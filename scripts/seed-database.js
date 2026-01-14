@@ -55,29 +55,37 @@ async function seedDatabase() {
     return
   }
 
+  // Suite data matching floor plan (18 suites per floor)
+  const SUITE_DATA = {
+    1: { size: 85.15, type: 'Premium Suite' },
+    2: { size: 53.35, type: 'Executive Suite' },
+    3: { size: 54.30, type: 'Executive Suite' },
+    4: { size: 56.80, type: 'Executive Suite' },
+    5: { size: 63.80, type: 'Deluxe Suite' },
+    6: { size: 74.46, type: 'Deluxe Suite' },
+    7: { size: 65.55, type: 'Deluxe Suite' },
+    8: { size: 64.53, type: 'Deluxe Suite' },
+    9: { size: 82.25, type: 'Premium Suite' },
+    10: { size: 64.53, type: 'Deluxe Suite' },
+    11: { size: 65.55, type: 'Deluxe Suite' },
+    12: { size: 74.46, type: 'Deluxe Suite' },
+    13: { size: 63.80, type: 'Deluxe Suite' },
+    14: { size: 56.80, type: 'Executive Suite' },
+    15: { size: 54.30, type: 'Executive Suite' },
+    16: { size: 53.35, type: 'Executive Suite' },
+    17: { size: 85.15, type: 'Premium Suite' },
+    18: { size: 53.53, type: 'Executive Suite' },
+  }
+
   // Generate suite data
-  console.log('\n🏗️  Generating 126 executive suites...')
+  console.log('\n🏗️  Generating 162 executive suites (18 per floor × 9 floors)...')
   const suites = []
 
   for (let floor = 17; floor <= 25; floor++) {
-    for (let unit = 1; unit <= 14; unit++) {
-      // Size varies by position: corner units larger, middle units smaller
-      let size_sqm
-      let suite_type
-
-      if ([1, 7, 8, 14].includes(unit)) {
-        // Corner units: 75-90 sqm - Premium Suite
-        size_sqm = 75 + Math.random() * 15
-        suite_type = 'Premium Suite'
-      } else if ([2, 6, 9, 13].includes(unit)) {
-        // Near-corner: 65-75 sqm - Deluxe Suite
-        size_sqm = 65 + Math.random() * 10
-        suite_type = 'Deluxe Suite'
-      } else {
-        // Middle units: 55-65 sqm - Executive Suite
-        size_sqm = 55 + Math.random() * 10
-        suite_type = 'Executive Suite'
-      }
+    for (let unit = 1; unit <= 18; unit++) {
+      const suiteInfo = SUITE_DATA[unit]
+      const size_sqm = suiteInfo.size
+      const suite_type = suiteInfo.type
 
       // Status distribution: 70% available, 20% reserved, 10% sold
       let status
@@ -92,27 +100,18 @@ async function seedDatabase() {
 
       // Price based on floor and suite type (higher floors = premium)
       let price_usd
-      if ([1, 7, 8, 14].includes(unit)) {
+      if (suite_type === 'Premium Suite') {
         price_usd = 280000 + ((floor - 17) * 10000) + Math.floor(Math.random() * 20000)
-      } else if ([2, 6, 9, 13].includes(unit)) {
+      } else if (suite_type === 'Deluxe Suite') {
         price_usd = 220000 + ((floor - 17) * 8000) + Math.floor(Math.random() * 15000)
       } else {
         price_usd = 180000 + ((floor - 17) * 6000) + Math.floor(Math.random() * 10000)
       }
 
-      // Update suite_type based on actual size
-      if (size_sqm >= 80) {
-        suite_type = 'Premium Suite'
-      } else if (size_sqm >= 65) {
-        suite_type = 'Deluxe Suite'
-      } else {
-        suite_type = 'Executive Suite'
-      }
-
       suites.push({
         floor,
         unit_number: unit,
-        size_sqm: Math.round(size_sqm * 100) / 100,
+        size_sqm,
         suite_type,
         status,
         price_usd,
@@ -163,7 +162,7 @@ async function seedDatabase() {
   console.log('\n🎉 Database seeded successfully!')
   console.log(`   Total suites: ${suites.length}`)
   console.log(`   Floors: 17-25 (9 floors)`)
-  console.log(`   Units per floor: 14`)
+  console.log(`   Units per floor: 18`)
 }
 
 seedDatabase().catch(console.error)
