@@ -68,21 +68,21 @@ const statusConfig = {
   available: {
     icon: Check,
     label: 'Available',
-    badgeClass: 'bg-emerald-50 text-emerald-600',
-    dotClass: 'bg-emerald-500',
+    badgeClass: 'badge-premium-available',
+    dotClass: 'bg-green-500',
     availabilityText: 'Available for purchase',
   },
   reserved: {
     icon: Clock,
     label: 'Reserved',
-    badgeClass: 'bg-amber-50 text-amber-600',
-    dotClass: 'bg-amber-500',
+    badgeClass: 'badge-premium-reserved',
+    dotClass: 'bg-gold-500',
     availabilityText: 'Under reservation',
   },
   sold: {
     icon: Lock,
     label: 'Sold',
-    badgeClass: 'bg-slate-100 text-slate-500',
+    badgeClass: 'bg-slate-100 text-slate-500 border border-slate-200',
     dotClass: 'bg-slate-400',
     availabilityText: 'Sold',
   },
@@ -148,10 +148,10 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
               {/* Title + Status */}
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-2xl text-slate-900 font-semibold">
+                  <h1 className="text-3xl text-slate-900 heading-display">
                     Suite {suite.floor}-{suite.unit_number}
                   </h1>
-                  <p className="text-sm text-slate-500 mt-0.5">{suiteType}</p>
+                  <p className="text-sm text-gold-600 font-medium mt-1">{suiteType}</p>
                 </div>
                 <div className={cn(
                   'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium',
@@ -212,13 +212,15 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
                     />
                   )}
                   {activeMedia === 'floorplan' && (
-                    <div className="w-full h-full bg-white flex items-center justify-center p-4">
+                    <div className="w-full h-full bg-gradient-to-br from-white via-white to-gold-50 flex items-center justify-center p-6">
                       {suite.floor_plan_url ? (
-                        <img
-                          src={suite.floor_plan_url}
-                          alt={`Suite ${suite.unit_number} floor plan`}
-                          className="max-w-full max-h-full object-contain"
-                        />
+                        <div className="floorplan-reveal w-full h-full flex items-center justify-center">
+                          <img
+                            src={suite.floor_plan_url}
+                            alt={`Suite ${suite.unit_number} floor plan`}
+                            className="max-w-full max-h-full object-contain rounded-lg shadow-premium"
+                          />
+                        </div>
                       ) : (
                         <div className="text-center">
                           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-sm">
@@ -272,13 +274,14 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
 
             {/* Actions Sidebar - 4 cols */}
             <div className="col-4">
-              <div className="sticky top-4 bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+              <div className="sticky top-4 bg-white rounded-xl gold-border overflow-hidden shadow-lg">
                 {/* Price Header */}
-                <div className="p-5 border-b border-slate-100">
-                  <p className="text-xs text-slate-400 uppercase tracking-wide mb-1">
-                    {suite.status === 'sold' ? 'Sold at' : 'From'}
+                <div className="p-5 border-b border-slate-100 bg-gold-subtle">
+                  <p className="text-xs text-gold-700 uppercase tracking-wider font-medium mb-1">
+                    {suite.status === 'sold' ? 'Sold at' : 'Starting From'}
                   </p>
-                  <p className="text-3xl text-slate-900 font-bold">
+                  <p className="text-3xl price-premium">
+                    <span className="price-currency">USD </span>
                     {suite.price_display || formatPrice(price)}
                   </p>
                 </div>
@@ -287,7 +290,7 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
                 <div className="p-5 space-y-3">
                   <a
                     href="#"
-                    className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
+                    className="w-full btn-cta-premium flex items-center justify-center gap-2"
                   >
                     <Download className="w-4 h-4" />
                     Download Brochure

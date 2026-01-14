@@ -104,8 +104,8 @@ export default function BuildingImage({ apartments, selectedFloor, onFloorClick 
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="mb-4">
-        <h2 className="text-2xl text-text-primary font-semibold">Building Navigator</h2>
-        <p className="text-sm text-text-secondary mt-1">Select a floor to explore units</p>
+        <h2 className="text-2xl text-text-primary heading-display">Building Navigator</h2>
+        <p className="text-sm text-gold-600 mt-1">Select a floor to explore executive suites</p>
       </div>
 
       <div className="flex-1 flex gap-4 min-h-0">
@@ -221,20 +221,20 @@ export default function BuildingImage({ apartments, selectedFloor, onFloorClick 
                   top: `${floors.find((f) => f.floor === activeFloor)?.top || 0}%`,
                 }}
               >
-                <div className="bg-primary text-white rounded-xl shadow-xl px-4 py-3 min-w-[150px]">
-                  <div className="text-lg font-semibold">Floor {activeFloor}</div>
+                <div className="bg-gradient-to-br from-primary to-primary-dark text-white rounded-xl shadow-xl px-4 py-3 min-w-[150px] border border-gold-500/30">
+                  <div className="text-lg font-semibold font-serif">Floor {activeFloor}</div>
                   <div className="text-sm text-white/80 mt-1.5 space-y-1">
                     {(() => {
                       const stats = getFloorStats(activeFloor)
                       return (
                         <>
                           <div className="flex items-center gap-2">
-                            <Check className="w-3.5 h-3.5 text-accent-light" />
+                            <Check className="w-3.5 h-3.5 text-green-400" />
                             <span>{stats.available} available</span>
                           </div>
                           {stats.reserved > 0 && (
                             <div className="flex items-center gap-2">
-                              <Clock className="w-3.5 h-3.5 text-amber-400" />
+                              <Clock className="w-3.5 h-3.5 text-gold-400" />
                               <span>{stats.reserved} reserved</span>
                             </div>
                           )}
@@ -242,29 +242,29 @@ export default function BuildingImage({ apartments, selectedFloor, onFloorClick 
                       )
                     })()}
                   </div>
-                  <div className="text-xs text-white/50 mt-2 pt-2 border-t border-white/20">
+                  <div className="text-xs text-gold-300/70 mt-2 pt-2 border-t border-gold-500/20">
                     Click to view units
                   </div>
                   {/* Arrow */}
-                  <div className="absolute left-0 top-5 w-2.5 h-2.5 bg-primary transform -translate-x-1 rotate-45" />
+                  <div className="absolute left-0 top-5 w-2.5 h-2.5 bg-primary transform -translate-x-1 rotate-45 border-l border-b border-gold-500/30" />
                 </div>
               </div>
             )}
 
             {/* Legend - inside building card, bottom-left */}
-            <div className="absolute bottom-3 left-3 flex items-center gap-4 px-3 py-2 bg-black/60 backdrop-blur-sm rounded-lg">
+            <div className="absolute bottom-3 left-3 flex items-center gap-4 px-3 py-2 bg-black/70 backdrop-blur-sm rounded-lg border border-gold-500/20">
               <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                <Check className="w-3 h-3 text-emerald-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                <Check className="w-3 h-3 text-green-400" />
                 <span className="text-[11px] text-white font-medium">Available</span>
               </div>
-              <div className="w-px h-4 bg-white/20" />
+              <div className="w-px h-4 bg-gold-500/30" />
               <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                <Clock className="w-3 h-3 text-amber-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-gold-400" />
+                <Clock className="w-3 h-3 text-gold-400" />
                 <span className="text-[11px] text-white font-medium">Reserved</span>
               </div>
-              <div className="w-px h-4 bg-white/20" />
+              <div className="w-px h-4 bg-gold-500/30" />
               <div className="flex items-center gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-white/40" />
                 <Lock className="w-3 h-3 text-white/60" />

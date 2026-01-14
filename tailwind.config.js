@@ -35,22 +35,35 @@ export default {
         '24': '96px',
       },
       colors: {
-        // Brand colors - premium restrained palette
+        // Brand colors - Pullman Casino premium palette
         primary: {
-          DEFAULT: '#1e3a5f',      // Deep navy
-          light: '#2d4a6f',
-          dark: '#152a47',
+          DEFAULT: '#0f1729',      // Deep midnight navy
+          light: '#1e293b',
+          dark: '#030712',
           foreground: '#ffffff',
         },
         accent: {
-          DEFAULT: '#10b981',      // Emerald (premium green)
-          light: '#34d399',
-          dark: '#059669',
+          DEFAULT: '#d4af37',      // Casino gold
+          light: '#e5c158',
+          dark: '#b8942d',
+          muted: 'rgba(212, 175, 55, 0.15)',
         },
         secondary: {
-          DEFAULT: '#c9a227',      // Gold
+          DEFAULT: '#c9a227',      // Rich gold
           light: '#d4b33d',
           foreground: '#1f2937',
+        },
+        gold: {
+          50: '#fefce8',
+          100: '#fef9c3',
+          200: '#fef08a',
+          300: '#fde047',
+          400: '#facc15',
+          500: '#d4af37',          // Casino gold
+          600: '#b8942d',
+          700: '#92752e',
+          800: '#7a6329',
+          900: '#5c4a1f',
         },
         // Warm neutral system
         background: '#fafaf9',     // Warm off-white (stone-50)
@@ -69,16 +82,18 @@ export default {
         },
         // Semantic status colors
         status: {
-          available: '#10b981',    // Emerald
-          'available-bg': 'rgba(16, 185, 129, 0.1)',
-          limited: '#f59e0b',      // Amber
-          'limited-bg': 'rgba(245, 158, 11, 0.1)',
-          sold: '#64748b',         // Slate gray (not aggressive red)
+          available: '#22c55e',    // Green
+          'available-bg': 'rgba(34, 197, 94, 0.1)',
+          limited: '#d4af37',      // Gold
+          'limited-bg': 'rgba(212, 175, 55, 0.1)',
+          sold: '#64748b',         // Slate gray
           'sold-bg': 'rgba(100, 116, 139, 0.1)',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
       },
       fontSize: {
         // Typography scale
@@ -105,7 +120,9 @@ export default {
         'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05)',
         'card': '0 2px 8px -2px rgba(0, 0, 0, 0.08)',
         'card-hover': '0 8px 24px -4px rgba(0, 0, 0, 0.12)',
-        'glow': '0 0 20px rgba(16, 185, 129, 0.3)',
+        'glow': '0 0 20px rgba(212, 175, 55, 0.3)',
+        'glow-gold': '0 0 30px rgba(212, 175, 55, 0.4)',
+        'premium': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
       },
       ringColor: {
         DEFAULT: '#1e3a5f',
