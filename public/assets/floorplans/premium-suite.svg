@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="350" viewBox="0 0 500 350" fill="none">
+  <rect width="500" height="350" fill="#f8fafc"/>
+
+  <!-- Suite outline -->
+  <rect x="20" y="20" width="460" height="310" fill="white" stroke="#94a3b8" stroke-width="2"/>
+
+  <!-- Living area -->
+  <rect x="20" y="20" width="240" height="180" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/>
+  <text x="140" y="100" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">Grand Living Area</text>
+  <text x="140" y="115" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">38 m²</text>
+  <!-- Sofa set -->
+  <rect x="50" y="70" width="100" height="50" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1" rx="4"/>
+  <rect x="170" y="80" width="50" height="40" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1" rx="4"/>
+
+  <!-- Master Bedroom -->
+  <rect x="260" y="20" width="220" height="165" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+  <text x="370" y="90" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">Master Bedroom</text>
+  <text x="370" y="105" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">28 m²</text>
+  <!-- King Bed -->
+  <rect x="300" y="45" width="140" height="100" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1" rx="4"/>
+
+  <!-- En-suite Bathroom -->
+  <rect x="260" y="185" width="220" height="145" fill="#dbeafe" stroke="#94a3b8" stroke-width="1"/>
+  <text x="370" y="255" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">Luxury En-suite</text>
+  <text x="370" y="270" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">15 m²</text>
+  <!-- Bathtub -->
+  <ellipse cx="320" cy="230" rx="40" ry="25" fill="#93c5fd" stroke="#94a3b8" stroke-width="1"/>
+
+  <!-- Kitchen/Dining -->
+  <rect x="20" y="200" width="240" height="130" fill="#fef3c7" stroke="#94a3b8" stroke-width="1"/>
+  <text x="140" y="260" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">Gourmet Kitchen &amp; Dining</text>
+  <text x="140" y="275" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">14 m²</text>
+  <!-- Dining table -->
+  <ellipse cx="140" cy="230" rx="50" ry="25" fill="#fbbf24" fill-opacity="0.3" stroke="#94a3b8" stroke-width="1"/>
+
+  <!-- Door -->
+  <rect x="20" y="150" width="10" height="40" fill="#f59e0b"/>
+  <text x="5" y="172" font-family="system-ui" font-size="8" fill="#64748b" transform="rotate(-90, 5, 172)">Entry</text>
+
+  <!-- Balcony -->
+  <rect x="260" y="5" width="150" height="15" fill="#dcfce7" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4"/>
+  <text x="335" y="14" text-anchor="middle" font-family="system-ui" font-size="8" fill="#64748b">Private Balcony</text>
+
+  <!-- Window indicators -->
+  <line x1="320" y1="20" x2="430" y2="20" stroke="#3b82f6" stroke-width="4"/>
+  <line x1="60" y1="20" x2="200" y2="20" stroke="#3b82f6" stroke-width="4"/>
+
+  <!-- Title -->
+  <text x="250" y="345" text-anchor="middle" font-family="system-ui" font-size="11" font-weight="600" fill="#334155">Premium Suite - 85 m²</text>
+
+  <!-- Compass -->
+  <circle cx="455" cy="40" r="15" fill="white" stroke="#94a3b8" stroke-width="1"/>
+  <text x="455" y="35" text-anchor="middle" font-family="system-ui" font-size="8" fill="#64748b">N</text>
+  <polygon points="455,28 452,38 458,38" fill="#f59e0b"/>
+</svg>

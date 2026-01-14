@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="450" height="320" viewBox="0 0 450 320" fill="none">
+  <rect width="450" height="320" fill="#f8fafc"/>
+
+  <!-- Suite outline -->
+  <rect x="20" y="20" width="410" height="280" fill="white" stroke="#94a3b8" stroke-width="2"/>
+
+  <!-- Living area -->
+  <rect x="20" y="20" width="220" height="170" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/>
+  <text x="130" y="100" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">Living Area</text>
+  <text x="130" y="115" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">30 m²</text>
+  <!-- Sofa -->
+  <rect x="50" y="80" width="80" height="40" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1" rx="4"/>
+
+  <!-- Master Bedroom -->
+  <rect x="240" y="20" width="190" height="150" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+  <text x="335" y="90" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">Master Bedroom</text>
+  <text x="335" y="105" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">22 m²</text>
+  <!-- Bed -->
+  <rect x="280" y="50" width="110" height="80" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1" rx="4"/>
+
+  <!-- En-suite Bathroom -->
+  <rect x="240" y="170" width="190" height="130" fill="#dbeafe" stroke="#94a3b8" stroke-width="1"/>
+  <text x="335" y="235" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">En-suite Bathroom</text>
+  <text x="335" y="250" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">12 m²</text>
+
+  <!-- Kitchen/Dining -->
+  <rect x="20" y="190" width="220" height="110" fill="#fef3c7" stroke="#94a3b8" stroke-width="1"/>
+  <text x="130" y="245" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">Kitchen &amp; Dining</text>
+  <text x="130" y="260" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">11 m²</text>
+
+  <!-- Door -->
+  <rect x="20" y="140" width="10" height="35" fill="#f59e0b"/>
+  <text x="5" y="160" font-family="system-ui" font-size="8" fill="#64748b" transform="rotate(-90, 5, 160)">Entry</text>
+
+  <!-- Window indicators -->
+  <line x1="300" y1="20" x2="380" y2="20" stroke="#3b82f6" stroke-width="4"/>
+  <line x1="60" y1="20" x2="180" y2="20" stroke="#3b82f6" stroke-width="4"/>
+
+  <!-- Title -->
+  <text x="225" y="315" text-anchor="middle" font-family="system-ui" font-size="11" font-weight="600" fill="#334155">Deluxe Suite - 70 m²</text>
+
+  <!-- Compass -->
+  <circle cx="420" cy="40" r="15" fill="white" stroke="#94a3b8" stroke-width="1"/>
+  <text x="420" y="35" text-anchor="middle" font-family="system-ui" font-size="8" fill="#64748b">N</text>
+  <polygon points="420,28 417,38 423,38" fill="#f59e0b"/>
+</svg>

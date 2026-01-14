@@ -1,0 +1,16 @@
+# BMAD Installation Manifest
+version: "6.0.0-alpha.16"
+installed: $(date -Iseconds)
+modules:
+  - name: core
+    version: "6.0.0-alpha.16"
+  - name: bmb
+    version: "6.0.0-alpha.16"
+  - name: bmgd
+    version: "6.0.0-alpha.16"
+  - name: bmm
+    version: "6.0.0-alpha.16"
+  - name: cis
+    version: "6.0.0-alpha.16"
+ides:
+  - claude-code

@@ -1,0 +1,164 @@
+// Pullman Hotel & Casino Panama - Project Configuration
+// Executive Suites Sales Website
+
+export const projectConfig = {
+  // Basic Info
+  name: 'Pullman Hotel & Casino Panama',
+  tagline: 'Premium Hotel Investment in the Heart of Panama City',
+  description: '126 Executive Suites across 9 floors (17-25), managed by Pullman Hotels & Resorts, part of the Accor ALL ecosystem.',
+
+  // Location
+  location: {
+    city: 'Panama City',
+    country: 'Panama',
+    neighborhood: 'Via España',
+    address: 'Via España, Panama City',
+    coordinates: {
+      lat: 9.0082,
+      lng: -79.5034,
+    },
+  },
+
+  // Building Stats
+  building: {
+    totalFloors: 9, // Executive suite floors only
+    floorRange: { min: 17, max: 25 },
+    totalUnits: 126, // 14 units × 9 floors
+    unitsPerFloor: 14,
+    unitTypes: ['Executive Suite'],
+    completionYear: 2026,
+  },
+
+  // Pricing
+  pricing: {
+    startingFrom: 'Contact for Pricing',
+    pricePerSqm: 'Contact Sales',
+    currency: 'USD',
+  },
+
+  // Contact
+  contact: {
+    phone: '+1-514-282-9214',
+    whatsapp: '+1-514-282-9214',
+    email: 'sales@pullmanpanama.com',
+    salesOffice: 'Sales Gallery',
+  },
+
+  // Media
+  media: {
+    heroImage: '/assets/pullman-facade.png',
+    heroVideo: null,
+    logo: '/assets/pullman-logo.png',
+    gallery: [
+      { src: '/assets/gallery/suite-type-07.jpg', alt: 'Executive Suite living room with panoramic Panama City views' },
+      { src: '/assets/gallery/suite-type-08.jpg', alt: 'Executive Suite interior with modern design and city views' },
+      { src: '/assets/gallery/lobby.jpg', alt: 'Pullman Hotel lobby with premium finishes' },
+      { src: '/assets/gallery/rooftop-pool.jpg', alt: 'Rooftop pool with stunning city panorama' },
+    ],
+  },
+
+  // Branding
+  branding: {
+    primary: 'Pullman Hotels & Resorts',
+    parent: 'Accor',
+    developer: 'Mercan Properties',
+    colors: {
+      primary: '#1a1a2e',    // Pullman dark blue/black
+      accent: '#c9a227',      // Gold accent
+      secondary: '#4a4a4a',
+    },
+  },
+
+  // Highlights (for landing page)
+  highlights: [
+    {
+      title: 'Pullman Brand',
+      description: 'Part of Accor ALL ecosystem with global reach and loyalty program',
+      icon: 'Award',
+    },
+    {
+      title: 'Hotel Management',
+      description: 'Professional hotel management with rental income potential',
+      icon: 'TrendingUp',
+    },
+    {
+      title: 'Premium Location',
+      description: 'Via España - Panama City\'s prime commercial corridor',
+      icon: 'MapPin',
+    },
+    {
+      title: 'World-Class Amenities',
+      description: 'Casino, rooftop pool, restaurants, and full hotel services',
+      icon: 'Building2',
+    },
+  ],
+
+  // Amenities
+  amenities: {
+    suiteFeatures: [
+      'Floor-to-ceiling windows',
+      'Premium finishes',
+      'Full kitchen',
+      'Smart home ready',
+      'City views',
+      'Hotel services access',
+    ],
+    hotelAmenities: [
+      'Rooftop infinity pool',
+      'Full-service casino',
+      'Multiple restaurants',
+      '24/7 room service',
+      'Fitness center',
+      'Business center',
+      'Concierge services',
+      'Valet parking',
+    ],
+    nearby: [
+      'Banking district',
+      'Shopping centers',
+      'Metro stations',
+      'International airport (25 min)',
+      'Casco Viejo',
+      'Panama Canal',
+    ],
+  },
+
+  // Investment Info
+  investment: {
+    program: 'Hotel Management Program',
+    benefits: [
+      'Passive rental income',
+      'Professional management',
+      'Accor loyalty program inclusion',
+      'Personal use flexibility',
+      'Panama residency pathway',
+    ],
+  },
+
+  // Social Links
+  social: {
+    instagram: null,
+    facebook: null,
+    linkedin: null,
+  },
+}
+
+// Suite size data from floor plan
+export const SUITE_SIZES: Record<number, number> = {
+  1: 53.35,
+  2: 85.15,
+  3: 54.30,
+  4: 53.53,
+  5: 56.80,
+  6: 63.80,
+  7: 74.46,
+  8: 65.55,
+  9: 82.25,
+  10: 64.53,
+  11: 74.46,
+  12: 63.80,
+  13: 56.88,
+  14: 53.53,
+}
+
+export type ProjectConfig = typeof projectConfig
