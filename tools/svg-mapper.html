@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Floor Plan SVG Mapper</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      background: #16213e;
+      padding: 20px;
+      overflow-y: auto;
+      border-right: 1px solid #0f3460;
+    }
+
+    h1 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #e94560;
+    }
+
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #aaa;
+    }
+
+    input[type="number"], input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    input[type="number"]:focus, select:focus {
+      outline: none;
+      border-color: #e94560;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .btn-primary {
+      background: #e94560;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #ff6b6b;
+    }
+
+    .btn-secondary {
+      background: #0f3460;
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      background: #1a4a7a;
+    }
+
+    .btn-success {
+      background: #2d8a5e;
+      color: white;
+    }
+
+    .btn-warning {
+      background: #d4a000;
+      color: #1a1a2e;
+    }
+
+    .btn-danger {
+      background: #c0392b;
+      color: white;
+    }
+
+    /* Points list */
+    .points-list {
+      background: #1a1a2e;
+      border-radius: 6px;
+      padding: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .point-item {
+      padding: 4px 8px;
+      margin-bottom: 4px;
+      background: #0f3460;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .point-item .delete-btn {
+      background: none;
+      border: none;
+      color: #e94560;
+      cursor: pointer;
+      padding: 2px 6px;
+      margin: 0;
+    }
+
+    /* Suites list */
+    .suites-list {
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .suite-item {
+      padding: 10px;
+      margin-bottom: 8px;
+      background: #1a1a2e;
+      border-radius: 6px;
+      border-left: 3px solid #2d8a5e;
+      cursor: pointer;
+    }
+
+    .suite-item:hover {
+      background: #0f3460;
+    }
+
+    .suite-item.active {
+      border-left-color: #e94560;
+      background: #0f3460;
+    }
+
+    .suite-name {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .suite-points {
+      font-size: 11px;
+      color: #888;
+    }
+
+    /* Output */
+    .output-area {
+      background: #1a1a2e;
+      border-radius: 6px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 11px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    /* Main canvas area */
+    .canvas-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #0f0f1a;
+    }
+
+    .toolbar {
+      padding: 12px 20px;
+      background: #16213e;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #0f3460;
+    }
+
+    .toolbar span {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .toolbar .coords {
+      background: #1a1a2e;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #e94560;
+    }
+
+    .canvas-wrapper {
+      flex: 1;
+      overflow: auto;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #canvas {
+      border: 2px solid #0f3460;
+      cursor: crosshair;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* Instructions */
+    .instructions {
+      background: #0f3460;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .instructions li {
+      margin-left: 16px;
+      margin-bottom: 4px;
+    }
+
+    .zoom-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .zoom-controls button {
+      margin: 0;
+      padding: 6px 12px;
+    }
+
+    .zoom-level {
+      font-family: monospace;
+      min-width: 50px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h1>Floor Plan SVG Mapper</h1>
+
+    <div class="instructions">
+      <strong>Instructions:</strong>
+      <ol>
+        <li>Enter suite number and click "New Suite"</li>
+        <li>Click on canvas to add polygon points</li>
+        <li>Click "Close Polygon" when done</li>
+        <li>Repeat for each suite</li>
+        <li>Export to get SVG paths</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Current Suite</div>
+      <label>Suite Number:</label>
+      <input type="number" id="suiteNumber" value="1" min="1" max="18">
+      <button class="btn-primary" onclick="startNewSuite()">New Suite</button>
+      <button class="btn-success" onclick="closePolygon()">Close Polygon</button>
+      <button class="btn-danger" onclick="clearCurrentPoints()">Clear Points</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Current Points (<span id="pointCount">0</span>)</div>
+      <div class="points-list" id="pointsList">
+        <em style="color:#666">Click on canvas to add points...</em>
+      </div>
+      <button class="btn-secondary" onclick="undoLastPoint()">Undo Last Point</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Saved Suites (<span id="suiteCount">0</span>)</div>
+      <div class="suites-list" id="suitesList">
+        <em style="color:#666">No suites saved yet...</em>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Export</div>
+      <button class="btn-primary" onclick="exportPaths()">Generate SVG Paths</button>
+      <button class="btn-secondary" onclick="exportJSON()">Export JSON</button>
+      <button class="btn-warning" onclick="importJSON()">Import JSON</button>
+      <div class="output-area" id="output" style="margin-top: 12px;">
+        Click "Generate SVG Paths" to see output...
+      </div>
+    </div>
+  </div>
+
+  <div class="canvas-container">
+    <div class="toolbar">
+      <span>Mouse:</span>
+      <span class="coords" id="mouseCoords">X: 0, Y: 0</span>
+      <span>Normalized (0-100):</span>
+      <span class="coords" id="normalizedCoords">X: 0.00, Y: 0.00</span>
+      <div style="flex:1"></div>
+      <div class="zoom-controls">
+        <button class="btn-secondary" onclick="zoomOut()">-</button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+        <button class="btn-secondary" onclick="zoomIn()">+</button>
+        <button class="btn-secondary" onclick="resetZoom()">Reset</button>
+      </div>
+    </div>
+    <div class="canvas-wrapper">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let img = new Image();
+    let imgLoaded = false;
+    let zoom = 1;
+
+    let currentPoints = [];
+    let savedSuites = {};
+    let currentSuiteNumber = 1;
+
+    // Status colors
+    const colors = {
+      available: { fill: 'rgba(76, 175, 119, 0.3)', stroke: '#2D8A5E' },
+      reserved: { fill: 'rgba(212, 160, 0, 0.25)', stroke: '#D4A000' },
+      sold: { fill: 'rgba(117, 117, 117, 0.2)', stroke: '#757575' },
+      current: { fill: 'rgba(233, 69, 96, 0.3)', stroke: '#e94560' }
+    };
+
+    // Load floor plan image
+    img.onload = function() {
+      imgLoaded = true;
+      canvas.width = img.width;
+      canvas.height = img.height;
+      render();
+    };
+    img.src = '../public/assets/floorplans/pullman-plan.png';
+
+    // Alternative path if first one fails
+    img.onerror = function() {
+      img.src = '../assets/floorplans/pullman-plan.png';
+      img.onerror = function() {
+        alert('Could not load floor plan image. Make sure pullman-plan.png exists in assets/floorplans/');
+      };
+    };
+
+    function render() {
+      if (!imgLoaded) return;
+
+      // Clear and draw image
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+
+      // Draw saved suites
+      Object.entries(savedSuites).forEach(([num, points]) => {
+        drawPolygon(points, colors.available, num);
+      });
+
+      // Draw current polygon being created
+      if (currentPoints.length > 0) {
+        drawPolygon(currentPoints, colors.current, currentSuiteNumber, false);
+
+        // Draw points
+        currentPoints.forEach((pt, i) => {
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+          ctx.fillStyle = i === 0 ? '#e94560' : '#fff';
+          ctx.fill();
+          ctx.strokeStyle = '#000';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Point number
+          ctx.fillStyle = '#fff';
+          ctx.font = '10px sans-serif';
+          ctx.fillText(i + 1, pt.x + 8, pt.y + 4);
+        });
+
+        // Draw lines between points
+        if (currentPoints.length > 1) {
+          ctx.beginPath();
+          ctx.moveTo(currentPoints[0].x, currentPoints[0].y);
+          for (let i = 1; i < currentPoints.length; i++) {
+            ctx.lineTo(currentPoints[i].x, currentPoints[i].y);
+          }
+          ctx.strokeStyle = colors.current.stroke;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+      }
+    }
+
+    function drawPolygon(points, color, label, closed = true) {
+      if (points.length < 2) return;
+
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      if (closed) ctx.closePath();
+
+      ctx.fillStyle = color.fill;
+      ctx.fill();
+      ctx.strokeStyle = color.stroke;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Draw label
+      if (closed && points.length > 2) {
+        const cx = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+        const cy = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+
+        ctx.fillStyle = color.stroke;
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, cx, cy);
+      }
+    }
+
+    // Mouse events
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      const x = Math.round((e.clientX - rect.left) * scaleX);
+      const y = Math.round((e.clientY - rect.top) * scaleY);
+
+      document.getElementById('mouseCoords').textContent = `X: ${x}, Y: ${y}`;
+
+      // Normalized to 0-100 range
+      const nx = ((x / canvas.width) * 100).toFixed(2);
+      const ny = ((y / canvas.height) * 100).toFixed(2);
+      document.getElementById('normalizedCoords').textContent = `X: ${nx}, Y: ${ny}`;
+    });
+
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      const x = Math.round((e.clientX - rect.left) * scaleX);
+      const y = Math.round((e.clientY - rect.top) * scaleY);
+
+      currentPoints.push({ x, y });
+      updatePointsList();
+      render();
+    });
+
+    function startNewSuite() {
+      currentSuiteNumber = parseInt(document.getElementById('suiteNumber').value);
+      currentPoints = [];
+
+      // If editing existing suite, load its points
+      if (savedSuites[currentSuiteNumber]) {
+        if (confirm(`Suite ${currentSuiteNumber} exists. Edit it?`)) {
+          currentPoints = [...savedSuites[currentSuiteNumber]];
+          delete savedSuites[currentSuiteNumber];
+        }
+      }
+
+      updatePointsList();
+      updateSuitesList();
+      render();
+    }
+
+    function closePolygon() {
+      if (currentPoints.length < 3) {
+        alert('Need at least 3 points to create a polygon');
+        return;
+      }
+
+      savedSuites[currentSuiteNumber] = [...currentPoints];
+      currentPoints = [];
+
+      // Move to next suite
+      document.getElementById('suiteNumber').value = currentSuiteNumber + 1;
+      currentSuiteNumber++;
+
+      updatePointsList();
+      updateSuitesList();
+      render();
+    }
+
+    function clearCurrentPoints() {
+      currentPoints = [];
+      updatePointsList();
+      render();
+    }
+
+    function undoLastPoint() {
+      currentPoints.pop();
+      updatePointsList();
+      render();
+    }
+
+    function updatePointsList() {
+      const list = document.getElementById('pointsList');
+      document.getElementById('pointCount').textContent = currentPoints.length;
+
+      if (currentPoints.length === 0) {
+        list.innerHTML = '<em style="color:#666">Click on canvas to add points...</em>';
+        return;
+      }
+
+      list.innerHTML = currentPoints.map((pt, i) => `
+        <div class="point-item">
+          <span>${i + 1}: (${pt.x}, ${pt.y})</span>
+          <button class="delete-btn" onclick="deletePoint(${i})">×</button>
+        </div>
+      `).join('');
+    }
+
+    function deletePoint(index) {
+      currentPoints.splice(index, 1);
+      updatePointsList();
+      render();
+    }
+
+    function updateSuitesList() {
+      const list = document.getElementById('suitesList');
+      const suites = Object.keys(savedSuites);
+      document.getElementById('suiteCount').textContent = suites.length;
+
+      if (suites.length === 0) {
+        list.innerHTML = '<em style="color:#666">No suites saved yet...</em>';
+        return;
+      }
+
+      list.innerHTML = suites.sort((a, b) => a - b).map(num => `
+        <div class="suite-item" onclick="editSuite(${num})">
+          <div class="suite-name">Suite ${num}</div>
+          <div class="suite-points">${savedSuites[num].length} points</div>
+        </div>
+      `).join('');
+    }
+
+    function editSuite(num) {
+      if (currentPoints.length > 0) {
+        if (!confirm('Discard current points?')) return;
+      }
+
+      currentSuiteNumber = num;
+      document.getElementById('suiteNumber').value = num;
+      currentPoints = [...savedSuites[num]];
+      delete savedSuites[num];
+
+      updatePointsList();
+      updateSuitesList();
+      render();
+    }
+
+    function exportPaths() {
+      const output = document.getElementById('output');
+
+      if (Object.keys(savedSuites).length === 0) {
+        output.textContent = 'No suites to export. Create some polygons first!';
+        return;
+      }
+
+      // Generate SVG path strings (normalized to 0-100)
+      let code = `const SUITE_PATHS: Record<number, string> = {\n`;
+
+      Object.keys(savedSuites).sort((a, b) => a - b).forEach(num => {
+        const points = savedSuites[num];
+        const normalizedPoints = points.map(p => ({
+          x: ((p.x / canvas.width) * 100).toFixed(1),
+          y: ((p.y / canvas.height) * 100).toFixed(1)
+        }));
+
+        let path = `M ${normalizedPoints[0].x},${normalizedPoints[0].y}`;
+        for (let i = 1; i < normalizedPoints.length; i++) {
+          path += ` L ${normalizedPoints[i].x},${normalizedPoints[i].y}`;
+        }
+        path += ' Z';
+
+        code += `  ${num}: '${path}',\n`;
+      });
+
+      code += `};\n`;
+
+      output.textContent = code;
+    }
+
+    function exportJSON() {
+      const data = {
+        imageWidth: canvas.width,
+        imageHeight: canvas.height,
+        suites: savedSuites
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'floor-plan-mapping.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJSON() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const data = JSON.parse(event.target.result);
+            savedSuites = data.suites || {};
+            updateSuitesList();
+            render();
+            alert('Imported successfully!');
+          } catch (err) {
+            alert('Error importing file: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+
+    // Zoom controls
+    function zoomIn() {
+      zoom = Math.min(zoom + 0.25, 3);
+      applyZoom();
+    }
+
+    function zoomOut() {
+      zoom = Math.max(zoom - 0.25, 0.5);
+      applyZoom();
+    }
+
+    function resetZoom() {
+      zoom = 1;
+      applyZoom();
+    }
+
+    function applyZoom() {
+      document.getElementById('zoomLevel').textContent = Math.round(zoom * 100) + '%';
+      canvas.style.transform = `scale(${zoom})`;
+      canvas.style.transformOrigin = 'top left';
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'z' && e.ctrlKey) {
+        e.preventDefault();
+        undoLastPoint();
+      }
+      if (e.key === 'Enter') {
+        closePolygon();
+      }
+      if (e.key === 'Escape') {
+        clearCurrentPoints();
+      }
+    });
+  </script>
+</body>
+</html>

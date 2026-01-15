@@ -89,7 +89,14 @@
       "Bash(taskkill:*)",
       "Bash(cmd //c \"taskkill /PID 21756 /F\")",
       "Bash(move scriptsrun-migration.js scriptsrun-migration.cjs)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(copy \"c:\\\\Users\\\\Wassim\\\\Downloads\\\\Pnama Project\\\\PullMan Hotel\\\\pullman plan.PNG\" \"c:\\\\Users\\\\Wassim\\\\Downloads\\\\Pnama Project\\\\PullMan Hotel\\\\public\\\\assets\\\\floorplans\\\\pullman-plan.png\")",
+      "Bash(cmd /c copy \"c:\\\\Users\\\\Wassim\\\\Downloads\\\\Pnama Project\\\\PullMan Hotel\\\\pullman plan.PNG\" \"c:\\\\Users\\\\Wassim\\\\Downloads\\\\Pnama Project\\\\PullMan Hotel\\\\public\\\\assets\\\\floorplans\\\\pullman-plan.png\")",
+      "Bash(claude mcp list:*)",
+      "Bash(claude mcp add:*)",
+      "WebFetch(domain:help.figma.com)",
+      "Bash(copy:*)",
+      "Bash(PGPASSWORD=postgres123 psql -h 38.97.60.181 -p 5433 -U postgres -d postgres -c \"ALTER TABLE pullman_suites DROP CONSTRAINT pullman_suites_unit_number_check; ALTER TABLE pullman_suites ADD CONSTRAINT pullman_suites_unit_number_check CHECK \\(unit_number >= 1 AND unit_number <= 18\\);\")"
     ]
   }
 }

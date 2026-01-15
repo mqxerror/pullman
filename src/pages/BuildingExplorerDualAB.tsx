@@ -377,22 +377,25 @@ export default function BuildingExplorerDualAB() {
           </div>
         </div>
 
-        {/* OPTION A: Slide-in Detail Panel */}
+        {/* OPTION A: Enhanced Slide-in Detail Panel */}
         {viewMode === 'A' && selectedSuite && (
-          <div className="lg:w-[40%] bg-white border-l border-slate-200 overflow-y-auto animate-slide-in-right">
-            <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4 flex items-center justify-between">
+          <div className="lg:w-[40%] bg-white border-l border-slate-200 shadow-2xl overflow-y-auto animate-slide-in-right">
+            {/* Sticky Header */}
+            <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md border-b border-slate-200 p-4 flex items-center justify-between">
               <button
                 onClick={handleClosePanel}
-                className="flex items-center gap-2 text-slate-500 hover:text-slate-700 transition-colors"
+                className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors group"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <div className="p-1.5 rounded-lg bg-slate-100 group-hover:bg-slate-200 transition-colors">
+                  <ChevronLeft className="w-4 h-4" />
+                </div>
                 <span className="text-sm font-medium">Back to Floor Plan</span>
               </button>
               <span className={cn(
-                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium',
-                selectedSuite.status === 'available' ? 'bg-green-100 text-green-700' :
-                selectedSuite.status === 'reserved' ? 'bg-gold-100 text-gold-700' :
-                'bg-slate-100 text-slate-600'
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm',
+                selectedSuite.status === 'available' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' :
+                selectedSuite.status === 'reserved' ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                'bg-slate-100 text-slate-600 border border-slate-200'
               )}>
                 {(() => {
                   const StatusIcon = statusConfig[selectedSuite.status].icon
@@ -402,123 +405,204 @@ export default function BuildingExplorerDualAB() {
               </span>
             </div>
 
+            {/* Hero Image Section */}
+            <div className="relative">
+              {/* Main Image */}
+              <div className="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+                <img
+                  src={activeImageTab === 'floorplan'
+                    ? getFloorPlanImage(selectedSuite.unit_number)
+                    : activeImageTab === 'views'
+                    ? 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'
+                    : getSuiteImages(selectedSuite.unit_number)[0]}
+                  alt={`Suite ${activeImageTab}`}
+                  className="w-full h-full object-cover"
+                />
+
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+                {/* Image Navigation Arrows */}
+                {activeImageTab !== 'floorplan' && (
+                  <>
+                    <button className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all hover:scale-105">
+                      <ChevronLeft className="w-5 h-5 text-slate-700" />
+                    </button>
+                    <button className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all hover:scale-105">
+                      <ArrowRight className="w-5 h-5 text-slate-700" />
+                    </button>
+                  </>
+                )}
+
+                {/* Suite Title Overlay */}
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h2 className="text-3xl font-bold text-white heading-display drop-shadow-lg">
+                    Suite {selectedSuite.floor}-{selectedSuite.unit_number}
+                  </h2>
+                  <p className="text-gold-300 text-lg mt-1 drop-shadow-md">{getSuiteType(selectedSuite.size_sqm)}</p>
+                </div>
+
+                {/* Image Counter */}
+                <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/50 backdrop-blur text-white text-sm rounded-full">
+                  1 / 3
+                </div>
+              </div>
+
+              {/* Image Tabs */}
+              <div className="absolute top-4 left-4 flex gap-2">
+                {['interior', 'views', 'floorplan'].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveImageTab(tab as any)}
+                    className={cn(
+                      'px-4 py-2 rounded-full text-sm font-medium transition-all capitalize shadow-sm',
+                      activeImageTab === tab
+                        ? 'bg-white text-slate-900'
+                        : 'bg-black/30 backdrop-blur text-white hover:bg-black/50'
+                    )}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Thumbnail Strip */}
+            {activeImageTab !== 'floorplan' && (
+              <div className="flex gap-2 p-3 bg-slate-50 border-b border-slate-200">
+                {getSuiteImages(selectedSuite.unit_number).map((img, idx) => (
+                  <button
+                    key={idx}
+                    className={cn(
+                      'flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all',
+                      idx === 0 ? 'border-gold-500 shadow-md' : 'border-transparent opacity-60 hover:opacity-100'
+                    )}
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Panel Content */}
             <div className="p-6">
-              {/* Header */}
-              <div className="mb-6">
-                <h2 className="text-3xl font-bold text-slate-900 heading-display">
-                  Suite {selectedSuite.floor}-{selectedSuite.unit_number}
-                </h2>
-                <p className="text-gold-600 text-lg mt-1">{getSuiteType(selectedSuite.size_sqm)}</p>
-              </div>
-
-              {/* Image Gallery with Tabs */}
-              <div className="mb-6">
-                <div className="flex gap-2 mb-3">
-                  {['interior', 'views', 'floorplan'].map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveImageTab(tab as any)}
-                      className={cn(
-                        'px-4 py-2 rounded-lg text-sm font-medium transition-all capitalize',
-                        activeImageTab === tab ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      )}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
-                <div className="aspect-video rounded-xl overflow-hidden bg-slate-100">
-                  <img
-                    src={activeImageTab === 'floorplan' ? getFloorPlanImage(selectedSuite.unit_number) : getSuiteImage(selectedSuite.unit_number)}
-                    alt={`Suite ${activeImageTab}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-
-              {/* Quick Stats */}
+              {/* Quick Stats - Enhanced Cards */}
               <div className="grid grid-cols-3 gap-3 mb-6">
-                <div className="bg-slate-50 rounded-xl p-4 text-center">
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 text-center border border-slate-200 shadow-sm">
+                  <Maximize2 className="w-5 h-5 text-gold-500 mx-auto mb-2" />
                   <div className="text-2xl font-bold text-slate-900">{selectedSuite.size_sqm}</div>
-                  <div className="text-xs text-slate-500">m²</div>
+                  <div className="text-xs text-slate-500 font-medium">Square Meters</div>
                 </div>
-                <div className="bg-slate-50 rounded-xl p-4 text-center">
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 text-center border border-slate-200 shadow-sm">
+                  <Building2 className="w-5 h-5 text-gold-500 mx-auto mb-2" />
                   <div className="text-2xl font-bold text-slate-900">{selectedSuite.floor}</div>
-                  <div className="text-xs text-slate-500">Floor</div>
+                  <div className="text-xs text-slate-500 font-medium">Floor Level</div>
                 </div>
-                <div className="bg-slate-50 rounded-xl p-4 text-center">
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 text-center border border-slate-200 shadow-sm">
+                  <Mountain className="w-5 h-5 text-gold-500 mx-auto mb-2" />
                   <div className="text-2xl font-bold text-slate-900">Ocean</div>
-                  <div className="text-xs text-slate-500">View</div>
+                  <div className="text-xs text-slate-500 font-medium">View Type</div>
                 </div>
               </div>
 
-              {/* Price */}
-              <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-5 mb-6">
-                <div className="text-slate-400 text-sm">Starting from</div>
-                <div className="text-2xl font-bold text-white mt-1">Contact for Pricing</div>
-              </div>
-
-              {/* Suite Features */}
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Suite Features</h3>
-                <div className="space-y-2">
-                  {SUITE_FEATURES.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3 text-slate-700">
-                      <feature.icon className="w-4 h-4 text-gold-500" />
-                      <span className="text-sm">{feature.label}</span>
-                    </div>
-                  ))}
+              {/* Price Card - Enhanced */}
+              <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-xl p-5 mb-6 shadow-lg relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PC9nPjwvc3ZnPg==')] opacity-30" />
+                <div className="relative">
+                  <div className="text-slate-400 text-sm">Starting from</div>
+                  <div className="text-3xl font-bold text-white mt-1">Contact for Pricing</div>
+                  <div className="text-gold-400 text-sm mt-2">Flexible payment plans available</div>
                 </div>
               </div>
 
-              {/* Hotel Amenities */}
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Hotel Amenities</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {HOTEL_AMENITIES.map((amenity, i) => (
-                    <div key={i} className="flex items-center gap-2 text-slate-600">
-                      <amenity.icon className="w-4 h-4 text-gold-500" />
-                      <span className="text-sm">{amenity.label}</span>
-                    </div>
-                  ))}
+              {/* Features & Amenities - Side by Side */}
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                {/* Suite Features */}
+                <div className="bg-white rounded-xl p-4 border border-slate-200">
+                  <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-gold-500" />
+                    Suite Features
+                  </h3>
+                  <div className="space-y-2.5">
+                    {SUITE_FEATURES.map((feature, i) => (
+                      <div key={i} className="flex items-center gap-2.5 text-slate-600">
+                        <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                        <span className="text-sm">{feature.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Hotel Amenities */}
+                <div className="bg-white rounded-xl p-4 border border-slate-200">
+                  <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                    <Star className="w-4 h-4 text-gold-500" />
+                    Hotel Amenities
+                  </h3>
+                  <div className="space-y-2.5">
+                    {HOTEL_AMENITIES.slice(0, 3).map((amenity, i) => (
+                      <div key={i} className="flex items-center gap-2.5 text-slate-600">
+                        <Check className="w-4 h-4 text-gold-500 flex-shrink-0" />
+                        <span className="text-sm">{amenity.label}</span>
+                      </div>
+                    ))}
+                    <button className="text-sm text-gold-600 font-medium hover:text-gold-700 transition-colors">
+                      +3 more amenities
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* CTAs */}
+              {/* CTAs - Enhanced */}
               {selectedSuite.status !== 'sold' && (
                 <div className="space-y-3">
-                  <button className="w-full py-4 bg-primary text-white font-medium rounded-xl hover:bg-primary-light transition-colors flex items-center justify-center gap-2">
-                    <Download className="w-5 h-5" />
-                    Download Brochure
-                  </button>
-                  <button className="w-full py-3 bg-white border-2 border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">
-                    <Share2 className="w-4 h-4" />
-                    Share Suite
-                  </button>
-                  <button className="w-full py-4 bg-gold-500 text-white font-medium rounded-xl hover:bg-gold-600 transition-colors flex items-center justify-center gap-2">
+                  <button className="w-full py-4 bg-gold-500 text-white font-semibold rounded-xl hover:bg-gold-600 transition-all shadow-lg shadow-gold-500/25 flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-gold-500/30 hover:-translate-y-0.5">
                     <Phone className="w-5 h-5" />
-                    Contact Sales
+                    Schedule a Viewing
                   </button>
+                  <div className="flex gap-3">
+                    <button className="flex-1 py-3.5 bg-slate-900 text-white font-medium rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
+                      <Download className="w-4 h-4" />
+                      Brochure
+                    </button>
+                    <button className="flex-1 py-3.5 bg-white border-2 border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
+                      <Share2 className="w-4 h-4" />
+                      Share
+                    </button>
+                  </div>
                 </div>
               )}
 
-              {/* Similar Suites */}
+              {/* Similar Suites - Enhanced */}
               {similarSuites.length > 0 && (
                 <div className="mt-8 pt-6 border-t border-slate-200">
-                  <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Similar Suites</h3>
+                  <h3 className="text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                    <Bed className="w-4 h-4 text-gold-500" />
+                    Similar Suites Available
+                  </h3>
                   <div className="space-y-2">
                     {similarSuites.slice(0, 3).map((suite) => (
                       <button
                         key={suite.id}
                         onClick={() => setSelectedSuite(suite)}
-                        className="w-full flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors text-left"
+                        className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200 hover:border-gold-300 hover:shadow-md transition-all text-left group"
                       >
-                        <div>
-                          <div className="font-medium text-slate-900">Suite {suite.floor}-{suite.unit_number}</div>
-                          <div className="text-sm text-slate-500">{suite.size_sqm} m²</div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-lg bg-slate-100 overflow-hidden">
+                            <img
+                              src={getSuiteImage(suite.unit_number)}
+                              alt=""
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-slate-900 group-hover:text-gold-600 transition-colors">
+                              Suite {suite.floor}-{suite.unit_number}
+                            </div>
+                            <div className="text-sm text-slate-500">{suite.size_sqm} m² · Floor {suite.floor}</div>
+                          </div>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-slate-400" />
+                        <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-gold-500 group-hover:translate-x-1 transition-all" />
                       </button>
                     ))}
                   </div>
