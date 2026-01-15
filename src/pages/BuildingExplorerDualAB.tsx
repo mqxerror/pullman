@@ -48,8 +48,8 @@ const getSuiteImages = (unitNumber: number): string[] => {
 }
 
 const getFloorPlanImage = (unitNumber: number): string => {
-  if (unitNumber === 1 || unitNumber === 3) return '/assets/floorplans/suite-1-3.png'
-  if (unitNumber === 2 || unitNumber === 9) return '/assets/floorplans/suite-2-9.png'
+  if (unitNumber === 1 || unitNumber === 3 || unitNumber === 15 || unitNumber === 17) return '/assets/floorplans/suite-1-3.png'
+  if (unitNumber === 2 || unitNumber === 9 || unitNumber === 16 || unitNumber === 18) return '/assets/floorplans/suite-2-9.png'
   if (unitNumber === 4 || unitNumber === 14) return '/assets/floorplans/suite-4-14.png'
   if (unitNumber === 5 || unitNumber === 13) return '/assets/floorplans/suite-5-13.png'
   if (unitNumber === 6 || unitNumber === 12) return '/assets/floorplans/suite-6-12.png'
@@ -253,8 +253,8 @@ export default function BuildingExplorerDualAB() {
           )}>
             {!leftPanelCollapsed && (
               <div>
-                <h2 className="text-xl font-bold heading-display text-slate-900">Select Floor</h2>
-                <p className="text-sm text-slate-500 mt-1">Click building to choose</p>
+                <h2 className="text-2xl font-bold heading-display text-slate-900">Select Floor</h2>
+                <p className="text-sm text-gold-600 mt-1">Click on the building to choose a floor</p>
               </div>
             )}
 
@@ -309,8 +309,8 @@ export default function BuildingExplorerDualAB() {
             </div>
           ) : (
             /* Expanded State: Full Building View */
-            <div className="flex-1 flex items-center justify-center min-h-[400px]">
-              <div className="relative h-full max-h-[600px] aspect-[3/4] w-full max-w-[400px]">
+            <div className="flex-1 flex items-center justify-center min-h-[500px]">
+              <div className="relative h-full max-h-[750px] aspect-[2/5] w-full max-w-[320px]">
                 <img
                   src="/assets/pullman-facade.png"
                   alt="Pullman Hotel & Casino Tower"
@@ -339,7 +339,7 @@ export default function BuildingExplorerDualAB() {
                       >
                         {isSelected && (
                           <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] floor-highlight-band flex items-center justify-center">
-                            <div className="floor-pill text-amber-700 text-xs font-bold px-3 py-0.5 rounded-md shadow-lg">
+                            <div className="floor-pill text-gold-700 text-xs font-bold px-3 py-0.5 rounded-md shadow-lg">
                               {f.floor}
                             </div>
                           </div>
@@ -353,7 +353,7 @@ export default function BuildingExplorerDualAB() {
                 </div>
 
                 {/* Floor Navigator */}
-                <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-3 border border-amber-200">
+                <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-3 border border-gold-200">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleFloorDown}
@@ -361,9 +361,9 @@ export default function BuildingExplorerDualAB() {
                     >
                       <ChevronDown className="w-4 h-4" />
                     </button>
-                    <div className="text-center min-w-[50px]">
-                      <div className="text-xl font-bold text-slate-900 tabular-nums">{selectedFloor}</div>
-                      <div className="text-[9px] text-slate-500 uppercase tracking-wider">Floor</div>
+                    <div className="text-center min-w-[45px]">
+                      <div className="text-xl font-bold text-primary tabular-nums">{selectedFloor}</div>
+                      <div className="text-[8px] text-slate-400 uppercase tracking-wider">Floor</div>
                     </div>
                     <button
                       onClick={handleFloorUp}
@@ -384,13 +384,13 @@ export default function BuildingExplorerDualAB() {
                       transform: 'translateX(100%)'
                     }}
                   >
-                    <div className="bg-white rounded-xl shadow-xl px-3 py-2 min-w-[120px] border border-amber-200">
+                    <div className="bg-white rounded-xl shadow-xl px-3 py-2 min-w-[120px] border border-gold-200">
                       <div className="text-sm font-bold text-slate-900">Floor {activeFloor}</div>
                       <div className="flex items-center gap-3 mt-1 text-xs">
                         <span className="text-green-600">{getFloorStats(activeFloor).available} avail</span>
-                        <span className="text-amber-600">{getFloorStats(activeFloor).reserved} res</span>
+                        <span className="text-gold-600">{getFloorStats(activeFloor).reserved} res</span>
                       </div>
-                      <div className="absolute left-0 top-4 w-2 h-2 bg-white transform -translate-x-1 rotate-45 border-l border-b border-amber-200" />
+                      <div className="absolute left-0 top-4 w-2 h-2 bg-white transform -translate-x-1 rotate-45 border-l border-b border-gold-200" />
                     </div>
                   </div>
                 )}
@@ -452,7 +452,7 @@ export default function BuildingExplorerDualAB() {
               </div>
               <div className="w-px h-10 bg-slate-700" />
               <div>
-                <div className="text-2xl font-bold text-gold-400">{getFloorStats(selectedFloor).reserved}</div>
+                <div className="text-2xl font-bold text-amber-400">{getFloorStats(selectedFloor).reserved}</div>
                 <div className="text-xs text-slate-400">Reserved</div>
               </div>
               <div className="w-px h-10 bg-slate-700" />
