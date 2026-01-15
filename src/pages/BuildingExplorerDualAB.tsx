@@ -6,7 +6,8 @@ import type { ExecutiveSuite } from '@/types/database'
 import {
   Menu, X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
   X as CloseIcon, ArrowRight, Bed, Bath, Mountain, Download, Share2, Phone,
-  ChevronLeft, Sparkles, Star, Wifi, Car, Dumbbell, Coffee, Shield, Waves
+  ChevronLeft, ChevronRight, Sparkles, Star, Wifi, Car, Dumbbell, Coffee, Shield, Waves,
+  PanelLeftClose, PanelLeftOpen, Home, MapPin
 } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR } from '@/config/building'
 import { cn } from '@/lib/utils'
@@ -86,6 +87,7 @@ export default function BuildingExplorerDualAB() {
   const [hoveredFloor, setHoveredFloor] = useState<number | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeImageTab, setActiveImageTab] = useState<'interior' | 'views' | 'floorplan'>('interior')
+  const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(false)
 
   const { data: apartments = [], isLoading } = useQuery({
     queryKey: ['pullman_suites'],
@@ -168,144 +170,240 @@ export default function BuildingExplorerDualAB() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-stone-50 to-slate-100">
-      {/* Header */}
-      <header className="bg-white/90 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50">
-        <div className="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png" alt="Mercan Group" className="h-12 w-auto" />
-          </Link>
+      {/* Header - Enhanced with Breadcrumbs */}
+      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-screen-2xl mx-auto px-4 lg:px-6">
+          {/* Top Row: Logo + A/B Toggle + Nav */}
+          <div className="py-3 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <img src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png" alt="Mercan Group" className="h-10 lg:h-12 w-auto" />
+              </Link>
 
-          {/* A/B Test Toggle */}
-          <div className="flex items-center gap-2 bg-slate-100 rounded-xl p-1">
-            <button
-              onClick={() => { setViewMode('A'); setSelectedSuite(null); }}
-              className={cn(
-                'px-4 py-2 rounded-lg text-sm font-medium transition-all',
-                viewMode === 'A' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'
-              )}
-            >
-              A: Slide Panel
-            </button>
-            <button
-              onClick={() => { setViewMode('B'); setSelectedSuite(null); }}
-              className={cn(
-                'px-4 py-2 rounded-lg text-sm font-medium transition-all',
-                viewMode === 'B' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'
-              )}
-            >
-              B: Full Page
-            </button>
-            <button
-              onClick={() => { setViewMode('C'); setSelectedSuite(null); }}
-              className={cn(
-                'px-4 py-2 rounded-lg text-sm font-medium transition-all',
-                viewMode === 'C' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'
-              )}
-            >
-              C: Large Modal
-            </button>
+              {/* Breadcrumb Navigation */}
+              <nav className="hidden md:flex items-center gap-2 text-sm ml-4 pl-4 border-l border-slate-200">
+                <Link to="/" className="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 transition-colors">
+                  <Home className="w-3.5 h-3.5" />
+                  <span>Home</span>
+                </Link>
+                <ChevronRight className="w-4 h-4 text-slate-300" />
+                <span className="text-slate-900 font-medium">Floor {selectedFloor}</span>
+                {selectedSuite && (
+                  <>
+                    <ChevronRight className="w-4 h-4 text-slate-300" />
+                    <span className="text-amber-600 font-medium">Suite {selectedSuite.floor}-{selectedSuite.unit_number}</span>
+                  </>
+                )}
+              </nav>
+            </div>
+
+            {/* A/B Test Toggle - Enhanced touch targets */}
+            <div className="flex items-center gap-1.5 bg-slate-100 rounded-xl p-1">
+              <button
+                onClick={() => { setViewMode('A'); setSelectedSuite(null); }}
+                className={cn(
+                  'px-3 lg:px-4 py-2.5 min-h-[44px] rounded-lg text-sm font-medium transition-all',
+                  viewMode === 'A' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
+                )}
+              >
+                A: Panel
+              </button>
+              <button
+                onClick={() => { setViewMode('B'); setSelectedSuite(null); }}
+                className={cn(
+                  'px-3 lg:px-4 py-2.5 min-h-[44px] rounded-lg text-sm font-medium transition-all',
+                  viewMode === 'B' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
+                )}
+              >
+                B: Page
+              </button>
+              <button
+                onClick={() => { setViewMode('C'); setSelectedSuite(null); }}
+                className={cn(
+                  'px-3 lg:px-4 py-2.5 min-h-[44px] rounded-lg text-sm font-medium transition-all',
+                  viewMode === 'C' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700 hover:bg-white/50'
+                )}
+              >
+                C: Modal
+              </button>
+            </div>
+
+            <nav className="hidden lg:flex items-center gap-6">
+              <Link to="/building-dual" className="text-sm text-slate-400 hover:text-slate-900 transition-colors">Original</Link>
+              <span className="text-sm text-slate-900 font-medium border-b-2 border-amber-500 pb-0.5">A/B Test</span>
+            </nav>
           </div>
-
-          <nav className="hidden md:flex items-center gap-8">
-            <Link to="/building-dual" className="text-sm text-slate-400 hover:text-slate-900 transition-colors">Original</Link>
-            <span className="text-sm text-slate-900 font-medium border-b-2 border-gold-500 pb-0.5">A/B Test</span>
-          </nav>
         </div>
       </header>
 
       <main className="flex-1 flex flex-col lg:flex-row relative">
-        {/* LEFT: Tower Building - No longer shrinks, panel is overlay */}
-        <div className="p-6 flex flex-col border-r border-slate-200/50 bg-gradient-to-b from-white to-slate-50 lg:w-[35%]">
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold heading-display text-slate-900">Select Floor</h2>
-            <p className="text-sm text-gold-600 mt-1">Click on the building to choose a floor</p>
-          </div>
-
-          <div className="flex-1 flex items-center justify-center min-h-[400px]">
-            <div className="relative h-full max-h-[600px] aspect-[3/4] w-full max-w-[400px]">
-              <img
-                src="/assets/pullman-facade.png"
-                alt="Pullman Hotel & Casino Tower"
-                className="h-full w-full object-cover rounded-2xl shadow-xl"
-              />
-
-              {/* Floor Overlays */}
-              <div className="absolute inset-0 rounded-2xl overflow-hidden">
-                {floors.map((f) => {
-                  const isHovered = hoveredFloor === f.floor
-                  const isSelected = selectedFloor === f.floor
-
-                  return (
-                    <button
-                      key={f.floor}
-                      onClick={() => setSelectedFloor(f.floor)}
-                      onMouseEnter={() => setHoveredFloor(f.floor)}
-                      onMouseLeave={() => setHoveredFloor(null)}
-                      className="absolute transition-all duration-200"
-                      style={{
-                        top: `${f.top}%`,
-                        left: `${BUILDING_CONFIG.left}%`,
-                        width: `${BUILDING_CONFIG.right - BUILDING_CONFIG.left}%`,
-                        height: `${f.height}%`,
-                      }}
-                    >
-                      {isSelected && (
-                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] floor-highlight-band flex items-center justify-center">
-                          <div className="floor-pill text-gold-700 text-xs font-bold px-3 py-0.5 rounded-md shadow-lg">
-                            {f.floor}
-                          </div>
-                        </div>
-                      )}
-                      {isHovered && !isSelected && (
-                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] bg-white/20 backdrop-blur-[2px] transition-all duration-150 rounded-sm border border-white/30" />
-                      )}
-                    </button>
-                  )
-                })}
+        {/* LEFT: Collapsible Tower Building Panel */}
+        <div
+          className={cn(
+            "flex flex-col border-r border-slate-200/50 bg-gradient-to-b from-white to-slate-50 transition-all duration-300 ease-out",
+            leftPanelCollapsed
+              ? "lg:w-[80px] p-3"
+              : "lg:w-[35%] p-6"
+          )}
+        >
+          {/* Panel Header with Collapse Toggle */}
+          <div className={cn(
+            "mb-4 flex items-center justify-between",
+            leftPanelCollapsed && "flex-col gap-3"
+          )}>
+            {!leftPanelCollapsed && (
+              <div>
+                <h2 className="text-xl font-bold heading-display text-slate-900">Select Floor</h2>
+                <p className="text-sm text-slate-500 mt-1">Click building to choose</p>
               </div>
+            )}
 
-              {/* Floor Navigator */}
-              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-3 border border-gold-200">
-                <div className="flex items-center gap-2">
-                  <button onClick={handleFloorDown} className="p-1.5 rounded-lg bg-slate-100 hover:bg-gold-100 transition-colors">
-                    <ChevronDown className="w-4 h-4" />
-                  </button>
-                  <div className="text-center min-w-[45px]">
-                    <div className="text-xl font-bold text-primary tabular-nums">{selectedFloor}</div>
-                    <div className="text-[8px] text-slate-400 uppercase tracking-wider">Floor</div>
-                  </div>
-                  <button onClick={handleFloorUp} className="p-1.5 rounded-lg bg-slate-100 hover:bg-gold-100 transition-colors">
-                    <ChevronUp className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Floor tooltip */}
-              {activeFloor && !selectedSuite && (
-                <div
-                  className="absolute z-20 pointer-events-none animate-fade-in"
-                  style={{
-                    right: '-10px',
-                    top: `${floors.find((f) => f.floor === activeFloor)?.top || 0}%`,
-                    transform: 'translateX(100%)'
-                  }}
-                >
-                  <div className="bg-white rounded-xl shadow-xl px-3 py-2 min-w-[120px] border border-gold-200">
-                    <div className="text-sm font-bold text-slate-900">Floor {activeFloor}</div>
-                    <div className="flex items-center gap-3 mt-1 text-xs">
-                      <span className="text-green-600">{getFloorStats(activeFloor).available} avail</span>
-                      <span className="text-gold-600">{getFloorStats(activeFloor).reserved} res</span>
-                    </div>
-                    <div className="absolute left-0 top-4 w-2 h-2 bg-white transform -translate-x-1 rotate-45 border-l border-b border-gold-200" />
-                  </div>
-                </div>
+            {/* Collapse Toggle Button - 44px touch target */}
+            <button
+              onClick={() => setLeftPanelCollapsed(!leftPanelCollapsed)}
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-xl bg-slate-100 hover:bg-amber-100 transition-all flex items-center justify-center group"
+              aria-label={leftPanelCollapsed ? "Expand panel" : "Collapse panel"}
+            >
+              {leftPanelCollapsed ? (
+                <PanelLeftOpen className="w-5 h-5 text-slate-600 group-hover:text-amber-600 transition-colors" />
+              ) : (
+                <PanelLeftClose className="w-5 h-5 text-slate-600 group-hover:text-amber-600 transition-colors" />
               )}
-            </div>
+            </button>
           </div>
+
+          {/* Collapsed State: Compact Floor Selector */}
+          {leftPanelCollapsed ? (
+            <div className="flex flex-col items-center gap-3 flex-1">
+              {/* Vertical Floor Navigator */}
+              <div className="flex flex-col items-center gap-2 bg-white rounded-xl shadow-md p-2 border border-slate-200">
+                <button
+                  onClick={handleFloorUp}
+                  className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-50 hover:bg-amber-100 transition-colors flex items-center justify-center"
+                >
+                  <ChevronUp className="w-5 h-5" />
+                </button>
+                <div className="text-center py-2">
+                  <div className="text-2xl font-bold text-slate-900 tabular-nums">{selectedFloor}</div>
+                  <div className="text-[10px] text-slate-500 uppercase tracking-wider">Floor</div>
+                </div>
+                <button
+                  onClick={handleFloorDown}
+                  className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-50 hover:bg-amber-100 transition-colors flex items-center justify-center"
+                >
+                  <ChevronDown className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Floor Stats Mini */}
+              <div className="flex flex-col gap-1.5 text-center">
+                <div className="flex items-center justify-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                  <span className="text-xs text-slate-600">{getFloorStats(selectedFloor).available}</span>
+                </div>
+                <div className="flex items-center justify-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-amber-500" />
+                  <span className="text-xs text-slate-600">{getFloorStats(selectedFloor).reserved}</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Expanded State: Full Building View */
+            <div className="flex-1 flex items-center justify-center min-h-[400px]">
+              <div className="relative h-full max-h-[600px] aspect-[3/4] w-full max-w-[400px]">
+                <img
+                  src="/assets/pullman-facade.png"
+                  alt="Pullman Hotel & Casino Tower"
+                  className="h-full w-full object-cover rounded-2xl shadow-xl"
+                />
+
+                {/* Floor Overlays */}
+                <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                  {floors.map((f) => {
+                    const isHovered = hoveredFloor === f.floor
+                    const isSelected = selectedFloor === f.floor
+
+                    return (
+                      <button
+                        key={f.floor}
+                        onClick={() => setSelectedFloor(f.floor)}
+                        onMouseEnter={() => setHoveredFloor(f.floor)}
+                        onMouseLeave={() => setHoveredFloor(null)}
+                        className="absolute transition-all duration-200"
+                        style={{
+                          top: `${f.top}%`,
+                          left: `${BUILDING_CONFIG.left}%`,
+                          width: `${BUILDING_CONFIG.right - BUILDING_CONFIG.left}%`,
+                          height: `${f.height}%`,
+                        }}
+                      >
+                        {isSelected && (
+                          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] floor-highlight-band flex items-center justify-center">
+                            <div className="floor-pill text-amber-700 text-xs font-bold px-3 py-0.5 rounded-md shadow-lg">
+                              {f.floor}
+                            </div>
+                          </div>
+                        )}
+                        {isHovered && !isSelected && (
+                          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] bg-white/20 backdrop-blur-[2px] transition-all duration-150 rounded-sm border border-white/30" />
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Floor Navigator */}
+                <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-3 border border-amber-200">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleFloorDown}
+                      className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    <div className="text-center min-w-[50px]">
+                      <div className="text-xl font-bold text-slate-900 tabular-nums">{selectedFloor}</div>
+                      <div className="text-[9px] text-slate-500 uppercase tracking-wider">Floor</div>
+                    </div>
+                    <button
+                      onClick={handleFloorUp}
+                      className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
+                    >
+                      <ChevronUp className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Floor tooltip */}
+                {activeFloor && !selectedSuite && (
+                  <div
+                    className="absolute z-20 pointer-events-none animate-fade-in"
+                    style={{
+                      right: '-10px',
+                      top: `${floors.find((f) => f.floor === activeFloor)?.top || 0}%`,
+                      transform: 'translateX(100%)'
+                    }}
+                  >
+                    <div className="bg-white rounded-xl shadow-xl px-3 py-2 min-w-[120px] border border-amber-200">
+                      <div className="text-sm font-bold text-slate-900">Floor {activeFloor}</div>
+                      <div className="flex items-center gap-3 mt-1 text-xs">
+                        <span className="text-green-600">{getFloorStats(activeFloor).available} avail</span>
+                        <span className="text-amber-600">{getFloorStats(activeFloor).reserved} res</span>
+                      </div>
+                      <div className="absolute left-0 top-4 w-2 h-2 bg-white transform -translate-x-1 rotate-45 border-l border-b border-amber-200" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* MIDDLE: Floor Plan - No longer shrinks, panel is overlay */}
-        <div className="p-6 flex flex-col bg-white lg:w-[65%]">
+        {/* MIDDLE: Floor Plan - Expands when left panel collapses */}
+        <div className={cn(
+          "p-6 flex flex-col bg-white transition-all duration-300 ease-out",
+          leftPanelCollapsed ? "lg:flex-1" : "lg:w-[65%]"
+        )}>
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold heading-display text-slate-900">Floor {selectedFloor} Layout</h2>
@@ -630,35 +728,37 @@ export default function BuildingExplorerDualAB() {
           </>
         )}
 
-        {/* OPTION C: Large Modal Overlay */}
+        {/* OPTION C: Large Modal Overlay - UX Optimized */}
         {viewMode === 'C' && selectedSuite && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in"
             onClick={handleClosePanel}
           >
             <div
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden animate-scale-in"
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl max-h-[90vh] overflow-hidden animate-modal-in"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex h-full max-h-[90vh]">
-                {/* Left: Image Gallery */}
-                <div className="w-1/2 bg-slate-900 relative">
+                {/* Left: Image Gallery - Enhanced */}
+                <div className="w-[55%] bg-slate-900 relative min-h-[500px]">
                   <img
                     src={activeImageTab === 'floorplan' ? getFloorPlanImage(selectedSuite.unit_number) : getSuiteImage(selectedSuite.unit_number)}
                     alt={`Suite ${selectedSuite.floor}-${selectedSuite.unit_number}`}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
-                  {/* Image Tabs */}
+                  {/* Image Tabs - 44px touch targets */}
                   <div className="absolute top-4 left-4 flex gap-2">
                     {['interior', 'views', 'floorplan'].map((tab) => (
                       <button
                         key={tab}
                         onClick={() => setActiveImageTab(tab as any)}
                         className={cn(
-                          'px-4 py-2 rounded-lg text-sm font-medium transition-all capitalize',
-                          activeImageTab === tab ? 'bg-white text-slate-900' : 'bg-white/20 text-white hover:bg-white/30'
+                          'px-4 py-2.5 min-h-[44px] rounded-xl text-sm font-semibold transition-all duration-200 capitalize',
+                          activeImageTab === tab
+                            ? 'bg-white text-slate-900 shadow-lg'
+                            : 'bg-white/20 backdrop-blur text-white hover:bg-white/30'
                         )}
                       >
                         {tab}
@@ -666,120 +766,160 @@ export default function BuildingExplorerDualAB() {
                     ))}
                   </div>
 
-                  {/* Suite Name Overlay */}
-                  <div className="absolute bottom-6 left-6">
+                  {/* Image Navigation Arrows */}
+                  {activeImageTab !== 'floorplan' && (
+                    <>
+                      <button className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all active:scale-95">
+                        <ChevronLeft className="w-6 h-6 text-slate-700" />
+                      </button>
+                      <button className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all active:scale-95">
+                        <ChevronRight className="w-6 h-6 text-slate-700" />
+                      </button>
+                    </>
+                  )}
+
+                  {/* Suite Name Overlay - Better typography hierarchy */}
+                  <div className="absolute bottom-6 left-6 right-6">
                     <span className={cn(
-                      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium mb-3',
+                      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold mb-3',
                       selectedSuite.status === 'available' ? 'bg-green-500 text-white' :
-                      selectedSuite.status === 'reserved' ? 'bg-gold-500 text-white' :
+                      selectedSuite.status === 'reserved' ? 'bg-amber-500 text-white' :
                       'bg-slate-500 text-white'
                     )}>
+                      {(() => {
+                        const StatusIcon = statusConfig[selectedSuite.status].icon
+                        return <StatusIcon className="w-4 h-4" />
+                      })()}
                       {statusConfig[selectedSuite.status].label}
                     </span>
-                    <h2 className="text-4xl font-bold text-white heading-display">
+                    <h2 className="text-4xl lg:text-5xl font-bold text-white heading-display">
                       Suite {selectedSuite.floor}-{selectedSuite.unit_number}
                     </h2>
-                    <p className="text-gold-300 text-xl mt-1">{getSuiteType(selectedSuite.size_sqm)}</p>
+                    <p className="text-amber-300 text-xl lg:text-2xl mt-2 font-medium">{getSuiteType(selectedSuite.size_sqm)}</p>
+                  </div>
+
+                  {/* Image Counter */}
+                  <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/60 backdrop-blur text-white text-sm font-medium rounded-full">
+                    1 / 3
                   </div>
                 </div>
 
-                {/* Right: Details */}
-                <div className="w-1/2 overflow-y-auto">
-                  <div className="sticky top-0 bg-white z-10 p-6 border-b border-slate-200 flex items-center justify-between">
+                {/* Right: Details - Enhanced layout */}
+                <div className="w-[45%] overflow-y-auto flex flex-col">
+                  {/* Sticky Header */}
+                  <div className="sticky top-0 bg-white z-10 px-6 py-5 border-b border-slate-200 flex items-center justify-between">
                     <div>
-                      <div className="text-slate-400 text-sm">Starting from</div>
-                      <div className="text-2xl font-bold text-slate-900">Contact for Pricing</div>
+                      <div className="text-slate-500 text-sm font-medium">Starting from</div>
+                      <div className="text-2xl lg:text-3xl font-bold text-slate-900 heading-display">Contact for Pricing</div>
                     </div>
                     <button
                       onClick={handleClosePanel}
-                      className="p-2.5 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors"
+                      className="p-3 min-w-[48px] min-h-[48px] bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors flex items-center justify-center"
+                      aria-label="Close modal"
                     >
-                      <CloseIcon className="w-5 h-5" />
+                      <CloseIcon className="w-5 h-5 text-slate-600" />
                     </button>
                   </div>
 
-                  <div className="p-6">
-                    {/* Quick Stats */}
-                    <div className="grid grid-cols-3 gap-4 mb-8">
-                      <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <Maximize2 className="w-6 h-6 text-gold-500 mx-auto mb-2" />
-                        <div className="text-xl font-bold text-slate-900">{selectedSuite.size_sqm}</div>
-                        <div className="text-xs text-slate-500">Square Meters</div>
+                  <div className="p-6 flex-1">
+                    {/* Quick Stats - Enhanced cards */}
+                    <div className="grid grid-cols-3 gap-3 mb-6">
+                      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 text-center border border-slate-200/50">
+                        <Maximize2 className="w-6 h-6 text-amber-500 mx-auto mb-2" />
+                        <div className="text-2xl font-bold text-slate-900 heading-display">{selectedSuite.size_sqm}</div>
+                        <div className="text-xs text-slate-500 font-medium">Square Meters</div>
                       </div>
-                      <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <Building2 className="w-6 h-6 text-gold-500 mx-auto mb-2" />
-                        <div className="text-xl font-bold text-slate-900">{selectedSuite.floor}</div>
-                        <div className="text-xs text-slate-500">Floor Level</div>
+                      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 text-center border border-slate-200/50">
+                        <Building2 className="w-6 h-6 text-amber-500 mx-auto mb-2" />
+                        <div className="text-2xl font-bold text-slate-900 heading-display">{selectedSuite.floor}</div>
+                        <div className="text-xs text-slate-500 font-medium">Floor Level</div>
                       </div>
-                      <div className="bg-slate-50 rounded-xl p-4 text-center">
-                        <Mountain className="w-6 h-6 text-gold-500 mx-auto mb-2" />
-                        <div className="text-xl font-bold text-slate-900">Ocean</div>
-                        <div className="text-xs text-slate-500">View</div>
+                      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 text-center border border-slate-200/50">
+                        <Mountain className="w-6 h-6 text-amber-500 mx-auto mb-2" />
+                        <div className="text-2xl font-bold text-slate-900 heading-display">Ocean</div>
+                        <div className="text-xs text-slate-500 font-medium">View</div>
                       </div>
                     </div>
 
-                    {/* Details */}
-                    <div className="grid grid-cols-2 gap-8 mb-8">
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Suite Features</h3>
-                        <div className="space-y-3">
+                    {/* Features & Amenities - Two columns with all items */}
+                    <div className="grid grid-cols-2 gap-6 mb-6">
+                      <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-amber-500" />
+                          Suite Features
+                        </h3>
+                        <div className="space-y-2.5">
                           {SUITE_FEATURES.map((feature, i) => (
-                            <div key={i} className="flex items-center gap-3 text-slate-700">
-                              <feature.icon className="w-5 h-5 text-gold-500" />
-                              <span>{feature.label}</span>
+                            <div key={i} className="flex items-center gap-2.5 text-slate-700">
+                              <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                              <span className="text-sm">{feature.label}</span>
                             </div>
                           ))}
                         </div>
                       </div>
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Hotel Amenities</h3>
-                        <div className="space-y-3">
-                          {HOTEL_AMENITIES.slice(0, 4).map((amenity, i) => (
-                            <div key={i} className="flex items-center gap-3 text-slate-700">
-                              <amenity.icon className="w-5 h-5 text-gold-500" />
-                              <span>{amenity.label}</span>
+                      <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                          <Star className="w-4 h-4 text-amber-500" />
+                          Hotel Amenities
+                        </h3>
+                        <div className="space-y-2.5">
+                          {HOTEL_AMENITIES.map((amenity, i) => (
+                            <div key={i} className="flex items-center gap-2.5 text-slate-700">
+                              <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                              <span className="text-sm">{amenity.label}</span>
                             </div>
                           ))}
                         </div>
                       </div>
                     </div>
 
-                    {/* CTAs */}
+                    {/* CTAs - Enhanced with better hierarchy */}
                     {selectedSuite.status !== 'sold' && (
-                      <div className="space-y-3">
-                        <button className="w-full py-4 bg-primary text-white font-medium rounded-xl hover:bg-primary-light transition-colors flex items-center justify-center gap-2">
-                          <Download className="w-5 h-5" />
-                          Download Brochure
+                      <div className="space-y-3 mb-6">
+                        <button className="w-full py-4 min-h-[52px] bg-amber-500 text-white font-semibold rounded-xl hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 active:scale-[0.98]">
+                          <Phone className="w-5 h-5" />
+                          Schedule a Viewing
                         </button>
                         <div className="flex gap-3">
-                          <button className="flex-1 py-3 bg-white border-2 border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">
+                          <button className="flex-1 py-3.5 min-h-[48px] bg-slate-900 text-white font-medium rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
+                            <Download className="w-4 h-4" />
+                            Brochure
+                          </button>
+                          <button className="flex-1 py-3.5 min-h-[48px] bg-white border-2 border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
                             <Share2 className="w-4 h-4" />
                             Share
                           </button>
-                          <button className="flex-1 py-3 bg-gold-500 text-white font-medium rounded-xl hover:bg-gold-600 transition-colors flex items-center justify-center gap-2">
-                            <Phone className="w-4 h-4" />
-                            Contact Sales
-                          </button>
                         </div>
+                        {/* View on Floor Plan - New UX feature */}
+                        <button
+                          onClick={handleClosePanel}
+                          className="w-full py-3 min-h-[44px] bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
+                        >
+                          <MapPin className="w-4 h-4" />
+                          View on Floor Plan
+                        </button>
                       </div>
                     )}
 
-                    {/* Similar Suites */}
+                    {/* Similar Suites - Enhanced cards */}
                     {similarSuites.length > 0 && (
-                      <div className="mt-8 pt-6 border-t border-slate-200">
-                        <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Similar Suites</h3>
-                        <div className="grid grid-cols-2 gap-3">
+                      <div className="pt-5 border-t border-slate-200">
+                        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                          <Bed className="w-4 h-4 text-amber-500" />
+                          Similar Suites
+                        </h3>
+                        <div className="grid grid-cols-2 gap-2">
                           {similarSuites.slice(0, 4).map((suite) => (
                             <button
                               key={suite.id}
                               onClick={() => setSelectedSuite(suite)}
-                              className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors text-left"
+                              className="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-200 hover:border-amber-300 hover:shadow-md transition-all text-left group"
                             >
                               <div>
-                                <div className="font-medium text-slate-900">Suite {suite.floor}-{suite.unit_number}</div>
+                                <div className="font-semibold text-slate-900 group-hover:text-amber-600 transition-colors">Suite {suite.floor}-{suite.unit_number}</div>
                                 <div className="text-sm text-slate-500">{suite.size_sqm} m²</div>
                               </div>
-                              <ArrowRight className="w-4 h-4 text-slate-400" />
+                              <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
                             </button>
                           ))}
                         </div>
