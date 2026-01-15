@@ -113,23 +113,25 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
   }
 
   return (
-    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center">
-      {/* Floor plan container */}
-      <div className="relative w-full h-full flex items-center justify-center">
+    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center overflow-hidden">
+      {/* Floor plan container - maintains aspect ratio for SVG alignment */}
+      <div
+        className="relative h-[90%] max-w-full"
+        style={{ aspectRatio: '1188 / 1238' }}
+      >
         {/* Clean Floor Plan Image */}
-        <div className="relative" style={{ maxWidth: '100%', maxHeight: '100%' }}>
-          <img
-            src="/assets/floorplans/pullman-plan.png"
-            alt={`Floor ${floor} Plan`}
-            className="max-w-full max-h-full object-contain"
-          />
+        <img
+          src="/assets/floorplans/pullman-plan.png"
+          alt={`Floor ${floor} Plan`}
+          className="absolute inset-0 w-full h-full object-contain"
+        />
 
-          {/* SVG Overlay - matches image dimensions for proper alignment */}
-          <svg
-            viewBox="0 0 1188 1238"
-            preserveAspectRatio="xMidYMid meet"
-            className="absolute inset-0 w-full h-full"
-          >
+        {/* SVG Overlay - matches image dimensions for proper alignment */}
+        <svg
+          viewBox="0 0 1188 1238"
+          preserveAspectRatio="xMidYMid meet"
+          className="absolute inset-0 w-full h-full"
+        >
             <defs>
               {/* Refined glow effect for selected suites */}
               <filter id="selectedGlow" x="-30%" y="-30%" width="160%" height="160%">
@@ -197,14 +199,13 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
               )
             })}
           </svg>
-        </div>
 
-        {/* Floor label */}
-        <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-5 py-3 shadow-lg border border-gold-200">
-          <div className="text-xl font-bold text-slate-900 heading-display">Floor {floor}</div>
-          <div className="text-sm text-gold-600 font-medium">18 Executive Suites</div>
+          {/* Floor label */}
+          <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg border border-gold-200">
+            <div className="text-lg font-bold text-slate-900 heading-display">Floor {floor}</div>
+            <div className="text-xs text-gold-600 font-medium">18 Executive Suites</div>
+          </div>
         </div>
-      </div>
 
       {/* Floating Tooltip - Refined Design */}
       {hoveredSuite && tooltipPos && (

@@ -28,11 +28,11 @@ function AppRoutes() {
       <Routes location={location}>
         {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/building" element={<BuildingExplorer />} />
+        <Route path="/building" element={<BuildingExplorerDualAB />} />
+        <Route path="/building-classic" element={<BuildingExplorer />} />
         <Route path="/building-v2" element={<BuildingExplorerV2 />} />
         <Route path="/building-v3" element={<BuildingExplorerV3 />} />
         <Route path="/building-dual" element={<BuildingExplorerDual />} />
-        <Route path="/building-dual-ab" element={<BuildingExplorerDualAB />} />
         <Route path="/suite/:floor/:unit" element={<SuiteDetailPage />} />
         <Route path="/suites" element={<SuitesExplorer />} />
         <Route path="/about" element={<AboutPage />} />

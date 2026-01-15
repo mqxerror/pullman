@@ -326,7 +326,7 @@ export default function SuiteDetailPage() {
             {/* CTA Buttons */}
             <div className="flex gap-4">
               <button className="flex-1 py-4 bg-gold-600 text-white rounded-xl font-semibold hover:bg-gold-700 transition-all">
-                Schedule a Viewing
+                Contact Us
               </button>
               <button className="flex-1 py-4 border-2 border-slate-900 text-slate-900 rounded-xl font-semibold hover:bg-slate-900 hover:text-white transition-all">
                 Request Information
