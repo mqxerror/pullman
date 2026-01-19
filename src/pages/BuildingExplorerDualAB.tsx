@@ -389,23 +389,21 @@ export default function BuildingExplorerDualAB() {
                   </div>
                 </div>
 
-                {/* Floor tooltip */}
+                {/* Floor tooltip - positioned inside the building image */}
                 {activeFloor && !selectedSuite && (
                   <div
                     className="absolute z-20 pointer-events-none animate-fade-in"
                     style={{
-                      right: '-10px',
+                      right: '8px',
                       top: `${floors.find((f) => f.floor === activeFloor)?.top || 0}%`,
-                      transform: 'translateX(100%)'
                     }}
                   >
-                    <div className="bg-white rounded-xl shadow-xl px-3 py-2 min-w-[120px] border border-gold-200">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg px-3 py-2 min-w-[100px] border border-gold-200">
                       <div className="text-sm font-bold text-slate-900">Floor {activeFloor}</div>
-                      <div className="flex items-center gap-3 mt-1 text-xs">
+                      <div className="flex items-center gap-2 mt-1 text-xs">
                         <span className="text-green-600">{getFloorStats(activeFloor).available} avail</span>
-                        <span className="text-gold-600">{getFloorStats(activeFloor).reserved} res</span>
+                        <span className="text-amber-600">{getFloorStats(activeFloor).reserved} res</span>
                       </div>
-                      <div className="absolute left-0 top-4 w-2 h-2 bg-white transform -translate-x-1 rotate-45 border-l border-b border-gold-200" />
                     </div>
                   </div>
                 )}
