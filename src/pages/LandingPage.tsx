@@ -580,35 +580,35 @@ export default function LandingPage() {
       </section>
 
       {/* Full-bleed Lifestyle Break - Interactive Unit Preview */}
-      <section className="relative h-[45vh] min-h-[360px] flex items-center overflow-hidden">
+      <section className="relative h-[50vh] min-h-[400px] flex items-center overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/assets/gallery/view-rooftop.jpg"
-            alt="Rooftop lifestyle"
+            src="/assets/hotel-entrance.png"
+            alt="Panama City Central Hotel Entrance"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
         </div>
         {/* Content */}
         <div className="relative page-container">
           <div className="max-w-lg">
-            <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-3">
-              {stats.available} Units Available
+            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
+              {stats.available} of {stats.totalUnits} Units Available
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-3">
+            <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4">
               Find Your Perfect Residence
             </h2>
-            <p className="text-base text-white/70 mb-6">
-              From studios to penthouses — explore floor plans, views, and pricing in our interactive building explorer.
+            <p className="text-base md:text-lg text-white/80 mb-8">
+              From executive suites to premium residences — explore floor plans, views, and availability in our interactive building explorer.
             </p>
             <Link to="/building">
               <HoverBorderGradient
                 containerClassName="rounded-xl"
-                className="flex items-center gap-2 px-6 py-3 bg-slate-950 text-white font-medium"
+                className="flex items-center gap-2 px-8 py-4 bg-slate-950 text-white font-semibold"
               >
                 Explore All Units
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-5 h-5" />
               </HoverBorderGradient>
             </Link>
           </div>
