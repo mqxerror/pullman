@@ -180,9 +180,9 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
                   d={path}
                   fill={isSelected ? config.selectedFill : isHovered ? config.hoverFill : config.fill}
                   stroke={config.stroke}
-                  strokeWidth={isSelected ? 2 : isHovered ? 1.5 : 1}
+                  strokeWidth={isSelected ? 2.5 : isHovered ? 2 : 1.5}
                   strokeLinejoin="round"
-                  className="cursor-pointer transition-all duration-200 ease-out"
+                  className="cursor-pointer transition-all duration-200 ease-out touch-manipulation"
                   style={{
                     vectorEffect: 'non-scaling-stroke',
                     opacity: status === 'sold' && !isHovered && !isSelected ? 0.7 : 1
@@ -194,6 +194,17 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
                     setHoveredSuite(null)
                     setTooltipPos(null)
                   }}
+                  onTouchStart={(e) => {
+                    if (containerRef.current) {
+                      const touch = e.touches[0]
+                      const rect = containerRef.current.getBoundingClientRect()
+                      setTooltipPos({
+                        x: touch.clientX - rect.left,
+                        y: touch.clientY - rect.top - 10
+                      })
+                    }
+                    setHoveredSuite(unitNumber)
+                  }}
                   onClick={() => suite && onSuiteClick(suite)}
                 />
               )
@@ -203,7 +214,7 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
           {/* Floor label */}
           <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg border border-gold-200">
             <div className="text-lg font-bold text-slate-900 heading-display">Floor {floor}</div>
-            <div className="text-xs text-gold-600 font-medium">18 Executive Suites</div>
+            <div className="text-xs text-gold-600 font-medium">18 Luxury Suites</div>
           </div>
         </div>
 
