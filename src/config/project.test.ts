@@ -4,7 +4,7 @@ import { projectConfig, SUITE_SIZES } from './project'
 describe('Project Configuration', () => {
   describe('Project Info', () => {
     it('should have project name', () => {
-      expect(projectConfig.name).toBe('Pullman Hotel & Casino Panama')
+      expect(projectConfig.name).toBe('Panama City Central')
     })
 
     it('should have tagline', () => {
@@ -15,18 +15,20 @@ describe('Project Configuration', () => {
 
   describe('Building Configuration', () => {
     it('should have correct floor configuration', () => {
-      expect(projectConfig.building.totalFloors).toBe(9)
+      expect(projectConfig.building.totalFloors).toBe(9) // All floors 17-25
       expect(projectConfig.building.floorRange.min).toBe(17)
       expect(projectConfig.building.floorRange.max).toBe(25)
     })
 
     it('should have correct unit configuration', () => {
-      expect(projectConfig.building.totalUnits).toBe(126)
+      expect(projectConfig.building.totalUnits).toBe(98) // 7 floors × 14 units
       expect(projectConfig.building.unitsPerFloor).toBe(14)
     })
 
     it('should have consistent totals', () => {
-      const calculatedTotal = projectConfig.building.totalFloors * projectConfig.building.unitsPerFloor
+      // Only residential floors have units (totalFloors - 2 amenity floors)
+      const residentialFloors = projectConfig.building.totalFloors - 2
+      const calculatedTotal = residentialFloors * projectConfig.building.unitsPerFloor
       expect(calculatedTotal).toBe(projectConfig.building.totalUnits)
     })
   })

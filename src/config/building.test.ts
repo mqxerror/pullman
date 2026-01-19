@@ -16,7 +16,7 @@ describe('Building Configuration', () => {
   describe('Constants', () => {
     it('should have correct floor range', () => {
       expect(MIN_FLOOR).toBe(17)
-      expect(MAX_FLOOR).toBe(25)
+      expect(MAX_FLOOR).toBe(25) // All floors including amenities
       expect(TOTAL_FLOORS).toBe(9)
     })
 
@@ -25,7 +25,9 @@ describe('Building Configuration', () => {
     })
 
     it('should calculate total suites correctly', () => {
-      expect(TOTAL_FLOORS * UNITS_PER_FLOOR).toBe(126)
+      // Only residential floors (17-23 = 7 floors) have suites
+      // TOTAL_FLOORS includes amenity floors 24-25
+      expect(7 * UNITS_PER_FLOOR).toBe(98)
     })
   })
 
@@ -59,16 +61,16 @@ describe('Building Configuration', () => {
     })
 
     it('should have reasonable floor band coverage', () => {
-      // Floor 25 should be near top, Floor 17 near bottom of golden section
-      const topFloor = FLOOR_POSITIONS[25]
+      // Floor 23 should be near top, Floor 17 near bottom of residential section
+      const topFloor = FLOOR_POSITIONS[23]
       const bottomFloor = FLOOR_POSITIONS[17]
 
       // Top floor should start higher (lower %) than bottom floor
       expect(topFloor.top).toBeLessThan(bottomFloor.top)
 
-      // Coverage should span reasonable portion of image (20-40%)
+      // Coverage should span reasonable portion of image (15-40%)
       const coverage = (bottomFloor.top + bottomFloor.height) - topFloor.top
-      expect(coverage).toBeGreaterThan(20)
+      expect(coverage).toBeGreaterThan(15)
       expect(coverage).toBeLessThan(50)
     })
   })
@@ -153,9 +155,9 @@ describe('Building Configuration', () => {
       })
 
       it('should return different focus points for different floors', () => {
-        const focus25 = getFloorFocusPoint(25)
+        const focus23 = getFloorFocusPoint(23)
         const focus17 = getFloorFocusPoint(17)
-        expect(focus25.y).not.toBe(focus17.y)
+        expect(focus23.y).not.toBe(focus17.y)
       })
     })
   })

@@ -1,4 +1,4 @@
-// Pullman Hotel - Building Visualization Configuration
+// Panama City Central - Building Visualization Configuration
 // Floor coordinate mapping for facade image hotspots
 
 /**
@@ -10,42 +10,67 @@
  * Run the app and adjust values until hotspots align with actual floors.
  */
 
-// Floor range for Executive Suites
+// Floor range for building visualization (all floors 17-25)
 export const MIN_FLOOR = 17
-export const MAX_FLOOR = 25
-export const TOTAL_FLOORS = MAX_FLOOR - MIN_FLOOR + 1 // 9 floors
+export const MAX_FLOOR = 25  // All floors including amenities
+export const TOTAL_FLOORS = MAX_FLOOR - MIN_FLOOR + 1 // 9 floors total
 export const UNITS_PER_FLOOR = 14
 
 /**
- * Floor position mapping on facade image
+ * BUILDING_CONFIG - Single source of truth for floor overlay positioning
+ * These percentages map to the pullman-facade-v2.png image
+ *
+ * Calibrated by visual inspection:
+ * - top: Where floor 25 (top floor) starts
+ * - bottom: Where floor 17 (bottom floor) ends
+ * - left/right: Horizontal bounds of the building facade
+ */
+export const BUILDING_CONFIG = {
+  top: 22,      // Start of executive floors (floor 25)
+  bottom: 44,   // End of executive floors (floor 17) - tighter mapping to actual floor bands
+  left: 30,     // Left edge of building
+  right: 70,    // Right edge of building
+}
+
+// Residential vs Amenity floor classification
+export const MAX_RESIDENTIAL_FLOOR = 23  // Floors 17-23 have apartments
+export const RESIDENTIAL_FLOORS = 7  // 7 residential floors (17-23)
+export const AMENITY_FLOORS = [24, 25] as const
+export const AMENITY_FLOOR_LABELS: Record<number, string> = {
+  24: 'Sky Lounge & Gym',
+  25: 'Rooftop Pool & Bar',
+}
+
+// Helper to check if floor is amenity
+export const isAmenityFloor = (floor: number): boolean =>
+  AMENITY_FLOORS.includes(floor as typeof AMENITY_FLOORS[number])
+
+/**
+ * Floor position mapping on facade image (pullman-facade-v2.png)
  * All values are percentages of image dimensions
  *
- * top: Distance from top of image to top of floor band
- * height: Height of the clickable floor band
- * left/right: Horizontal bounds of the building on image
- *
- * NOTE: The facade is an aerial/perspective view, so floors
- * appear slightly different sizes. These are approximations.
+ * These are auto-calculated from BUILDING_CONFIG for consistency.
+ * span = bottom - top = 42%
+ * height per floor = 42 / 9 = 4.67%
  */
+const FLOOR_HEIGHT = (BUILDING_CONFIG.bottom - BUILDING_CONFIG.top) / TOTAL_FLOORS
+
 export const FLOOR_POSITIONS: Record<number, {
   top: number
   height: number
   left: number
   right: number
-}> = {
-  // Executive Suite Floors (17-25) - Golden windowed section
-  // Cropped image: Building is more prominent and centered
-  // 9 floors spanning from ~14% to ~54% (40% total, ~4.4% each)
-  25: { top: 14.0, height: 4.4, left: 28, right: 72 },
-  24: { top: 18.4, height: 4.4, left: 28, right: 72 },
-  23: { top: 22.8, height: 4.4, left: 28, right: 72 },
-  22: { top: 27.2, height: 4.4, left: 28, right: 72 },
-  21: { top: 31.6, height: 4.4, left: 28, right: 72 },
-  20: { top: 36.0, height: 4.4, left: 28, right: 72 },
-  19: { top: 40.4, height: 4.4, left: 28, right: 72 },
-  18: { top: 44.8, height: 4.4, left: 28, right: 72 },
-  17: { top: 49.2, height: 4.4, left: 28, right: 72 },
-}
+}> = Object.fromEntries(
+  Array.from({ length: TOTAL_FLOORS }, (_, i) => {
+    const floor = MAX_FLOOR - i
+    return [floor, {
+      top: BUILDING_CONFIG.top + (i * FLOOR_HEIGHT),
+      height: FLOOR_HEIGHT,
+      left: BUILDING_CONFIG.left,
+      right: BUILDING_CONFIG.right,
+    }]
+  })
+)
 
 /**
  * Building boundary on the facade image
@@ -53,15 +78,15 @@ export const FLOOR_POSITIONS: Record<number, {
  */
 export const BUILDING_BOUNDS = {
   // Where the Pullman building sits in the image (percentages)
-  // Cropped image: Building is more prominent
-  top: 8,       // Top of building (roof structures)
-  bottom: 70,   // Base of building
-  left: 25,     // Left edge
-  right: 75,    // Right edge
+  // New image (pullman-facade-v2.png): Building is centered
+  top: 10,      // Top of building (roof structures)
+  bottom: 65,   // Base of building
+  left: 28,     // Left edge
+  right: 72,    // Right edge
 
   // Center point for zoom calculations
   centerX: 50,
-  centerY: 35,
+  centerY: 38,  // Center of golden section
 }
 
 /**

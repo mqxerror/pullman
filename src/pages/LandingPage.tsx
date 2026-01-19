@@ -4,18 +4,18 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Apartment } from '@/types/database'
 import { projectConfig } from '@/config/project'
-import { MapPin, Gem, Building2, TrendingUp, ChevronRight, Download, ArrowRight, Check, Bed, Maximize2, Compass, Users, Calendar, Globe, Award, ExternalLink, Menu, X } from 'lucide-react'
+import { MapPin, Building2, TrendingUp, ChevronRight, Download, ArrowRight, Users, Calendar, Globe, ExternalLink, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Footer from '@/components/Footer'
-import { FeaturedUnitsSkeleton } from '@/components/Skeleton'
+// Aceternity UI Components
+import { BackgroundBeams, TextGenerateEffect, FlipWords, Spotlight, HoverBorderGradient, FocusCards } from '@/components/ui'
 
-const iconMap = {
-  MapPin,
-  Gem,
-  Building2,
-  TrendingUp,
-  Award,
-}
+// Gallery images for FocusCards showcase
+const galleryCards = [
+  { title: 'Rooftop Infinity Pool', src: '/assets/gallery/rooftop-pool.jpg', subtitle: 'Panoramic views' },
+  { title: 'Elegant Suites', src: '/assets/gallery/suite-type-07.jpg', subtitle: 'Luxury finishes' },
+  { title: 'Grand Lobby', src: '/assets/gallery/lobby.jpg', subtitle: 'Premium entrance' },
+]
 
 export default function LandingPage() {
   const navigate = useNavigate()
@@ -34,7 +34,7 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const { data: apartments = [], isLoading } = useQuery({
+  const { data: apartments = [] } = useQuery({
     queryKey: ['apartments'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -56,12 +56,6 @@ export default function LandingPage() {
     startingPrice: projectConfig.pricing.startingFrom,
     deliveryYear: projectConfig.building.completionYear,
   }
-
-  // Featured units (available, higher floors)
-  const featuredUnits = apartments
-    .filter((a) => a.status === 'available')
-    .sort((a, b) => b.floor - a.floor)
-    .slice(0, 4)
 
   const handleSearch = () => {
     const params = new URLSearchParams()
@@ -97,13 +91,16 @@ export default function LandingPage() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
               <Link to="/building" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                Explore
+                Interactive Map
+              </Link>
+              <Link to="/apartments" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
+                Apartments
               </Link>
               <Link to="/location" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
                 Location
               </Link>
               <Link to="/about" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                Residences
+                About
               </Link>
               <a href="#investor" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
                 Investor
@@ -133,7 +130,14 @@ export default function LandingPage() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
                 >
-                  Explore Units
+                  Interactive Map
+                </Link>
+                <Link
+                  to="/apartments"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
+                >
+                  Apartments
                 </Link>
                 <Link
                   to="/location"
@@ -147,7 +151,7 @@ export default function LandingPage() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
                 >
-                  Residences
+                  About
                 </Link>
                 <a
                   href="#investor"
@@ -169,9 +173,9 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section id="main-content" className="relative h-[85vh] min-h-[600px] flex items-center">
-        {/* Background with subtle parallax effect */}
+      {/* Hero Section - Enhanced with Aceternity UI */}
+      <section id="main-content" className="relative h-[85vh] min-h-[600px] flex items-center overflow-hidden">
+        {/* Background Image with Parallax */}
         <div className="absolute inset-0 overflow-hidden">
           <div
             className="absolute inset-0 scale-105"
@@ -184,64 +188,94 @@ export default function LandingPage() {
             />
           </div>
           {/* Layered gradient for depth */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
         </div>
 
+        {/* Animated Spotlight Effect */}
+        <Spotlight
+          className="-top-40 left-0 md:left-60 md:-top-20"
+          fill="#d4af37"
+        />
+
+        {/* Animated Background Beams */}
+        <BackgroundBeams className="opacity-40" />
+
         {/* Content */}
-        <div className="relative page-container">
+        <div className="relative page-container z-10">
           <div className="max-w-2xl">
-            <p className="text-accent text-sm font-medium tracking-wider uppercase mb-4">
-              {projectConfig.location.neighborhood}, {projectConfig.location.city}
-            </p>
-            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-4">
-              {projectConfig.name}
+            {/* Location Tag with Animation */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent/20 backdrop-blur-sm rounded-full border border-accent/30 mb-6">
+              <MapPin className="w-3.5 h-3.5 text-accent" />
+              <span className="text-accent text-xs font-medium tracking-wider uppercase">
+                {projectConfig.location.neighborhood}, {projectConfig.location.city}
+              </span>
+            </div>
+
+            {/* Animated Heading */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
+              <TextGenerateEffect
+                words={projectConfig.name}
+                className="text-white"
+                filter={false}
+                duration={0.8}
+              />
             </h1>
-            <p className="text-xl text-white/80 mb-8">
-              {projectConfig.tagline}
+
+            {/* Animated Tagline with FlipWords */}
+            <p className="text-xl md:text-2xl text-white/80 mb-8 flex items-center gap-2 flex-wrap">
+              Experience
+              <FlipWords
+                words={['Luxury', 'Elegance', 'Comfort', 'Excellence']}
+                className="text-accent font-semibold"
+                duration={3000}
+              />
+              <span className="hidden sm:inline">in the heart of Panama</span>
             </p>
 
-            {/* CTAs */}
-            <div className="flex items-center gap-3 mb-10">
-              <Link
-                to="/building"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-light text-white font-medium rounded-xl transition-colors"
-              >
-                Explore Availability
-                <ArrowRight className="w-4 h-4" />
+            {/* CTAs with HoverBorderGradient */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10">
+              <Link to="/building">
+                <HoverBorderGradient
+                  containerClassName="rounded-xl"
+                  className="flex items-center gap-2 px-6 py-3 bg-slate-950 text-white font-medium"
+                >
+                  Explore Availability
+                  <ArrowRight className="w-4 h-4" />
+                </HoverBorderGradient>
               </Link>
               <a
                 href="/Floor_Plan_Santa_Maria.pdf"
                 download="Santa-Maria-Residences-Brochure.pdf"
-                className="inline-flex items-center gap-2 px-5 py-3 text-white/80 hover:text-white text-sm font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-3 text-white/80 hover:text-white text-sm font-medium transition-colors group"
               >
-                <Download className="w-4 h-4" />
-                Brochure
+                <Download className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                Download Brochure
               </a>
             </div>
 
-            {/* Trust Strip - Key Metrics */}
-            <div className="grid grid-cols-2 sm:inline-flex sm:items-center gap-3 sm:gap-4 px-4 py-3 sm:py-2.5 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
+            {/* Trust Strip - Key Metrics with Glass Effect */}
+            <div className="grid grid-cols-2 sm:inline-flex sm:items-center gap-3 sm:gap-4 px-4 py-3 sm:py-2.5 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl">
               <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-white/70" aria-hidden="true" />
+                <Building2 className="w-4 h-4 text-accent" aria-hidden="true" />
                 <span className="text-white font-semibold">{stats.floors}</span>
                 <span className="text-white/70 text-sm">Floors</span>
               </div>
               <div className="hidden sm:block w-px h-4 bg-white/20" aria-hidden="true" />
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-white/70" aria-hidden="true" />
+                <Users className="w-4 h-4 text-accent" aria-hidden="true" />
                 <span className="text-white font-semibold">{stats.available}</span>
                 <span className="text-white/70 text-sm">Available</span>
               </div>
               <div className="hidden sm:block w-px h-4 bg-white/20" aria-hidden="true" />
               <div className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-white/70" aria-hidden="true" />
+                <TrendingUp className="w-4 h-4 text-accent" aria-hidden="true" />
                 <span className="text-white font-semibold">{stats.startingPrice}</span>
                 <span className="text-white/70 text-sm">From</span>
               </div>
               <div className="hidden sm:block w-px h-4 bg-white/20" aria-hidden="true" />
               <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-white/70" aria-hidden="true" />
+                <Calendar className="w-4 h-4 text-accent" aria-hidden="true" />
                 <span className="text-white font-semibold">{stats.deliveryYear}</span>
                 <span className="text-white/70 text-sm">Ready</span>
               </div>
@@ -249,10 +283,10 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Scroll Cue */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+        {/* Scroll Cue with Animation */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce z-10">
           <span className="text-white/60 text-xs font-medium tracking-wider uppercase">Discover</span>
-          <div className="w-px h-8 bg-gradient-to-b from-white/40 to-transparent" />
+          <div className="w-px h-8 bg-gradient-to-b from-accent/60 to-transparent" />
         </div>
       </section>
 
@@ -370,93 +404,182 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Why Pullman - Signature Highlights */}
-      <section className="py-14 bg-gradient-to-b from-stone-50/80 to-white overflow-hidden">
+      {/* Why Pullman - Stats & Image Grid */}
+      <section className="py-16 bg-gradient-to-b from-stone-50/80 to-white overflow-hidden">
         <div className="page-container">
           {/* Section Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-12">
             <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-2">Why Choose Us</p>
             <h2 className="text-2xl sm:text-3xl font-bold text-text-primary">The Pullman Advantage</h2>
           </div>
 
-          {/* Horizontal Flowing Highlights */}
-          <div className="relative">
-            {/* Connecting Line */}
-            <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
+          {/* Stats + Image Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left: Big Stats */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-primary rounded-2xl p-6 text-white relative overflow-hidden group">
+                <div className="absolute inset-0 bg-accent/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <p className="text-5xl font-bold mb-1 relative z-10">{projectConfig.building.totalUnits}</p>
+                <p className="text-white/70 text-sm relative z-10">Executive Suites</p>
+                <p className="text-white/50 text-xs mt-2 relative z-10">Across {projectConfig.building.totalFloors} floors</p>
+              </div>
+              <div className="bg-white border border-stone-200 rounded-2xl p-6 hover:border-accent/30 transition-colors group">
+                <p className="text-5xl font-bold text-primary mb-1">{projectConfig.building.completionYear}</p>
+                <p className="text-text-secondary text-sm">Delivery Year</p>
+                <p className="text-text-muted text-xs mt-2">Ready for occupancy</p>
+              </div>
+              <div className="bg-white border border-stone-200 rounded-2xl p-6 hover:border-accent/30 transition-colors group">
+                <p className="text-5xl font-bold text-accent mb-1">5★</p>
+                <p className="text-text-secondary text-sm">Pullman Brand</p>
+                <p className="text-text-muted text-xs mt-2">Part of Accor ALL</p>
+              </div>
+              <div className="bg-accent rounded-2xl p-6 text-primary-dark relative overflow-hidden group">
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <p className="text-5xl font-bold mb-1 relative z-10">24/7</p>
+                <p className="text-primary-dark/80 text-sm relative z-10">Hotel Services</p>
+                <p className="text-primary-dark/60 text-xs mt-2 relative z-10">Concierge & room service</p>
+              </div>
+            </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
-              {projectConfig.highlights.map((highlight, i) => {
-                const Icon = iconMap[highlight.icon as keyof typeof iconMap]
-                return (
-                  <div
-                    key={i}
-                    className="group relative flex flex-col items-center text-center"
-                  >
-                    {/* Icon Circle with Glow */}
-                    <div className="relative mb-5">
-                      <div className="absolute inset-0 bg-accent/20 rounded-full blur-xl scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <div className="relative w-20 h-20 rounded-full bg-white shadow-lg shadow-stone-200/50 flex items-center justify-center group-hover:shadow-accent/20 group-hover:scale-110 transition-all duration-300">
-                        <Icon className="w-8 h-8 text-accent" />
-                      </div>
-                      {/* Step number */}
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-accent text-white text-xs font-bold flex items-center justify-center shadow-md">
-                        {i + 1}
-                      </div>
-                    </div>
-
-                    {/* Text Content */}
-                    <h3 className="text-base font-semibold text-text-primary mb-2 group-hover:text-accent transition-colors">
-                      {highlight.title}
-                    </h3>
-                    <p className="text-sm text-text-secondary leading-relaxed max-w-[200px]">
-                      {highlight.description}
-                    </p>
+            {/* Right: Image + Features */}
+            <div className="space-y-4">
+              {/* Main Image */}
+              <div className="relative h-48 rounded-2xl overflow-hidden">
+                <img
+                  src="/assets/gallery/rooftop-pool.jpg"
+                  alt="Rooftop infinity pool"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-4 left-4">
+                  <p className="text-white font-semibold">World-Class Amenities</p>
+                  <p className="text-white/70 text-sm">Casino, rooftop pool, restaurants</p>
+                </div>
+              </div>
+              {/* Feature Row */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="relative h-32 rounded-xl overflow-hidden group">
+                  <img
+                    src="/assets/gallery/lobby.jpg"
+                    alt="Premium lobby"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-3 left-3">
+                    <p className="text-white text-sm font-medium">Premium Location</p>
+                    <p className="text-white/70 text-xs">Via España corridor</p>
                   </div>
-                )
-              })}
+                </div>
+                <div className="relative h-32 rounded-xl overflow-hidden group">
+                  <img
+                    src="/assets/gallery/suite-type-07.jpg"
+                    alt="Hotel management"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-3 left-3">
+                    <p className="text-white text-sm font-medium">Hotel Management</p>
+                    <p className="text-white/70 text-xs">Rental income potential</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Availability */}
-      <section className="py-10 bg-stone-50">
+      {/* Gallery Showcase - FocusCards */}
+      <section className="py-12 bg-white">
         <div className="page-container">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <p className="text-accent text-xs font-medium tracking-widest uppercase mb-1">Featured</p>
-              <h2 className="text-lg font-semibold text-text-primary">Premium Residences</h2>
-            </div>
-            <Link
-              to="/building"
-              className="text-sm text-primary hover:text-primary-light font-medium flex items-center gap-1"
-            >
-              View all {stats.available} available
-              <ChevronRight className="w-4 h-4" />
-            </Link>
+          <div className="text-center mb-8">
+            <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-2">Gallery</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-primary">Experience the Lifestyle</h2>
           </div>
-
-          {isLoading ? (
-            <FeaturedUnitsSkeleton />
-          ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {featuredUnits.map((apt, index) => (
-                <FeaturedUnitCard key={apt.id} apartment={apt} rank={index} />
-              ))}
-            </div>
-          )}
+          <FocusCards cards={galleryCards} />
         </div>
       </section>
 
-      {/* Discover Divider - Scroll Cue */}
-      <div className="py-4 bg-gradient-to-b from-stone-50 to-stone-100">
-        <div className="flex flex-col items-center gap-1.5">
-          <span className="text-xs text-text-muted font-medium tracking-widest uppercase">Discover</span>
-          <div className="w-px h-5 bg-gradient-to-b from-stone-300 to-transparent" />
-        </div>
-      </div>
+      {/* Smart Availability Overview */}
+      <section className="py-12 bg-stone-50">
+        <div className="page-container">
+          <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-3">
+              {/* Left: Availability Stats */}
+              <div className="p-8 lg:border-r border-stone-100">
+                <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-4">Live Availability</p>
+                <div className="space-y-4">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-bold text-primary">{stats.available}</span>
+                    <span className="text-text-secondary">units available</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                      <span className="text-text-secondary">Available: {stats.available}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-amber-500" />
+                      <span className="text-text-secondary">Reserved: {stats.reserved}</span>
+                    </div>
+                  </div>
+                  <div className="pt-4">
+                    <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500"
+                        style={{ width: `${(stats.available / stats.totalUnits) * 100}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-text-muted mt-2">{Math.round((stats.available / stats.totalUnits) * 100)}% still available</p>
+                  </div>
+                </div>
+              </div>
 
-      {/* Full-bleed Lifestyle Break */}
+              {/* Center: Quick Stats */}
+              <div className="p-8 lg:border-r border-stone-100 bg-stone-50/50">
+                <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-4">Suite Overview</p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-2xl font-bold text-text-primary">53-85</p>
+                    <p className="text-xs text-text-muted">Square meters range</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-text-primary">Floors</p>
+                    <p className="text-xs text-text-muted">17-25</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-text-primary">14</p>
+                    <p className="text-xs text-text-muted">Units per floor</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-text-primary">360°</p>
+                    <p className="text-xs text-text-muted">City views</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: CTA */}
+              <div className="p-8 flex flex-col justify-center items-center text-center bg-gradient-to-br from-primary to-primary-dark">
+                <div className="mb-6">
+                  <p className="text-white/70 text-sm mb-2">Ready to explore?</p>
+                  <p className="text-white text-xl font-semibold">Browse our interactive building explorer</p>
+                </div>
+                <Link to="/building">
+                  <HoverBorderGradient
+                    containerClassName="rounded-xl"
+                    className="flex items-center gap-2 px-6 py-3 bg-white text-primary font-medium"
+                  >
+                    Explore Units
+                    <ArrowRight className="w-4 h-4" />
+                  </HoverBorderGradient>
+                </Link>
+                <p className="text-white/50 text-xs mt-4">View floor plans, pricing & availability</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Full-bleed Lifestyle Break - Interactive Unit Preview */}
       <section className="relative h-[45vh] min-h-[360px] flex items-center overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
@@ -470,18 +593,23 @@ export default function LandingPage() {
         {/* Content */}
         <div className="relative page-container">
           <div className="max-w-lg">
+            <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-3">
+              {stats.available} Units Available
+            </p>
             <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-3">
-              Designed for elevated everyday living.
+              Find Your Perfect Residence
             </h2>
             <p className="text-base text-white/70 mb-6">
-              Where thoughtful architecture meets modern sophistication.
+              From studios to penthouses — explore floor plans, views, and pricing in our interactive building explorer.
             </p>
-            <Link
-              to="/about"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm text-white text-sm font-medium rounded-lg hover:bg-white/20 transition-colors border border-white/20"
-            >
-              Explore Interiors
-              <ArrowRight className="w-4 h-4" />
+            <Link to="/building">
+              <HoverBorderGradient
+                containerClassName="rounded-xl"
+                className="flex items-center gap-2 px-6 py-3 bg-slate-950 text-white font-medium"
+              >
+                Explore All Units
+                <ArrowRight className="w-4 h-4" />
+              </HoverBorderGradient>
             </Link>
           </div>
         </div>
@@ -582,7 +710,7 @@ export default function LandingPage() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Pullman Hotel & Casino location"
+                  title="Panama City Central location"
                   className="w-full h-full"
                 />
               </div>
@@ -591,150 +719,186 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Section Separator - Timeline Notch */}
-      <div id="investor" className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 scroll-mt-16">
-        <div className="page-container pt-10 pb-4">
-          <div className="flex items-center gap-4">
-            <div className="w-1 h-8 bg-gradient-to-b from-emerald-400 to-teal-500 rounded-full" />
-            <p className="text-xs text-slate-400 font-medium tracking-widest uppercase">Investment Pathway</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Investor / Program Section */}
-      <section className="pb-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      {/* Investment Journey Section - Timeline Approach */}
+      <section id="investor" className="py-20 bg-gradient-to-b from-primary via-primary-dark to-slate-900 relative overflow-hidden scroll-mt-16">
         {/* Background decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-slate-700/20 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-white/5 rounded-full blur-3xl" />
 
         <div className="page-container relative z-10">
-          {/* Why Panama Block */}
-          <div className="mb-14">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Why Panama
-            </h2>
-            <p className="text-base text-slate-300 mb-8 leading-relaxed max-w-2xl">
-              A strategic hub connecting North and South America, Panama offers stability, growth, and global connectivity for investors seeking long-term value.
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-3">Your Path to Residency</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Investment Journey</h2>
+            <p className="text-white/60 max-w-xl mx-auto">
+              A clear pathway from investment to permanent residency in one of the world's most strategic locations.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-              <div className="bg-gradient-to-br from-slate-800/80 to-slate-800/40 border border-slate-700/50 rounded-2xl p-6 backdrop-blur-sm hover:border-emerald-500/30 hover:bg-slate-800/60 transition-all group">
-                <p className="text-3xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">2.77M</p>
-                <p className="text-sm text-slate-400">Visitors in 2024 (+10.6%)</p>
+          </div>
+
+          {/* Timeline Journey - Horizontal on desktop, vertical on mobile */}
+          <div className="relative">
+            {/* Desktop Timeline Line */}
+            <div className="hidden lg:block absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-4">
+              {/* Step 1: Invest */}
+              <div className="relative group">
+                {/* Step Number - Circle */}
+                <div className="flex justify-center mb-6">
+                  <div className="w-12 h-12 rounded-full bg-accent text-primary-dark font-bold text-lg flex items-center justify-center shadow-lg shadow-accent/30 group-hover:scale-110 transition-transform z-10">
+                    1
+                  </div>
+                </div>
+                {/* Card */}
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-accent/30 transition-all h-full">
+                  <h3 className="text-lg font-bold text-white mb-2">Invest</h3>
+                  <p className="text-4xl font-bold text-accent mb-2">$280K</p>
+                  <p className="text-sm text-white/60">Minimum property investment to qualify for the program</p>
+                </div>
               </div>
-              <div className="bg-gradient-to-br from-slate-800/80 to-slate-800/40 border border-slate-700/50 rounded-2xl p-6 backdrop-blur-sm hover:border-emerald-500/30 hover:bg-slate-800/60 transition-all group">
-                <p className="text-3xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">$4.99B</p>
-                <p className="text-sm text-slate-400">Canal revenue FY2024</p>
+
+              {/* Step 2: Apply */}
+              <div className="relative group">
+                <div className="flex justify-center mb-6">
+                  <div className="w-12 h-12 rounded-full bg-accent text-primary-dark font-bold text-lg flex items-center justify-center shadow-lg shadow-accent/30 group-hover:scale-110 transition-transform z-10">
+                    2
+                  </div>
+                </div>
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-accent/30 transition-all h-full">
+                  <h3 className="text-lg font-bold text-white mb-2">Apply</h3>
+                  <p className="text-4xl font-bold text-accent mb-2">30 Days</p>
+                  <p className="text-sm text-white/60">Fast-track to permanent residency approval</p>
+                </div>
               </div>
-              <div className="bg-gradient-to-br from-slate-800/80 to-slate-800/40 border border-slate-700/50 rounded-2xl p-6 backdrop-blur-sm hover:border-emerald-500/30 hover:bg-slate-800/60 transition-all group">
-                <p className="text-3xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">85+</p>
-                <p className="text-sm text-slate-400">Flight destinations</p>
+
+              {/* Step 3: Maintain */}
+              <div className="relative group">
+                <div className="flex justify-center mb-6">
+                  <div className="w-12 h-12 rounded-full bg-accent text-primary-dark font-bold text-lg flex items-center justify-center shadow-lg shadow-accent/30 group-hover:scale-110 transition-transform z-10">
+                    3
+                  </div>
+                </div>
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-accent/30 transition-all h-full">
+                  <h3 className="text-lg font-bold text-white mb-2">Maintain</h3>
+                  <p className="text-4xl font-bold text-accent mb-2">1 Visit</p>
+                  <p className="text-sm text-white/60">Just one visit every 2 years to maintain status</p>
+                </div>
+              </div>
+
+              {/* Step 4: Citizenship */}
+              <div className="relative group">
+                <div className="flex justify-center mb-6">
+                  <div className="w-12 h-12 rounded-full bg-accent text-primary-dark font-bold text-lg flex items-center justify-center shadow-lg shadow-accent/30 group-hover:scale-110 transition-transform z-10">
+                    4
+                  </div>
+                </div>
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-accent/30 transition-all h-full">
+                  <h3 className="text-lg font-bold text-white mb-2">Citizenship</h3>
+                  <p className="text-4xl font-bold text-accent mb-2">5 Years</p>
+                  <p className="text-sm text-white/60">Pathway to full Panamanian citizenship</p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Program Snapshot */}
-          <div className="mb-14 pb-14 border-b border-slate-700/50">
-            {/* Section header with decorative lines */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/30 to-emerald-500/50" />
-              <p className="text-emerald-400 text-xs font-semibold tracking-widest uppercase">
-                Qualified Investor Program
-              </p>
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-emerald-500/30 to-emerald-500/50" />
+          {/* Why Panama - Key Stats Row */}
+          <div className="mt-16 pt-16 border-t border-white/10">
+            <div className="flex items-center gap-4 mb-8">
+              <h3 className="text-xl font-bold text-white">Why Panama?</h3>
+              <div className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-8 text-center">
-              Program Snapshot
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="bg-gradient-to-b from-emerald-500/20 to-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 hover:border-emerald-400/50 transition-colors">
-                <p className="text-3xl font-bold text-emerald-400 mb-2">$280K</p>
-                <p className="text-sm text-slate-300">Min. Investment</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-accent/30 transition-colors group">
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/20 transition-colors">
+                  <Users className="w-7 h-7 text-accent" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">2.77M</p>
+                  <p className="text-xs text-white/50">Visitors in 2024 (+10.6%)</p>
+                </div>
               </div>
-              <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 hover:border-slate-600/50 hover:bg-slate-800/70 transition-all">
-                <p className="text-3xl font-bold text-white mb-2">30 days</p>
-                <p className="text-sm text-slate-400">Permanent residency</p>
+              <div className="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-accent/30 transition-colors group">
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/20 transition-colors">
+                  <TrendingUp className="w-7 h-7 text-accent" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">$4.99B</p>
+                  <p className="text-xs text-white/50">Canal revenue FY2024</p>
+                </div>
               </div>
-              <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 hover:border-slate-600/50 hover:bg-slate-800/70 transition-all">
-                <p className="text-3xl font-bold text-white mb-2">1 visit</p>
-                <p className="text-sm text-slate-400">Every 2 years</p>
-              </div>
-              <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 hover:border-slate-600/50 hover:bg-slate-800/70 transition-all">
-                <p className="text-3xl font-bold text-white mb-2">5 years</p>
-                <p className="text-sm text-slate-400">to Citizenship</p>
+              <div className="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-accent/30 transition-colors group">
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/20 transition-colors">
+                  <Globe className="w-7 h-7 text-accent" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-white">85+</p>
+                  <p className="text-xs text-white/50">Direct flight destinations</p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Mercan Credibility */}
-          <div className="relative rounded-3xl bg-gradient-to-br from-slate-800/60 to-slate-800/30 p-8 border border-slate-700/50 overflow-hidden">
-            {/* Decorative glow */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/5 rounded-full blur-2xl" />
+          {/* Mercan Partnership Banner */}
+          <div className="mt-12 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 relative overflow-hidden">
+            {/* Decorative accent */}
+            <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10">
-              {/* Left: Content */}
-              <div>
-                <p className="text-emerald-400 text-xs font-semibold tracking-widest uppercase mb-3">Partner</p>
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  Globally supported by Mercan
-                </h3>
-                <p className="text-base text-slate-300 mb-6 leading-relaxed">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left: Partner Info */}
+              <div className="lg:col-span-5">
+                <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-2">Trusted Partner</p>
+                <h3 className="text-2xl font-bold text-white mb-3">Globally Supported by Mercan</h3>
+                <p className="text-white/60 text-sm mb-4">
                   Since 1989, Mercan has operated globally with expertise in investment and immigration services across 30+ countries.
                 </p>
                 <a
                   href="https://mercan.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-sm text-emerald-400 font-medium transition-colors"
+                  className="inline-flex items-center gap-2 text-accent text-sm font-medium hover:underline"
                 >
-                  Learn more about Mercan
+                  Learn about Mercan
                   <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
 
-              {/* Right: Stats Cards */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-800/50 hover:bg-slate-800/70 transition-all border border-slate-700/50 hover:border-emerald-500/30 rounded-xl p-5 group">
-                  <Users className="w-6 h-6 text-emerald-400 mb-3 group-hover:scale-110 transition-transform" />
-                  <p className="text-2xl font-bold text-white">900+</p>
-                  <p className="text-xs text-slate-400 mt-1">Team worldwide</p>
+              {/* Right: Stats */}
+              <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-white">900+</p>
+                  <p className="text-xs text-white/50 mt-1">Team worldwide</p>
                 </div>
-                <div className="bg-slate-800/50 hover:bg-slate-800/70 transition-all border border-slate-700/50 hover:border-emerald-500/30 rounded-xl p-5 group">
-                  <Award className="w-6 h-6 text-emerald-400 mb-3 group-hover:scale-110 transition-transform" />
-                  <p className="text-2xl font-bold text-white">4,100+</p>
-                  <p className="text-xs text-slate-400 mt-1">Golden Visa investors</p>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-white">4,100+</p>
+                  <p className="text-xs text-white/50 mt-1">Golden Visa investors</p>
                 </div>
-                <div className="bg-slate-800/50 hover:bg-slate-800/70 transition-all border border-slate-700/50 hover:border-emerald-500/30 rounded-xl p-5 group">
-                  <TrendingUp className="w-6 h-6 text-emerald-400 mb-3 group-hover:scale-110 transition-transform" />
-                  <p className="text-2xl font-bold text-white">$2B</p>
-                  <p className="text-xs text-slate-400 mt-1">Project development</p>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-white">$2B</p>
+                  <p className="text-xs text-white/50 mt-1">Project development</p>
                 </div>
-                <div className="bg-slate-800/50 hover:bg-slate-800/70 transition-all border border-slate-700/50 hover:border-emerald-500/30 rounded-xl p-5 group">
-                  <Globe className="w-6 h-6 text-emerald-400 mb-3 group-hover:scale-110 transition-transform" />
-                  <p className="text-2xl font-bold text-white">35+</p>
-                  <p className="text-xs text-slate-400 mt-1">Years experience</p>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-white">35+</p>
+                  <p className="text-xs text-white/50 mt-1">Years experience</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Investor CTA */}
+          {/* CTA */}
           <div className="mt-12 text-center">
-            <p className="text-slate-300 mb-4">Interested in the Qualified Investor Program?</p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400/50"
-            >
-              Schedule a Consultation
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            <Link to="/contact" className="inline-block">
+              <HoverBorderGradient
+                containerClassName="rounded-xl"
+                className="flex items-center gap-2 px-8 py-3 bg-slate-950 text-white font-medium"
+              >
+                Schedule a Consultation
+                <ArrowRight className="w-4 h-4" />
+              </HoverBorderGradient>
             </Link>
+            <p className="text-xs text-white/40 mt-6 max-w-xl mx-auto">
+              Programs vary by country; eligibility and timelines depend on individual circumstances. This is not immigration advice.
+            </p>
           </div>
-
-          {/* Disclaimer */}
-          <p className="text-xs text-slate-500 mt-8 max-w-2xl text-center mx-auto">
-            Programs vary by country; eligibility and timelines depend on individual circumstances. This is not immigration advice.
-          </p>
         </div>
       </section>
 
@@ -762,134 +926,3 @@ export default function LandingPage() {
   )
 }
 
-// Featured Unit Card - Enhanced with visual header
-function FeaturedUnitCard({ apartment, rank }: { apartment: Apartment; rank: number }) {
-  const getUnitType = (sizeSqm: number): string => {
-    if (sizeSqm >= 150) return 'Penthouse'
-    if (sizeSqm >= 120) return '3 Bed'
-    if (sizeSqm >= 90) return '2 Bed'
-    if (sizeSqm >= 75) return '1 Bed'
-    return 'Studio'
-  }
-
-  const getBeds = (sizeSqm: number): number => {
-    if (sizeSqm >= 150) return 4
-    if (sizeSqm >= 120) return 3
-    if (sizeSqm >= 90) return 2
-    if (sizeSqm >= 75) return 1
-    return 0
-  }
-
-  const getPrice = (floor: number, sizeSqm: number): string => {
-    const price = (3500 + (floor - 7) * 50) * sizeSqm
-    if (price >= 1000000) return `$${(price / 1000000).toFixed(1)}M`
-    return `$${Math.round(price / 1000)}K`
-  }
-
-  const getViewDirection = (unitNumber: number): string => {
-    const directions: Record<number, string> = {
-      1: 'North', 2: 'North', 3: 'North', 4: 'NE', 5: 'East', 6: 'SE',
-      7: 'South', 8: 'South', 9: 'South', 10: 'South', 11: 'SW', 12: 'West',
-      13: 'NW', 14: 'North',
-    }
-    return directions[unitNumber] || 'City'
-  }
-
-  const getFeatureLabel = (rank: number, floor: number, sizeSqm: number): string => {
-    if (sizeSqm >= 150) return 'Penthouse'
-    if (rank === 0) return 'Highest floor'
-    if (floor >= 35) return 'Premium views'
-    if (sizeSqm >= 120) return 'Spacious'
-    return 'Best value'
-  }
-
-  // Get gradient based on unit type - using brand colors
-  const getHeaderStyle = (sizeSqm: number): string => {
-    if (sizeSqm >= 150) return 'from-primary via-primary-light to-accent' // Penthouse - premium
-    if (sizeSqm >= 120) return 'from-primary to-primary-light' // 3 Bed - elegant
-    if (sizeSqm >= 90) return 'from-accent via-accent-light to-emerald-400' // 2 Bed - fresh
-    return 'from-slate-600 via-slate-500 to-slate-400' // 1 Bed/Studio - neutral
-  }
-
-  const beds = getBeds(apartment.size_sqm)
-  const unitType = getUnitType(apartment.size_sqm)
-  const viewDir = getViewDirection(apartment.unit_number)
-  const featureLabel = getFeatureLabel(rank, apartment.floor, apartment.size_sqm)
-
-  return (
-    <Link
-      to={`/building?floor=${apartment.floor}&unit=${apartment.id}`}
-      className="bg-white rounded-2xl border border-stone-200 overflow-hidden hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
-    >
-      {/* Gradient Header with Icon */}
-      <div className={`relative h-24 bg-gradient-to-br ${getHeaderStyle(apartment.size_sqm)} p-4`}>
-        {/* Decorative pattern overlay */}
-        <div className="absolute inset-0 opacity-20">
-          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <pattern id={`pattern-${apartment.id}`} x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-              <circle cx="2" cy="2" r="1" fill="white" />
-            </pattern>
-            <rect x="0" y="0" width="100" height="100" fill={`url(#pattern-${apartment.id})`} />
-          </svg>
-        </div>
-
-        {/* Feature Label */}
-        <span className="relative inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-[11px] text-white font-medium uppercase tracking-wide">
-          {featureLabel}
-        </span>
-
-        {/* Availability Badge */}
-        <div className="absolute top-3 right-3">
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white text-emerald-600 text-[11px] font-semibold shadow-sm">
-            <Check className="w-3 h-3" />
-            Available
-          </span>
-        </div>
-
-        {/* Large Floor Number */}
-        <div className="absolute bottom-3 right-4 text-white/30 font-bold text-4xl leading-none">
-          {apartment.floor}
-        </div>
-      </div>
-
-      {/* Card Content */}
-      <div className="p-4">
-        {/* Unit ID + Type */}
-        <div className="mb-3">
-          <span className="text-lg font-bold text-text-primary">
-            Unit {apartment.floor}-{apartment.unit_number}
-          </span>
-          <p className="text-sm text-text-muted">{unitType}</p>
-        </div>
-
-        {/* Micro-details row */}
-        <div className="flex items-center gap-4 text-sm text-text-secondary mb-4 pb-4 border-b border-stone-100">
-          <div className="flex items-center gap-1.5">
-            <Bed className="w-4 h-4 text-text-muted" />
-            <span>{beds === 0 ? 'Studio' : beds}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Maximize2 className="w-4 h-4 text-text-muted" />
-            <span>{apartment.size_sqm} m²</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Compass className="w-4 h-4 text-text-muted" />
-            <span>{viewDir}</span>
-          </div>
-        </div>
-
-        {/* Price + CTA */}
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-xs text-text-muted">From</span>
-            <p className="text-lg text-text-primary font-bold">{getPrice(apartment.floor, apartment.size_sqm)}</p>
-          </div>
-          <span className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">
-            View
-            <ArrowRight className="w-4 h-4" />
-          </span>
-        </div>
-      </div>
-    </Link>
-  )
-}

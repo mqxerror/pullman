@@ -3,35 +3,37 @@ import { projectConfig } from '@/config/project'
 import { Check, Building2, Sun, MapPin, ChevronRight } from 'lucide-react'
 import { GalleryImage } from '@/components/LazyImage'
 import Footer from '@/components/Footer'
+// Aceternity UI Components
+import { TextGenerateEffect, BentoGrid, BentoGridItem, FocusCards, HoverBorderGradient, BackgroundBeams } from '@/components/ui'
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <header className="bg-surface border-b border-border sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
         <div className="page-container py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
               <img
                 src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
                 alt="Mercan Group"
-                className="h-14 w-auto"
+                className="h-12 lg:h-14 w-auto"
               />
             </Link>
-            <nav className="flex items-center gap-6">
-              <Link to="/" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
-                Home
+            <nav className="hidden md:flex items-center gap-6">
+              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+                Interactive Map
               </Link>
-              <Link to="/building" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
-                Explore
+              <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+                Apartments
               </Link>
-              <Link to="/location" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
+              <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Location
               </Link>
               <Link to="/about" className="text-sm text-primary font-medium">
                 About
               </Link>
-              <Link to="/contact" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
+              <Link to="/contact" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Contact
               </Link>
             </nav>
@@ -39,23 +41,24 @@ export default function AboutPage() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section id="main-content" className="relative h-[50vh] min-h-[400px]">
+      {/* Hero - Enhanced with Aceternity */}
+      <section id="main-content" className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={projectConfig.media.heroImage}
             alt={projectConfig.name}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
         </div>
-        <div className="relative h-full flex items-end">
+        <BackgroundBeams className="opacity-30" />
+        <div className="relative h-full flex items-end z-10">
           <div className="page-container pb-12">
             <p className="text-accent text-sm font-medium tracking-wider uppercase mb-3">
               About the Project
             </p>
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              {projectConfig.name}
+              <TextGenerateEffect words={projectConfig.name} className="text-white" filter={false} duration={0.8} />
             </h1>
           </div>
         </div>
@@ -101,7 +104,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Amenities */}
+      {/* Amenities - BentoGrid Layout */}
       <section className="py-16 bg-surface">
         <div className="page-container">
           <div className="text-center mb-12">
@@ -113,55 +116,70 @@ export default function AboutPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-3 gap-8">
+          <BentoGrid className="md:grid-cols-3 md:auto-rows-auto">
             {/* Building Amenities */}
-            <div className="bg-background rounded-2xl p-6 border border-border">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                <Building2 className="w-6 h-6 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold text-text-primary mb-4">Hotel Amenities</h3>
-              <ul className="space-y-3">
-                {projectConfig.amenities.hotelAmenities.map((item: string, i: number) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-accent flex-shrink-0" />
-                    <span className="text-sm text-text-secondary">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <BentoGridItem
+              className="bg-white hover:bg-stone-50"
+              title="Hotel Amenities"
+              description={
+                <ul className="space-y-2 mt-2">
+                  {projectConfig.amenities.hotelAmenities.map((item: string, i: number) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <Check className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                      <span className="text-xs text-stone-600">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              }
+              header={
+                <div className="flex items-center justify-center h-16 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5">
+                  <Building2 className="w-8 h-8 text-primary" />
+                </div>
+              }
+            />
 
             {/* Interior Amenities */}
-            <div className="bg-background rounded-2xl p-6 border border-border">
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4">
-                <Sun className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="text-lg font-semibold text-text-primary mb-4">Suite Features</h3>
-              <ul className="space-y-3">
-                {projectConfig.amenities.suiteFeatures.map((item: string, i: number) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-accent flex-shrink-0" />
-                    <span className="text-sm text-text-secondary">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <BentoGridItem
+              className="bg-white hover:bg-stone-50"
+              title="Suite Features"
+              description={
+                <ul className="space-y-2 mt-2">
+                  {projectConfig.amenities.suiteFeatures.map((item: string, i: number) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <Check className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                      <span className="text-xs text-stone-600">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              }
+              header={
+                <div className="flex items-center justify-center h-16 rounded-lg bg-gradient-to-br from-accent/10 to-accent/5">
+                  <Sun className="w-8 h-8 text-accent" />
+                </div>
+              }
+            />
 
             {/* Nearby */}
-            <div className="bg-background rounded-2xl p-6 border border-border">
-              <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center mb-4">
-                <MapPin className="w-6 h-6 text-secondary" />
-              </div>
-              <h3 className="text-lg font-semibold text-text-primary mb-4">Nearby</h3>
-              <ul className="space-y-3">
-                {projectConfig.amenities.nearby.map((item, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-accent flex-shrink-0" />
-                    <span className="text-sm text-text-secondary">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+            <BentoGridItem
+              className="bg-white hover:bg-stone-50"
+              title="Nearby"
+              description={
+                <ul className="space-y-2 mt-2">
+                  {projectConfig.amenities.nearby.map((item, i) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <Check className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                      <span className="text-xs text-stone-600">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              }
+              header={
+                <div className="flex items-center justify-center h-16 rounded-lg bg-gradient-to-br from-secondary/10 to-secondary/5">
+                  <MapPin className="w-8 h-8 text-secondary" />
+                </div>
+              }
+            />
+          </BentoGrid>
         </div>
       </section>
 
@@ -231,23 +249,25 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 bg-primary">
-        <div className="page-container text-center">
+      {/* CTA - Enhanced */}
+      <section className="py-16 bg-primary relative overflow-hidden">
+        <div className="page-container text-center relative z-10">
           <h2 className="text-3xl font-semibold text-white mb-4">
             Ready to Explore?
           </h2>
           <p className="text-white/70 mb-8 max-w-xl mx-auto">
             Browse our available units or speak with our sales team to find your perfect residence.
           </p>
-          <div className="flex items-center justify-center gap-4">
-            <Link
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <HoverBorderGradient
+              containerClassName="rounded-xl"
+              as={Link}
               to="/building"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary font-medium rounded-xl hover:bg-white/90 transition-colors"
+              className="flex items-center gap-2 px-6 py-3 bg-white text-primary font-medium"
             >
               Explore Units
               <ChevronRight className="w-4 h-4" />
-            </Link>
+            </HoverBorderGradient>
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 transition-colors border border-white/20"

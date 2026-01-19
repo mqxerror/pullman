@@ -4,19 +4,10 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import { Menu, X, Maximize2, Building2, Compass, Check, Clock, Lock, ArrowRight, X as CloseIcon, ChevronUp, ChevronDown } from 'lucide-react'
-import { MIN_FLOOR, MAX_FLOOR } from '@/config/building'
+import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
 
 // Interactive Tower Version - Building-centric with overlay panels
-
-const BUILDING_CONFIG = {
-  top: 14,
-  bottom: 50,
-  left: 20,
-  right: 80,
-}
-
-const TOTAL_FLOORS = MAX_FLOOR - MIN_FLOOR + 1
 
 const getSuiteType = (sizeSqm: number): string => {
   if (sizeSqm >= 80) return 'Premium Suite'
@@ -126,8 +117,8 @@ export default function BuildingExplorerV3() {
           <div className="relative h-full max-h-[800px] aspect-[3/4] mx-auto">
             {/* Building Image */}
             <img
-              src="/assets/pullman-facade.png"
-              alt="Pullman Hotel & Casino Tower"
+              src="/assets/pullman-facade-v2.png"
+              alt="Panama City Central Tower"
               className="h-full w-full object-cover rounded-3xl shadow-2xl"
             />
 
@@ -153,7 +144,7 @@ export default function BuildingExplorerV3() {
                   >
                     {/* Selected floor highlight */}
                     {isSelected && (
-                      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] floor-highlight-band flex items-center justify-center">
+                      <div className="absolute inset-0 floor-highlight-band flex items-center justify-center">
                         <div className="floor-pill text-gold-700 text-sm font-bold px-4 py-1 rounded-lg shadow-lg">
                           Floor {f.floor}
                         </div>
@@ -162,7 +153,7 @@ export default function BuildingExplorerV3() {
 
                     {/* Hover state */}
                     {isHovered && !isSelected && (
-                      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] bg-white/20 backdrop-blur-[2px] transition-all duration-150 rounded-sm border border-white/30" />
+                      <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] transition-all duration-150 border-y border-white/30" />
                     )}
                   </button>
                 )
@@ -340,7 +331,7 @@ export default function BuildingExplorerV3() {
       {/* Footer - Minimal */}
       <footer className="bg-white border-t border-slate-200 py-4">
         <div className="max-w-screen-2xl mx-auto px-6 text-center">
-          <p className="text-slate-400 text-xs">© 2024 Pullman Hotel & Casino Panama</p>
+          <p className="text-slate-400 text-xs">© 2024 Panama City Central</p>
           <p className="text-gold-500 text-xs mt-1">Version 3: Interactive Tower</p>
         </div>
       </footer>

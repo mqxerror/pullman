@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase'
 import { Phone, Mail, MapPin, Clock, Send, ChevronRight, Building2, Users, Calendar, ArrowRight, Menu, X } from 'lucide-react'
 import { toast } from 'sonner'
 import Footer from '@/components/Footer'
+// Aceternity UI Components
+import { TextGenerateEffect, BackgroundBeams, HoverBorderGradient } from '@/components/ui'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -63,29 +65,29 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <header className="bg-surface border-b border-border sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
         <div className="page-container py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
               <img
                 src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
                 alt="Mercan Group"
-                className="h-14 w-auto"
+                className="h-12 lg:h-14 w-auto"
               />
             </Link>
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-6">
-              <Link to="/" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
-                Home
+              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+                Interactive Map
               </Link>
-              <Link to="/building" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
-                Explore
+              <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+                Apartments
               </Link>
-              <Link to="/location" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
+              <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Location
               </Link>
-              <Link to="/about" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
+              <Link to="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 About
               </Link>
               <Link to="/contact" className="text-sm text-primary font-medium">
@@ -96,7 +98,7 @@ export default function ContactPage() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 hover:bg-background rounded-lg"
+              className="md:hidden p-2 hover:bg-slate-100 rounded-lg"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -104,18 +106,18 @@ export default function ContactPage() {
 
           {/* Mobile Nav Dropdown */}
           {mobileMenuOpen && (
-            <div className="md:hidden border-t border-border mt-4 pt-3 space-y-2">
-              <Link to="/" className="block py-2 text-sm text-text-secondary hover:text-primary">Home</Link>
-              <Link to="/building" className="block py-2 text-sm text-text-secondary hover:text-primary">Explore</Link>
-              <Link to="/location" className="block py-2 text-sm text-text-secondary hover:text-primary">Location</Link>
-              <Link to="/about" className="block py-2 text-sm text-text-secondary hover:text-primary">About</Link>
+            <div className="md:hidden border-t border-slate-200 mt-4 pt-3 space-y-2">
+              <Link to="/building" className="block py-2 text-sm text-slate-600 hover:text-slate-900">Interactive Map</Link>
+              <Link to="/apartments" className="block py-2 text-sm text-slate-600 hover:text-slate-900">Apartments</Link>
+              <Link to="/location" className="block py-2 text-sm text-slate-600 hover:text-slate-900">Location</Link>
+              <Link to="/about" className="block py-2 text-sm text-slate-600 hover:text-slate-900">About</Link>
               <Link to="/contact" className="block py-2 text-sm text-primary font-medium">Contact</Link>
             </div>
           )}
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section - Enhanced */}
       <section id="main-content" className="relative h-[40vh] min-h-[300px] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -123,14 +125,15 @@ export default function ContactPage() {
             alt={projectConfig.name}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/40" />
         </div>
-        <div className="relative page-container">
+        <BackgroundBeams className="opacity-30" />
+        <div className="relative page-container z-10">
           <p className="text-accent text-sm font-medium tracking-wider uppercase mb-3">
             Get in Touch
           </p>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Contact Us
+            <TextGenerateEffect words="Contact Us" className="text-white" filter={false} duration={0.6} />
           </h1>
           <p className="text-lg text-white/80 max-w-xl">
             Ready to find your dream home? Our dedicated sales team is here to help you every step of the way.

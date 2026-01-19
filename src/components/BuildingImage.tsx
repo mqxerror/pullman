@@ -1,25 +1,12 @@
 import { useState, useEffect } from 'react'
 import type { Apartment } from '@/types/database'
 import { ChevronUp, ChevronDown, Check, Clock, Lock } from 'lucide-react'
+import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 
 interface BuildingImageProps {
   apartments: Apartment[]
   selectedFloor: number | null
   onFloorClick: (floor: number) => void
-}
-
-const MIN_FLOOR = 17
-const MAX_FLOOR = 25
-const TOTAL_FLOORS = MAX_FLOOR - MIN_FLOOR + 1
-
-// Adjusted floor positions to match Pullman building image
-// Floors 17-25 mapped to the actual building floors in the image
-// Floor 25 should align with the top row of windows (below Pullman sign)
-const BUILDING_CONFIG = {
-  top: 14,      // Start Floor 25 at the top row of windows
-  bottom: 50,   // Tighter span to match actual floor sizes in image
-  left: 28,     // Left edge of building
-  right: 72,    // Right edge of building
 }
 
 type FloorStatus = 'available' | 'limited' | 'sold' | 'empty'
@@ -167,8 +154,8 @@ export default function BuildingImage({ apartments, selectedFloor, onFloorClick 
           <div className="relative h-[90%] w-[85%] max-h-[800px]">
             {/* Building Image */}
             <img
-              src="/assets/pullman-facade.png"
-              alt="Pullman Hotel & Casino Tower"
+              src="/assets/pullman-facade-v2.png"
+              alt="Panama City Central Tower"
               className="h-full w-full object-cover rounded-2xl shadow-lg"
             />
 
@@ -195,7 +182,7 @@ export default function BuildingImage({ apartments, selectedFloor, onFloorClick 
                   >
                     {/* Selected floor - highlight band */}
                     {isSelected && (
-                      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] floor-highlight-band flex items-center justify-center">
+                      <div className="absolute inset-0 floor-highlight-band flex items-center justify-center">
                         {/* Floor pill - centered */}
                         <div className="floor-pill text-primary text-[10px] font-bold px-2.5 py-0.5 rounded-md">
                           {f.floor}
@@ -205,7 +192,7 @@ export default function BuildingImage({ apartments, selectedFloor, onFloorClick 
 
                     {/* Hover state - subtle band */}
                     {isHovered && !isSelected && (
-                      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] bg-white/15 transition-all duration-150 rounded-sm" />
+                      <div className="absolute inset-0 bg-white/15 transition-all duration-150 border-y border-white/20" />
                     )}
                   </button>
                 )

@@ -751,9 +751,55 @@
   }
 }
 
-/* Fade-in animation */
+/* Aceternity UI Animations */
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+.animate-spotlight {
+  animation: spotlight 2s ease 0.75s 1 forwards;
+}
+
+@keyframes moveUp {
+  0% {
+    transform: translateY(5px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+.animate-moveUp {
+  animation: moveUp 0.5s ease forwards;
+}
+
+@keyframes textReveal {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.animate-text-reveal {
+  animation: textReveal 0.5s ease forwards;
+}
+
+/* Fade-in animation - synced with modal-in timing */
 .animate-fade-in {
-  animation: fadeIn 200ms ease-out forwards;
+  animation: fadeIn 300ms ease-out forwards;
 }
 
 /* Premium divider with gold accent */

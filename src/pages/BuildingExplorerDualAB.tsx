@@ -9,21 +9,12 @@ import {
   ChevronLeft, ChevronRight, Sparkles, Star, Wifi, Car, Dumbbell, Coffee, Shield, Waves,
   PanelLeftClose, PanelLeftOpen, Home, MapPin
 } from 'lucide-react'
-import { MIN_FLOOR, MAX_FLOOR } from '@/config/building'
+import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
 
 // A/B Test Variants
 type ViewMode = 'A' | 'C'
-
-const BUILDING_CONFIG = {
-  top: 14,
-  bottom: 50,
-  left: 20,
-  right: 80,
-}
-
-const TOTAL_FLOORS = MAX_FLOOR - MIN_FLOOR + 1
 
 const getSuiteType = (sizeSqm: number): string => {
   if (sizeSqm >= 80) return 'Premium Suite'
@@ -168,6 +159,18 @@ export default function BuildingExplorerDualAB() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [selectedSuite, handleClosePanel])
 
+  // Lock body scroll when modal is open to prevent scrollbar flicker
+  useEffect(() => {
+    if (selectedSuite) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [selectedSuite])
+
   // Get similar suites - prioritize same floor, then similar size
   const similarSuites = apartments
     .filter(apt =>
@@ -196,7 +199,7 @@ export default function BuildingExplorerDualAB() {
           <div className="py-3 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <img src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png" alt="Mercan Group" className="h-8 lg:h-12 w-auto" />
+                <img src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png" alt="Mercan Group" className="h-10 lg:h-14 w-auto" />
               </Link>
 
               {/* Mobile Floor Selector - Only visible on mobile */}
@@ -239,6 +242,8 @@ export default function BuildingExplorerDualAB() {
 
             {/* Navigation Links */}
             <nav className="hidden lg:flex items-center gap-6">
+              <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Apartments</Link>
+              <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Location</Link>
               <Link to="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">About</Link>
               <Link to="/contact" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Contact</Link>
             </nav>
@@ -320,10 +325,10 @@ export default function BuildingExplorerDualAB() {
           ) : (
             /* Expanded State: Full Building View - Responsive like main page */
             <div className="flex-1 flex items-center justify-center overflow-hidden">
-              <div className="relative h-[70%] w-auto" style={{ aspectRatio: '3/4' }}>
+              <div className="relative h-[85%] w-auto" style={{ aspectRatio: '3/4' }}>
                 <img
-                  src="/assets/pullman-facade.png"
-                  alt="Pullman Hotel & Casino Tower"
+                  src="/assets/pullman-facade-v2.png"
+                  alt="Panama City Central Tower"
                   className="h-full w-full object-cover rounded-2xl shadow-xl"
                 />
 
@@ -348,14 +353,14 @@ export default function BuildingExplorerDualAB() {
                         }}
                       >
                         {isSelected && (
-                          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] floor-highlight-band flex items-center justify-center">
+                          <div className="absolute inset-0 floor-highlight-band flex items-center justify-center">
                             <div className="floor-pill text-gold-700 text-xs font-bold px-3 py-0.5 rounded-md shadow-lg">
                               {f.floor}
                             </div>
                           </div>
                         )}
                         {isHovered && !isSelected && (
-                          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] bg-white/20 backdrop-blur-[2px] transition-all duration-150 rounded-sm border border-white/30" />
+                          <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] transition-all duration-150 border-y border-white/30" />
                         )}
                       </button>
                     )
@@ -775,7 +780,7 @@ export default function BuildingExplorerDualAB() {
             onClick={handleClosePanel}
           >
             <div
-              className="bg-white w-full lg:rounded-2xl rounded-t-3xl shadow-2xl lg:max-w-6xl max-h-[95vh] lg:max-h-[80vh] overflow-hidden animate-slide-up lg:animate-modal-in"
+              className="bg-white w-full lg:rounded-2xl rounded-t-3xl shadow-2xl lg:max-w-6xl max-h-[95vh] lg:max-h-[80vh] overflow-hidden animate-modal-in"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Mobile: Stacked layout | Desktop: Side-by-side */}

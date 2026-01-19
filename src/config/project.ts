@@ -1,9 +1,9 @@
-// Pullman Hotel & Casino Panama - Project Configuration
+// Panama City Central - Project Configuration
 // Executive Suites Sales Website
 
 export const projectConfig = {
   // Basic Info
-  name: 'Pullman Hotel & Casino Panama',
+  name: 'Panama City Central',
   tagline: 'Premium Hotel Investment in the Heart of Panama City',
   description: '126 Executive Suites across 9 floors (17-25), managed by Pullman Hotels & Resorts, part of the Accor ALL ecosystem.',
 
@@ -21,12 +21,14 @@ export const projectConfig = {
 
   // Building Stats
   building: {
-    totalFloors: 9, // Executive suite floors only
+    totalFloors: 9, // All floors 17-25 (7 residential + 2 amenity)
     floorRange: { min: 17, max: 25 },
-    totalUnits: 126, // 14 units × 9 floors
+    totalUnits: 98, // 14 units × 7 residential floors
     unitsPerFloor: 14,
     unitTypes: ['Executive Suite'],
     completionYear: 2026,
+    amenityFloors: [24, 25], // Pool, gym, sky lounge
+    residentialFloors: 7, // Floors 17-23 have apartments
   },
 
   // Pricing
@@ -46,13 +48,13 @@ export const projectConfig = {
 
   // Media
   media: {
-    heroImage: '/assets/pullman-facade.png',
+    heroImage: '/assets/pullman-facade-v2.png',
     heroVideo: null,
     logo: '/assets/pullman-logo.png',
     gallery: [
       { src: '/assets/gallery/suite-type-07.jpg', alt: 'Executive Suite living room with panoramic Panama City views' },
       { src: '/assets/gallery/suite-type-08.jpg', alt: 'Executive Suite interior with modern design and city views' },
-      { src: '/assets/gallery/lobby.jpg', alt: 'Pullman Hotel lobby with premium finishes' },
+      { src: '/assets/gallery/lobby.jpg', alt: 'Panama City Central lobby with premium finishes' },
       { src: '/assets/gallery/rooftop-pool.jpg', alt: 'Rooftop pool with stunning city panorama' },
     ],
   },

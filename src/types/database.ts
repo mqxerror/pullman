@@ -1,4 +1,4 @@
-// Pullman Hotel - Database Types
+// Panama City Central - Database Types
 
 export type SuiteStatus = 'available' | 'reserved' | 'sold'
 

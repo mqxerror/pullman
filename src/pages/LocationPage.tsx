@@ -22,6 +22,8 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import Footer from '@/components/Footer'
+// Aceternity UI Components
+import { TextGenerateEffect, BackgroundBeams, BentoGrid, BentoGridItem, FocusCards } from '@/components/ui'
 
 const nearbyLocations = [
   {
@@ -129,51 +131,51 @@ export default function LocationPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <header className="bg-surface/95 backdrop-blur-md border-b border-border sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
         <div className="page-container py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
               <img
                 src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
                 alt="Mercan Group"
-                className="h-14 w-auto"
+                className="h-12 lg:h-14 w-auto"
               />
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              <Link to="/" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
-                Home
+              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+                Interactive Map
               </Link>
-              <Link to="/building" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
-                Explore
+              <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+                Apartments
               </Link>
               <Link to="/location" className="text-sm text-primary font-medium">
                 Location
               </Link>
-              <Link to="/about" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
+              <Link to="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 About
               </Link>
-              <Link to="/contact" className="text-sm text-text-secondary hover:text-primary transition-colors font-medium">
+              <Link to="/contact" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Contact
               </Link>
             </nav>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 hover:bg-background rounded-lg transition-colors"
+              className="md:hidden p-2 hover:bg-slate-100 rounded-lg transition-colors"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
 
           {mobileMenuOpen && (
-            <nav className="md:hidden mt-4 p-4 bg-background rounded-xl border border-border">
+            <nav className="md:hidden mt-4 p-4 bg-white rounded-xl border border-slate-200 shadow-lg">
               <div className="flex flex-col gap-1">
-                <Link to="/" className="px-4 py-3 hover:bg-surface rounded-lg transition-colors">Home</Link>
-                <Link to="/building" className="px-4 py-3 hover:bg-surface rounded-lg transition-colors">Explore</Link>
+                <Link to="/building" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Interactive Map</Link>
+                <Link to="/apartments" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Apartments</Link>
                 <Link to="/location" className="px-4 py-3 bg-primary/10 text-primary rounded-lg font-medium">Location</Link>
-                <Link to="/about" className="px-4 py-3 hover:bg-surface rounded-lg transition-colors">About</Link>
-                <Link to="/contact" className="px-4 py-3 hover:bg-surface rounded-lg transition-colors">Contact</Link>
+                <Link to="/about" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">About</Link>
+                <Link to="/contact" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Contact</Link>
               </div>
             </nav>
           )}

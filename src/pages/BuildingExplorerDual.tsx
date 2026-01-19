@@ -4,20 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import { Menu, X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown, X as CloseIcon, ArrowRight, Bed, Bath, Mountain } from 'lucide-react'
-import { MIN_FLOOR, MAX_FLOOR } from '@/config/building'
+import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
 
 // Dual View - Tower + Interactive SVG Floor Plan
-
-const BUILDING_CONFIG = {
-  top: 14,
-  bottom: 50,
-  left: 20,
-  right: 80,
-}
-
-const TOTAL_FLOORS = MAX_FLOOR - MIN_FLOOR + 1
 
 const getSuiteType = (sizeSqm: number): string => {
   if (sizeSqm >= 80) return 'Premium Suite'
@@ -158,8 +149,8 @@ export default function BuildingExplorerDual() {
             <div className="relative h-full max-h-[600px] aspect-[3/4] w-full max-w-[400px]">
               {/* Building Image */}
               <img
-                src="/assets/pullman-facade.png"
-                alt="Pullman Hotel & Casino Tower"
+                src="/assets/pullman-facade-v2.png"
+                alt="Panama City Central Tower"
                 className="h-full w-full object-cover rounded-2xl shadow-xl"
               />
 
@@ -184,14 +175,14 @@ export default function BuildingExplorerDual() {
                       }}
                     >
                       {isSelected && (
-                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] floor-highlight-band flex items-center justify-center">
+                        <div className="absolute inset-0 floor-highlight-band flex items-center justify-center">
                           <div className="floor-pill text-gold-700 text-xs font-bold px-3 py-0.5 rounded-md shadow-lg">
                             {f.floor}
                           </div>
                         </div>
                       )}
                       {isHovered && !isSelected && (
-                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[95%] bg-white/20 backdrop-blur-[2px] transition-all duration-150 rounded-sm border border-white/30" />
+                        <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] transition-all duration-150 border-y border-white/30" />
                       )}
                     </button>
                   )
@@ -450,7 +441,7 @@ export default function BuildingExplorerDual() {
       {/* Footer */}
       <footer className="bg-slate-900 border-t border-slate-800 py-4">
         <div className="max-w-screen-2xl mx-auto px-6 text-center">
-          <p className="text-slate-500 text-xs">© 2024 Pullman Hotel & Casino Panama</p>
+          <p className="text-slate-500 text-xs">© 2024 Panama City Central</p>
           <p className="text-gold-500 text-xs mt-1">Dual View: Tower Navigation + Interactive SVG Floor Plan</p>
         </div>
       </footer>
