@@ -389,20 +389,46 @@ export default function BuildingExplorerDualAB() {
                   </div>
                 </div>
 
-                {/* Floor tooltip - positioned inside the building image */}
+                {/* Floor tooltip - Premium design inside building */}
                 {activeFloor && !selectedSuite && (
                   <div
                     className="absolute z-20 pointer-events-none animate-fade-in"
                     style={{
-                      right: '8px',
+                      right: '12px',
                       top: `${floors.find((f) => f.floor === activeFloor)?.top || 0}%`,
                     }}
                   >
-                    <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg px-3 py-2 min-w-[100px] border border-gold-200">
-                      <div className="text-sm font-bold text-slate-900">Floor {activeFloor}</div>
-                      <div className="flex items-center gap-2 mt-1 text-xs">
-                        <span className="text-green-600">{getFloorStats(activeFloor).available} avail</span>
-                        <span className="text-amber-600">{getFloorStats(activeFloor).reserved} res</span>
+                    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl px-5 py-4 min-w-[160px] border border-amber-500/30">
+                      {/* Floor Number */}
+                      <div className="flex items-baseline gap-2 mb-3">
+                        <span className="text-3xl font-bold text-white">{activeFloor}</span>
+                        <span className="text-xs text-amber-400 uppercase tracking-widest font-medium">Floor</span>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent mb-3" />
+
+                      {/* Stats */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
+                            <span className="text-xs text-slate-400">Available</span>
+                          </div>
+                          <span className="text-sm font-semibold text-emerald-400">{getFloorStats(activeFloor).available}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-amber-400 shadow-sm shadow-amber-400/50" />
+                            <span className="text-xs text-slate-400">Reserved</span>
+                          </div>
+                          <span className="text-sm font-semibold text-amber-400">{getFloorStats(activeFloor).reserved}</span>
+                        </div>
+                      </div>
+
+                      {/* CTA hint */}
+                      <div className="mt-3 pt-3 border-t border-slate-700">
+                        <span className="text-[10px] text-slate-500 uppercase tracking-wide">Click to explore →</span>
                       </div>
                     </div>
                   </div>
