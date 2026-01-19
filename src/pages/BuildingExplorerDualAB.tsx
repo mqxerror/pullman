@@ -367,49 +367,25 @@ export default function BuildingExplorerDualAB() {
                   })}
                 </div>
 
-                {/* Floor Navigator with Quick Stats */}
-                <div className="absolute bottom-4 left-4 right-4 flex items-end gap-3">
-                  {/* Floor Navigator */}
-                  <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-3 border border-gold-200">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={handleFloorDown}
-                        className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
-                      >
-                        <ChevronDown className="w-4 h-4" />
-                      </button>
-                      <div className="text-center min-w-[45px]">
-                        <div className="text-xl font-bold text-primary tabular-nums">{selectedFloor}</div>
-                        <div className="text-[8px] text-slate-400 uppercase tracking-wider">Floor</div>
-                      </div>
-                      <button
-                        onClick={handleFloorUp}
-                        className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
-                      >
-                        <ChevronUp className="w-4 h-4" />
-                      </button>
+                {/* Floor Navigator */}
+                <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-3 border border-gold-200">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleFloorDown}
+                      className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    <div className="text-center min-w-[45px]">
+                      <div className="text-xl font-bold text-primary tabular-nums">{selectedFloor}</div>
+                      <div className="text-[8px] text-slate-400 uppercase tracking-wider">Floor</div>
                     </div>
-                  </div>
-
-                  {/* Floor Quick Info - Contextual */}
-                  <div className="flex-1 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-3 border border-gold-200">
-                    <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Floor {selectedFloor} Summary</div>
-                    <div className="flex items-center justify-around text-center">
-                      <div>
-                        <div className="text-sm font-bold text-green-600">{getFloorStats(selectedFloor).available}</div>
-                        <div className="text-[9px] text-slate-400">Available</div>
-                      </div>
-                      <div className="w-px h-6 bg-slate-200" />
-                      <div>
-                        <div className="text-sm font-bold text-amber-600">{getFloorStats(selectedFloor).reserved}</div>
-                        <div className="text-[9px] text-slate-400">Reserved</div>
-                      </div>
-                      <div className="w-px h-6 bg-slate-200" />
-                      <div>
-                        <div className="text-sm font-bold text-slate-600">{getFloorStats(selectedFloor).sold}</div>
-                        <div className="text-[9px] text-slate-400">Sold</div>
-                      </div>
-                    </div>
+                    <button
+                      onClick={handleFloorUp}
+                      className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
+                    >
+                      <ChevronUp className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
 

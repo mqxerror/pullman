@@ -26,8 +26,8 @@ export const UNITS_PER_FLOOR = 14
  * - left/right: Horizontal bounds of the building facade
  */
 export const BUILDING_CONFIG = {
-  top: 22,      // Start of executive floors (floor 25)
-  bottom: 44,   // End of executive floors (floor 17) - tighter mapping to actual floor bands
+  top: 25,      // Start of executive floors (floor 25) - shifted down
+  bottom: 47,   // End of executive floors (floor 17) - shifted down to match
   left: 30,     // Left edge of building
   right: 70,    // Right edge of building
 }
