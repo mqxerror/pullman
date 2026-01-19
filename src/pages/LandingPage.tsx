@@ -579,33 +579,38 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Full-bleed Lifestyle Break - Interactive Unit Preview */}
-      <section className="relative h-[50vh] min-h-[400px] flex items-center overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src="/assets/hotel-entrance.png"
-            alt="Panama City Central Hotel Entrance"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
-        </div>
+      {/* Full-bleed Lifestyle Break - Parallax Section */}
+      <section className="relative h-[60vh] min-h-[450px] flex items-center overflow-hidden">
+        {/* Parallax Background Image */}
+        <div
+          className="absolute inset-0 -top-20 -bottom-20"
+          style={{
+            backgroundImage: 'url(/assets/hotel-entrance.png)',
+            backgroundAttachment: 'fixed',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+          }}
+        />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30" />
+
         {/* Content */}
-        <div className="relative page-container">
-          <div className="max-w-lg">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
+        <div className="relative page-container z-10">
+          <div className="max-w-xl">
+            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-4 animate-fade-in">
               {stats.available} of {stats.totalUnits} Units Available
             </p>
-            <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5">
               Find Your Perfect Residence
             </h2>
-            <p className="text-base md:text-lg text-white/80 mb-8">
+            <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed">
               From executive suites to premium residences — explore floor plans, views, and availability in our interactive building explorer.
             </p>
             <Link to="/building">
               <HoverBorderGradient
                 containerClassName="rounded-xl"
-                className="flex items-center gap-2 px-8 py-4 bg-slate-950 text-white font-semibold"
+                className="flex items-center gap-3 px-10 py-5 bg-slate-950 text-white font-semibold text-lg"
               >
                 Explore All Units
                 <ArrowRight className="w-5 h-5" />
