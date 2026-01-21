@@ -49,7 +49,7 @@ export default function BuildingExplorerDual() {
   const [hoveredFloor, setHoveredFloor] = useState<number | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const { data: apartments = [], isLoading } = useQuery({
+  const { data: apartments = [] } = useQuery({
     queryKey: ['pullman_suites'],
     queryFn: async () => {
       const { data, error } = await supabase

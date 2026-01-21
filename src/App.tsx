@@ -13,7 +13,6 @@ import BuildingExplorerDualAB from './pages/BuildingExplorerDualAB'
 import SuiteDetailPage from './pages/SuiteDetailPage'
 import SuitesExplorer from './pages/SuitesExplorer'
 import AboutPage from './pages/AboutPage'
-import ContactPage from './pages/ContactPage'
 import LocationPage from './pages/LocationPage'
 import ApartmentsPage from './pages/ApartmentsPage'
 
@@ -39,7 +38,6 @@ function AppRoutes() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/apartments" element={<ApartmentsPage />} />
         <Route path="/location" element={<LocationPage />} />
-        <Route path="/contact" element={<ContactPage />} />
 
         {/* Admin Routes */}
         <Route path="/login" element={<LoginPage />} />

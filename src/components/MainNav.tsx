@@ -12,7 +12,6 @@ const navItems = [
   { label: 'Interactive Map', href: '/building' },
   { label: 'Apartments', href: '/apartments' },
   { label: 'Location', href: '/location' },
-  { label: 'Contact', href: '/contact' },
 ]
 
 export default function MainNav({ variant = 'solid', className }: MainNavProps) {
@@ -45,7 +44,7 @@ export default function MainNav({ variant = 'solid', className }: MainNavProps) 
             <img
               src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
               alt="Mercan Group"
-              className={cn('w-auto', isTransparent ? 'h-14' : 'h-10 lg:h-12')}
+              className={cn('w-auto', isTransparent ? 'h-20' : 'h-16 lg:h-18')}
             />
           </Link>
 

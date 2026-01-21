@@ -3,8 +3,6 @@ import {
   X,
   Maximize2,
   Building2,
-  Phone,
-  MessageCircle,
   Download,
   View,
   ChevronRight,
@@ -183,24 +181,6 @@ export default function SuiteDetailModal({
 
             {/* CTAs */}
             <div className="p-6 mt-auto bg-slate-800/50">
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <a
-                  href={`tel:${projectConfig.contact.phone}`}
-                  className="flex items-center justify-center gap-2 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-colors"
-                >
-                  <Phone className="w-4 h-4" />
-                  <span>Call</span>
-                </a>
-                <a
-                  href={`https://wa.me/${projectConfig.contact.whatsapp.replace(/[^0-9]/g, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl transition-colors"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>WhatsApp</span>
-                </a>
-              </div>
               <button className="w-full flex items-center justify-center gap-2 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-medium rounded-xl transition-colors">
                 <Download className="w-4 h-4" />
                 <span>Download Suite Brochure</span>

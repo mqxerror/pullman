@@ -105,9 +105,6 @@ export default function LandingPage() {
               <a href="#investor" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
                 Investor
               </a>
-              <Link to="/contact" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                Contact
-              </Link>
             </nav>
 
             {/* Mobile Menu Button */}
@@ -160,13 +157,6 @@ export default function LandingPage() {
                 >
                   Investor Program
                 </a>
-                <Link
-                  to="/contact"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 mt-2 bg-accent text-white text-center rounded-lg font-medium hover:bg-accent/90 transition-colors focus:outline-none focus:ring-2 focus:ring-accent/50"
-                >
-                  Contact Us
-                </Link>
               </div>
             </nav>
           )}
@@ -174,7 +164,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section - Enhanced with Aceternity UI */}
-      <section id="main-content" className="relative h-[85vh] min-h-[600px] flex items-center overflow-hidden">
+      <section id="main-content" className="relative h-[85vh] min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden">
         {/* Background Image with Parallax */}
         <div className="absolute inset-0 overflow-hidden">
           <div
@@ -414,30 +404,30 @@ export default function LandingPage() {
           </div>
 
           {/* Stats + Image Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
             {/* Left: Big Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-primary rounded-2xl p-6 text-white relative overflow-hidden group">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
+              <div className="bg-primary rounded-xl md:rounded-2xl p-4 md:p-6 text-white relative overflow-hidden group">
                 <div className="absolute inset-0 bg-accent/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <p className="text-5xl font-bold mb-1 relative z-10">{projectConfig.building.totalUnits}</p>
-                <p className="text-white/70 text-sm relative z-10">Executive Suites</p>
-                <p className="text-white/50 text-xs mt-2 relative z-10">Across {projectConfig.building.totalFloors} floors</p>
+                <p className="text-3xl md:text-5xl font-bold mb-1 relative z-10">{projectConfig.building.totalUnits}</p>
+                <p className="text-white/70 text-xs md:text-sm relative z-10">Executive Suites</p>
+                <p className="text-white/50 text-[10px] md:text-xs mt-1.5 md:mt-2 relative z-10">Across {projectConfig.building.totalFloors} floors</p>
               </div>
-              <div className="bg-white border border-stone-200 rounded-2xl p-6 hover:border-accent/30 transition-colors group">
-                <p className="text-5xl font-bold text-primary mb-1">{projectConfig.building.completionYear}</p>
-                <p className="text-text-secondary text-sm">Delivery Year</p>
-                <p className="text-text-muted text-xs mt-2">Ready for occupancy</p>
+              <div className="bg-white border border-stone-200 rounded-xl md:rounded-2xl p-4 md:p-6 hover:border-accent/30 transition-colors group">
+                <p className="text-3xl md:text-5xl font-bold text-primary mb-1">{projectConfig.building.completionYear}</p>
+                <p className="text-text-secondary text-xs md:text-sm">Delivery Year</p>
+                <p className="text-text-muted text-[10px] md:text-xs mt-1.5 md:mt-2">Ready for occupancy</p>
               </div>
-              <div className="bg-white border border-stone-200 rounded-2xl p-6 hover:border-accent/30 transition-colors group">
-                <p className="text-5xl font-bold text-accent mb-1">5★</p>
-                <p className="text-text-secondary text-sm">Pullman Brand</p>
-                <p className="text-text-muted text-xs mt-2">Part of Accor ALL</p>
+              <div className="bg-white border border-stone-200 rounded-xl md:rounded-2xl p-4 md:p-6 hover:border-accent/30 transition-colors group">
+                <p className="text-3xl md:text-5xl font-bold text-accent mb-1">5★</p>
+                <p className="text-text-secondary text-xs md:text-sm">Pullman Brand</p>
+                <p className="text-text-muted text-[10px] md:text-xs mt-1.5 md:mt-2">Part of Accor ALL</p>
               </div>
-              <div className="bg-accent rounded-2xl p-6 text-primary-dark relative overflow-hidden group">
+              <div className="bg-accent rounded-xl md:rounded-2xl p-4 md:p-6 text-primary-dark relative overflow-hidden group">
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <p className="text-5xl font-bold mb-1 relative z-10">24/7</p>
-                <p className="text-primary-dark/80 text-sm relative z-10">Hotel Services</p>
-                <p className="text-primary-dark/60 text-xs mt-2 relative z-10">Concierge & room service</p>
+                <p className="text-3xl md:text-5xl font-bold mb-1 relative z-10">24/7</p>
+                <p className="text-primary-dark/80 text-xs md:text-sm relative z-10">Hotel Services</p>
+                <p className="text-primary-dark/60 text-[10px] md:text-xs mt-1.5 md:mt-2 relative z-10">Concierge & room service</p>
               </div>
             </div>
 
@@ -580,7 +570,7 @@ export default function LandingPage() {
       </section>
 
       {/* Full-bleed Lifestyle Break - Parallax Section */}
-      <section className="relative h-[60vh] min-h-[450px] flex items-center overflow-hidden">
+      <section className="relative h-[60vh] min-h-[350px] md:min-h-[450px] flex items-center overflow-hidden">
         {/* Parallax Background Image */}
         <div
           className="absolute inset-0 -top-20 -bottom-20"
@@ -891,37 +881,18 @@ export default function LandingPage() {
 
           {/* CTA */}
           <div className="mt-12 text-center">
-            <Link to="/contact" className="inline-block">
+            <Link to="/building" className="inline-block">
               <HoverBorderGradient
                 containerClassName="rounded-xl"
                 className="flex items-center gap-2 px-8 py-3 bg-slate-950 text-white font-medium"
               >
-                Schedule a Consultation
+                Explore Available Units
                 <ArrowRight className="w-4 h-4" />
               </HoverBorderGradient>
             </Link>
             <p className="text-xs text-white/40 mt-6 max-w-xl mx-auto">
               Programs vary by country; eligibility and timelines depend on individual circumstances. This is not immigration advice.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Band */}
-      <section className="bg-primary">
-        <div className="page-container py-8 sm:py-10">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <div className="text-center sm:text-left">
-              <h2 className="text-xl sm:text-2xl font-semibold text-white">Ready to find your new home?</h2>
-              <p className="text-sm text-white/80 mt-1">Speak with our sales team today</p>
-            </div>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary text-sm font-medium rounded-lg hover:bg-white/90 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
-            >
-              Contact Us
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
           </div>
         </div>
       </section>

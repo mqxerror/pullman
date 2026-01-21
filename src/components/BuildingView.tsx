@@ -50,7 +50,7 @@ export default function BuildingView({ apartments, selectedFloor, onFloorClick }
           viewBox="0 0 200 700"
           className="w-full h-full"
           role="img"
-          aria-label="Pullman Hotel building, 25 floors"
+          aria-label="Panama City Central building, 25 floors"
         >
           {/* Building base */}
           <rect x="30" y="660" width="140" height="30" fill="#1e3a5f" rx="2" />

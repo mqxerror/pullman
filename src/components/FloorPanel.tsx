@@ -36,7 +36,7 @@ export default function FloorPanel({
         {/* Page Header */}
         <div className="mb-6">
           <div className="text-xs text-slate-400 mb-2">
-            Projects / Pullman Hotel / Executive Suites
+            Projects / Panama City Central / Executive Suites
           </div>
           <h2 className="text-2xl text-slate-900 font-semibold">Suite Selection</h2>
 
@@ -123,7 +123,7 @@ export default function FloorPanel({
       {/* Page Header */}
       <div className="mb-4">
         <div className="text-xs text-slate-400 mb-1">
-          Pullman Hotel / Floor {floor}
+          Panama City Central / Floor {floor}
         </div>
         <div className="flex items-baseline justify-between">
           <h2 className="text-xl text-slate-900 font-semibold">Floor {floor}</h2>

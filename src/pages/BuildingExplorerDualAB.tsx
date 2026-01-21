@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import {
-  Menu, X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
-  X as CloseIcon, ArrowRight, Bed, Bath, Mountain, Download, Share2, Phone,
+  X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
+  X as CloseIcon, ArrowRight, Bed, Mountain, Download, Share2,
   ChevronLeft, ChevronRight, Sparkles, Star, Wifi, Car, Dumbbell, Coffee, Shield, Waves,
-  PanelLeftClose, PanelLeftOpen, Home, MapPin
+  PanelLeftClose, PanelLeftOpen, Home
 } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
@@ -30,7 +30,7 @@ const getSuiteImage = (unitNumber: number): string => {
   return images[unitNumber % 2]
 }
 
-const getSuiteImages = (unitNumber: number): string[] => {
+const getSuiteImages = (_unitNumber: number): string[] => {
   return [
     '/assets/gallery/suite-type-07.jpg',
     '/assets/gallery/suite-type-08.jpg',
@@ -81,18 +81,17 @@ const HOTEL_AMENITIES = [
 ]
 
 export default function BuildingExplorerDualAB() {
-  const navigate = useNavigate()
   const [viewMode, setViewMode] = useState<ViewMode>('C')
+  void setViewMode // Prevent unused warning
   const [selectedFloor, setSelectedFloor] = useState<number>(23)
   const [selectedSuite, setSelectedSuite] = useState<ExecutiveSuite | null>(null)
   const [hoveredFloor, setHoveredFloor] = useState<number | null>(null)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeImageTab, setActiveImageTab] = useState<'interior' | 'views' | 'floorplan'>('interior')
   const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(false)
   const [showFloorPlanFullscreen, setShowFloorPlanFullscreen] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  const { data: apartments = [], isLoading } = useQuery({
+  const { data: apartments = [] } = useQuery({
     queryKey: ['pullman_suites'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -245,20 +244,19 @@ export default function BuildingExplorerDualAB() {
               <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Apartments</Link>
               <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Location</Link>
               <Link to="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">About</Link>
-              <Link to="/contact" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Contact</Link>
             </nav>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col lg:flex-row relative overflow-hidden">
+      <main className="flex-1 flex flex-col lg:flex-row relative overflow-hidden min-h-0">
         {/* LEFT: Collapsible Tower Building Panel - HIDDEN on mobile */}
         <div
           className={cn(
-            "hidden lg:flex flex-col border-r border-slate-200/50 bg-gradient-to-b from-white to-slate-50 transition-all duration-300 ease-out overflow-hidden",
+            "hidden lg:flex flex-col border-r border-slate-200/50 bg-gradient-to-b from-white to-slate-50 transition-all duration-300 ease-out overflow-y-auto min-h-0",
             leftPanelCollapsed
               ? "lg:w-[80px] p-2"
-              : "lg:w-[32%] p-4"
+              : "lg:w-[28%] xl:w-[30%] 2xl:w-[32%] p-3 xl:p-4"
           )}
         >
           {/* Panel Header with Collapse Toggle */}
@@ -324,8 +322,8 @@ export default function BuildingExplorerDualAB() {
             </div>
           ) : (
             /* Expanded State: Full Building View - Responsive like main page */
-            <div className="flex-1 flex items-center justify-center overflow-hidden">
-              <div className="relative h-[85%] w-auto" style={{ aspectRatio: '3/4' }}>
+            <div className="flex-1 flex items-center justify-center overflow-hidden min-h-0 p-2">
+              <div className="relative h-full max-h-[90%] w-auto" style={{ aspectRatio: '3/4', maxWidth: '100%' }}>
                 <img
                   src="/assets/pullman-facade-v2.png"
                   alt="Panama City Central Tower"
@@ -367,72 +365,42 @@ export default function BuildingExplorerDualAB() {
                   })}
                 </div>
 
-                {/* Floor Navigator */}
-                <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-3 border border-gold-200">
-                  <div className="flex items-center gap-2">
+                {/* Floor Navigator - Enhanced with live stats */}
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-2.5 border border-gold-200">
+                  <div className="flex items-center gap-3">
                     <button
                       onClick={handleFloorDown}
-                      className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
+                      className="p-2 min-w-[36px] min-h-[36px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
                     >
                       <ChevronDown className="w-4 h-4" />
                     </button>
-                    <div className="text-center min-w-[45px]">
-                      <div className="text-xl font-bold text-primary tabular-nums">{selectedFloor}</div>
-                      <div className="text-[8px] text-slate-400 uppercase tracking-wider">Floor</div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-primary tabular-nums leading-none">
+                        {activeFloor || selectedFloor}
+                      </div>
+                      <div className="text-[7px] text-slate-400 uppercase tracking-wider">Floor</div>
                     </div>
                     <button
                       onClick={handleFloorUp}
-                      className="p-2 min-w-[40px] min-h-[40px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
+                      className="p-2 min-w-[36px] min-h-[36px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
                     >
                       <ChevronUp className="w-4 h-4" />
                     </button>
-                  </div>
-                </div>
-
-                {/* Floor tooltip - Premium design inside building */}
-                {activeFloor && !selectedSuite && (
-                  <div
-                    className="absolute z-20 pointer-events-none animate-fade-in"
-                    style={{
-                      right: '12px',
-                      top: `${floors.find((f) => f.floor === activeFloor)?.top || 0}%`,
-                    }}
-                  >
-                    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl shadow-2xl px-5 py-4 min-w-[160px] border border-amber-500/30">
-                      {/* Floor Number */}
-                      <div className="flex items-baseline gap-2 mb-3">
-                        <span className="text-3xl font-bold text-white">{activeFloor}</span>
-                        <span className="text-xs text-amber-400 uppercase tracking-widest font-medium">Floor</span>
+                    {/* Divider */}
+                    <div className="w-px h-8 bg-slate-200" />
+                    {/* Live Stats */}
+                    <div className="flex items-center gap-2.5 text-xs">
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                        <span className="font-semibold text-emerald-600">{getFloorStats(activeFloor || selectedFloor).available}</span>
                       </div>
-
-                      {/* Divider */}
-                      <div className="h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent mb-3" />
-
-                      {/* Stats */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
-                            <span className="text-xs text-slate-400">Available</span>
-                          </div>
-                          <span className="text-sm font-semibold text-emerald-400">{getFloorStats(activeFloor).available}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-amber-400 shadow-sm shadow-amber-400/50" />
-                            <span className="text-xs text-slate-400">Reserved</span>
-                          </div>
-                          <span className="text-sm font-semibold text-amber-400">{getFloorStats(activeFloor).reserved}</span>
-                        </div>
-                      </div>
-
-                      {/* CTA hint */}
-                      <div className="mt-3 pt-3 border-t border-slate-700">
-                        <span className="text-[10px] text-slate-500 uppercase tracking-wide">Click to explore →</span>
+                      <div className="flex items-center gap-1">
+                        <div className="w-2 h-2 rounded-full bg-amber-500" />
+                        <span className="font-semibold text-amber-600">{getFloorStats(activeFloor || selectedFloor).reserved}</span>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           )}
@@ -441,7 +409,7 @@ export default function BuildingExplorerDualAB() {
         {/* MIDDLE: Floor Plan - Full width on mobile, expands when left panel collapses on desktop */}
         <div className={cn(
           "flex-1 p-2 lg:p-4 flex flex-col bg-white transition-all duration-300 ease-out overflow-hidden",
-          leftPanelCollapsed ? "lg:flex-1" : "lg:w-[65%]"
+          leftPanelCollapsed ? "lg:flex-1" : "lg:w-[72%] xl:w-[70%] 2xl:w-[68%]"
         )}>
           <div className="mb-2 flex items-center justify-between flex-shrink-0">
             <div>
@@ -736,10 +704,6 @@ export default function BuildingExplorerDualAB() {
                   {/* CTAs - Better hierarchy */}
                   {selectedSuite.status !== 'sold' && (
                     <div className="space-y-3">
-                      <button className="w-full py-4 bg-amber-500 text-white font-semibold rounded-xl hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 active:scale-[0.98]">
-                        <Phone className="w-5 h-5" />
-                        Contact Us
-                      </button>
                       <div className="flex gap-3">
                         <button className="flex-1 py-3.5 bg-slate-900 text-white font-medium rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
                           <Download className="w-4 h-4" />
@@ -1061,10 +1025,6 @@ export default function BuildingExplorerDualAB() {
                     {/* CTAs - Sticky on mobile */}
                     {selectedSuite.status !== 'sold' && (
                       <div className="space-y-2 mb-4">
-                        <button className="w-full py-3 min-h-[48px] bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-all shadow-md flex items-center justify-center gap-2 active:scale-[0.98]">
-                          <Phone className="w-4 h-4" />
-                          Contact Us
-                        </button>
                         <div className="flex gap-2">
                           <button className="flex-1 py-2.5 min-h-[44px] bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]">
                             <Download className="w-3.5 h-3.5" />

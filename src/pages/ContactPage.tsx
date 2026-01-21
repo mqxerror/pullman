@@ -6,7 +6,7 @@ import { Phone, Mail, MapPin, Clock, Send, ChevronRight, Building2, Users, Calen
 import { toast } from 'sonner'
 import Footer from '@/components/Footer'
 // Aceternity UI Components
-import { TextGenerateEffect, BackgroundBeams, HoverBorderGradient } from '@/components/ui'
+import { TextGenerateEffect, BackgroundBeams } from '@/components/ui'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({

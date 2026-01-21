@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { ArrowLeft, Maximize2, Building2, Compass, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -143,7 +143,7 @@ export default function SuiteDetailPage() {
             <span className="font-medium">Back to Floor Plan</span>
           </button>
 
-          <img src="/pullman-logo.png" alt="Pullman" className="h-10" />
+          <img src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png" alt="Mercan Group" className="h-12" />
 
           <div className="flex items-center gap-3">
             <button className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
@@ -257,21 +257,21 @@ export default function SuiteDetailPage() {
             </div>
 
             {/* Key Stats */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-white rounded-xl p-4 border border-slate-200 text-center">
-                <Maximize2 className="w-6 h-6 text-gold-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-slate-900">{suiteInfo?.size || '--'}</div>
-                <div className="text-sm text-slate-500">Square Meters</div>
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
+              <div className="bg-white rounded-xl p-3 md:p-4 border border-slate-200 text-center">
+                <Maximize2 className="w-5 h-5 md:w-6 md:h-6 text-gold-600 mx-auto mb-1.5 md:mb-2" />
+                <div className="text-lg md:text-2xl font-bold text-slate-900">{suiteInfo?.size || '--'}</div>
+                <div className="text-xs md:text-sm text-slate-500">Sq. Meters</div>
               </div>
-              <div className="bg-white rounded-xl p-4 border border-slate-200 text-center">
-                <Building2 className="w-6 h-6 text-gold-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-slate-900">{floor}</div>
-                <div className="text-sm text-slate-500">Floor Level</div>
+              <div className="bg-white rounded-xl p-3 md:p-4 border border-slate-200 text-center">
+                <Building2 className="w-5 h-5 md:w-6 md:h-6 text-gold-600 mx-auto mb-1.5 md:mb-2" />
+                <div className="text-lg md:text-2xl font-bold text-slate-900">{floor}</div>
+                <div className="text-xs md:text-sm text-slate-500">Floor Level</div>
               </div>
-              <div className="bg-white rounded-xl p-4 border border-slate-200 text-center">
-                <Compass className="w-6 h-6 text-gold-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-slate-900">Ocean</div>
-                <div className="text-sm text-slate-500">View</div>
+              <div className="bg-white rounded-xl p-3 md:p-4 border border-slate-200 text-center">
+                <Compass className="w-5 h-5 md:w-6 md:h-6 text-gold-600 mx-auto mb-1.5 md:mb-2" />
+                <div className="text-lg md:text-2xl font-bold text-slate-900">Ocean</div>
+                <div className="text-xs md:text-sm text-slate-500">View</div>
               </div>
             </div>
 
@@ -324,13 +324,13 @@ export default function SuiteDetailPage() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex gap-4">
-              <button className="flex-1 py-4 bg-gold-600 text-white rounded-xl font-semibold hover:bg-gold-700 transition-all">
-                Contact Us
-              </button>
-              <button className="flex-1 py-4 border-2 border-slate-900 text-slate-900 rounded-xl font-semibold hover:bg-slate-900 hover:text-white transition-all">
-                Request Information
-              </button>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <Link to="/building" className="flex-1 py-3.5 sm:py-4 bg-gold-600 text-white rounded-xl font-semibold hover:bg-gold-700 transition-all text-center text-sm sm:text-base">
+                Explore More Units
+              </Link>
+              <Link to="/apartments" className="flex-1 py-3.5 sm:py-4 border-2 border-slate-900 text-slate-900 rounded-xl font-semibold hover:bg-slate-900 hover:text-white transition-all text-center text-sm sm:text-base">
+                View All Apartments
+              </Link>
             </div>
           </div>
         </div>

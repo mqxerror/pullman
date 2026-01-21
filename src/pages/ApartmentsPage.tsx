@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
-import { projectConfig, SUITE_SIZES } from '@/config/project'
+import { projectConfig } from '@/config/project'
 import {
   Menu, X, Check, Clock, Lock, Maximize2, ArrowRight, ArrowUpDown,
-  SlidersHorizontal, Building2, Filter, Grid3X3, LayoutList, ChevronDown,
+  SlidersHorizontal, Building2, Filter, Grid3X3, LayoutList,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -206,9 +206,6 @@ export default function ApartmentsPage() {
               <Link to="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 About
               </Link>
-              <Link to="/contact" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Contact
-              </Link>
             </nav>
 
             <button
@@ -226,7 +223,6 @@ export default function ApartmentsPage() {
                 <Link to="/apartments" className="px-4 py-3 bg-primary/10 text-primary rounded-lg font-medium">Apartments</Link>
                 <Link to="/location" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Location</Link>
                 <Link to="/about" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">About</Link>
-                <Link to="/contact" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Contact</Link>
               </div>
             </nav>
           )}
@@ -288,13 +284,13 @@ export default function ApartmentsPage() {
       <section className="sticky top-[73px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div className="page-container py-4">
           {/* Filter Tabs */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {/* Status Filter Tabs */}
-            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
+            {/* Status Filter Tabs - Scrollable on mobile */}
+            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
               <button
                 onClick={() => setStatusFilter('all')}
                 className={cn(
-                  'px-4 py-2 text-sm font-medium rounded-lg transition-all',
+                  'px-3 md:px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap min-h-[40px]',
                   statusFilter === 'all'
                     ? 'bg-white text-slate-900 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
@@ -305,31 +301,31 @@ export default function ApartmentsPage() {
               <button
                 onClick={() => setStatusFilter('available')}
                 className={cn(
-                  'px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5',
+                  'px-3 md:px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap min-h-[40px]',
                   statusFilter === 'available'
                     ? 'bg-white text-emerald-600 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
                 )}
               >
                 <Check className="w-3.5 h-3.5" />
-                Available <span className="ml-1 text-slate-400">{stats.available}</span>
+                <span className="hidden sm:inline">Available</span><span className="sm:hidden">Avail</span> <span className="ml-1 text-slate-400">{stats.available}</span>
               </button>
               <button
                 onClick={() => setStatusFilter('reserved')}
                 className={cn(
-                  'px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5',
+                  'px-3 md:px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap min-h-[40px]',
                   statusFilter === 'reserved'
                     ? 'bg-white text-amber-600 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
                 )}
               >
                 <Clock className="w-3.5 h-3.5" />
-                Reserved <span className="ml-1 text-slate-400">{stats.reserved}</span>
+                <span className="hidden sm:inline">Reserved</span><span className="sm:hidden">Rsv</span> <span className="ml-1 text-slate-400">{stats.reserved}</span>
               </button>
               <button
                 onClick={() => setStatusFilter('sold')}
                 className={cn(
-                  'px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5',
+                  'px-3 md:px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-1.5 whitespace-nowrap min-h-[40px]',
                   statusFilter === 'sold'
                     ? 'bg-white text-slate-600 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
@@ -341,13 +337,13 @@ export default function ApartmentsPage() {
             </div>
 
             {/* Right Controls */}
-            <div className="flex items-center gap-3">
-              {/* Sort Dropdown */}
-              <div className="relative">
+            <div className="flex items-center gap-2 md:gap-3">
+              {/* Sort Dropdown - Hidden on small mobile */}
+              <div className="relative hidden sm:block">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="appearance-none bg-white border border-slate-200 rounded-lg px-4 py-2 pr-10 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+                  className="appearance-none bg-white border border-slate-200 rounded-lg px-3 md:px-4 py-2.5 pr-9 md:pr-10 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer min-h-[44px]"
                 >
                   <option value="unit">Sort: Unit</option>
                   <option value="size_asc">Size: Small to Large</option>
@@ -362,14 +358,14 @@ export default function ApartmentsPage() {
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-lg border transition-all text-sm font-medium',
+                  'flex items-center gap-2 px-3 md:px-4 py-2.5 rounded-lg border transition-all text-sm font-medium min-h-[44px]',
                   showFilters
                     ? 'bg-primary text-white border-primary'
                     : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
                 )}
               >
                 <SlidersHorizontal className="w-4 h-4" />
-                Filters
+                <span className="hidden sm:inline">Filters</span>
               </button>
 
               {/* View Toggle */}
@@ -771,27 +767,20 @@ export default function ApartmentsPage() {
         <BackgroundBeams className="opacity-20" />
         <div className="page-container relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Can't find what you're looking for?
+            Explore Our Premium Suites
           </h2>
           <p className="text-white/70 text-lg mb-8 max-w-2xl mx-auto">
-            Our team can help you find the perfect suite that matches your requirements.
-            Schedule a private consultation today.
+            Discover the perfect suite that matches your lifestyle with our interactive building explorer.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/contact">
+            <Link to="/building">
               <HoverBorderGradient
                 containerClassName="rounded-xl"
                 className="flex items-center gap-2 px-8 py-4 bg-slate-950 text-white font-medium"
               >
-                Contact Us
+                Explore Interactive Map
                 <ArrowRight className="w-4 h-4" />
               </HoverBorderGradient>
-            </Link>
-            <Link
-              to="/building"
-              className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white font-medium hover:bg-white/20 transition-colors"
-            >
-              Explore Interactive Map
             </Link>
           </div>
         </div>

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
-import { Menu, X, Maximize2, Building2, Compass, Check, Clock, Lock, ArrowRight, X as CloseIcon, ChevronUp, ChevronDown } from 'lucide-react'
+import { Menu, X, Maximize2, Check, Clock, Lock, X as CloseIcon, ChevronUp, ChevronDown } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
 
@@ -15,12 +15,6 @@ const getSuiteType = (sizeSqm: number): string => {
   return 'Executive Suite'
 }
 
-const getSuiteImage = (unitNumber: number): string => {
-  if ([2, 7, 9, 11].includes(unitNumber)) {
-    return '/assets/gallery/suite-type-07.jpg'
-  }
-  return '/assets/gallery/suite-type-08.jpg'
-}
 
 const statusConfig = {
   available: { icon: Check, label: 'Available', color: 'text-green-500', bg: 'bg-green-500', bgLight: 'bg-green-50' },
@@ -30,11 +24,11 @@ const statusConfig = {
 
 export default function BuildingExplorerV3() {
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null)
-  const [selectedSuite, setSelectedSuite] = useState<ExecutiveSuite | null>(null)
+  const [, setSelectedSuite] = useState<ExecutiveSuite | null>(null)
   const [hoveredFloor, setHoveredFloor] = useState<number | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const { data: apartments = [], isLoading } = useQuery({
+  const { data: apartments = [] } = useQuery({
     queryKey: ['pullman_suites'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -319,7 +313,7 @@ export default function BuildingExplorerV3() {
         )}
 
         {/* Instruction Overlay - Shows when no floor selected */}
-        {!selectedFloor && !isLoading && (
+        {!selectedFloor && (
           <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-gold-200">
             <p className="text-sm text-slate-600">
               <span className="text-gold-600 font-medium">Click on a floor</span> to explore available suites

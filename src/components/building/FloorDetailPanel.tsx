@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Maximize2, Check, Clock, Lock, Grid3X3, LayoutGrid } from 'lucide-react'
 import type { ExecutiveSuite } from '@/types/database'
@@ -232,9 +233,9 @@ export default function FloorDetailPanel({
 
       {/* CTA */}
       <div className="sticky bottom-0 p-4 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700">
-        <button className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-medium rounded-xl transition-colors">
-          Contact Sales for Floor {floor}
-        </button>
+        <Link to="/apartments" className="block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-medium rounded-xl transition-colors text-center">
+          View All Available Units
+        </Link>
       </div>
     </motion.div>
   )

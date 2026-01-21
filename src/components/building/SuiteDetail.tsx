@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, Check, Clock, Lock, Maximize2, Compass, Share2, Download, X, Building2, Sun, Wind, Wifi, Shield, Waves, ChevronRight, Expand, Image, ChevronDown, Phone, Utensils, Dumbbell, Car, Sparkles } from 'lucide-react'
+import { ArrowLeft, Check, Clock, Lock, Maximize2, Compass, Share2, Download, X, Building2, Sun, Wind, Wifi, Shield, Waves, ChevronRight, Expand, Image, ChevronDown, Utensils, Dumbbell, Car, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { ExecutiveSuite } from '@/types/database'
 import { cn } from '@/lib/utils'
@@ -138,7 +138,7 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
                   <span>Back</span>
                 </button>
                 <span className="text-slate-300">/</span>
-                <span className="text-slate-400">Pullman Hotel</span>
+                <span className="text-slate-400">Panama City Central</span>
                 <ChevronRight className="w-3 h-3 text-slate-300" />
                 <span className="text-slate-400">Floor {suite.floor}</span>
                 <ChevronRight className="w-3 h-3 text-slate-300" />
@@ -307,11 +307,11 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
                     Share Suite
                   </button>
                   <Link
-                    to={`/contact?unit=${suite.floor}-${suite.unit_number}`}
+                    to="/apartments"
                     className="w-full py-3 px-4 bg-amber-500 hover:bg-amber-400 text-slate-900 text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
                   >
-                    <Phone className="w-4 h-4" />
-                    Contact Sales
+                    <Building2 className="w-4 h-4" />
+                    View All Units
                   </Link>
                 </div>
 
@@ -447,10 +447,10 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
           <p className="text-xs text-slate-400">From</p>
           <p className="text-lg text-slate-900 font-bold">{suite.price_display || formatPrice(price)}</p>
         </div>
-        <button className="flex-1 py-3 px-4 bg-amber-500 text-slate-900 text-sm font-medium rounded-xl flex items-center justify-center gap-2">
-          <Phone className="w-4 h-4" />
-          Contact
-        </button>
+        <Link to="/apartments" className="flex-1 py-3 px-4 bg-amber-500 text-slate-900 text-sm font-medium rounded-xl flex items-center justify-center gap-2">
+          <Building2 className="w-4 h-4" />
+          All Units
+        </Link>
         <button className="w-12 h-12 flex items-center justify-center border border-slate-200 rounded-xl">
           <Share2 className="w-5 h-5 text-slate-500" />
         </button>

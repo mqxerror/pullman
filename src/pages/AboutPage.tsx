@@ -4,7 +4,7 @@ import { Check, Building2, Sun, MapPin, ChevronRight } from 'lucide-react'
 import { GalleryImage } from '@/components/LazyImage'
 import Footer from '@/components/Footer'
 // Aceternity UI Components
-import { TextGenerateEffect, BentoGrid, BentoGridItem, FocusCards, HoverBorderGradient, BackgroundBeams } from '@/components/ui'
+import { TextGenerateEffect, BentoGrid, BentoGridItem, HoverBorderGradient, BackgroundBeams } from '@/components/ui'
 
 export default function AboutPage() {
   return (
@@ -32,9 +32,6 @@ export default function AboutPage() {
               </Link>
               <Link to="/about" className="text-sm text-primary font-medium">
                 About
-              </Link>
-              <Link to="/contact" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Contact
               </Link>
             </nav>
           </div>
@@ -67,33 +64,33 @@ export default function AboutPage() {
       {/* Project Story */}
       <section className="py-16">
         <div className="page-container">
-          <div className="grid grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <div>
-              <h2 className="text-3xl font-semibold text-text-primary mb-6">
+              <h2 className="text-2xl md:text-3xl font-semibold text-text-primary mb-4 md:mb-6">
                 A New Standard in Urban Living
               </h2>
-              <p className="text-text-secondary mb-4">
+              <p className="text-text-secondary mb-4 text-sm md:text-base">
                 {projectConfig.name} represents the pinnacle of modern residential development in {projectConfig.location.city}. Rising {projectConfig.building.totalFloors} floors above the vibrant {projectConfig.location.neighborhood} district, this architectural masterpiece offers an unparalleled living experience.
               </p>
-              <p className="text-text-secondary mb-6">
+              <p className="text-text-secondary mb-6 text-sm md:text-base">
                 Every detail has been thoughtfully designed to provide residents with the perfect balance of luxury, comfort, and convenience. From the moment you enter the grand lobby to the stunning views from your private residence, excellence is evident at every turn.
               </p>
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-3 gap-4 md:gap-6">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-primary">{projectConfig.building.totalFloors}</p>
-                  <p className="text-sm text-text-muted">Floors</p>
+                  <p className="text-2xl md:text-3xl font-bold text-primary">{projectConfig.building.totalFloors}</p>
+                  <p className="text-xs md:text-sm text-text-muted">Floors</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-primary">{projectConfig.building.totalUnits}</p>
-                  <p className="text-sm text-text-muted">Residences</p>
+                  <p className="text-2xl md:text-3xl font-bold text-primary">{projectConfig.building.totalUnits}</p>
+                  <p className="text-xs md:text-sm text-text-muted">Residences</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-primary">{projectConfig.building.completionYear}</p>
-                  <p className="text-sm text-text-muted">Completion</p>
+                  <p className="text-2xl md:text-3xl font-bold text-primary">{projectConfig.building.completionYear}</p>
+                  <p className="text-xs md:text-sm text-text-muted">Completion</p>
                 </div>
               </div>
             </div>
-            <div className="aspect-[4/5] rounded-2xl overflow-hidden">
+            <div className="aspect-[4/3] lg:aspect-[4/5] rounded-2xl overflow-hidden order-first lg:order-last">
               <img
                 src="/assets/gallery/lobby.jpg"
                 alt="Lobby"
@@ -211,18 +208,18 @@ export default function AboutPage() {
       {/* Location */}
       <section className="py-16 bg-surface">
         <div className="page-container">
-          <div className="grid grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <p className="text-accent text-sm font-medium tracking-wider uppercase mb-3">
+              <p className="text-accent text-xs md:text-sm font-medium tracking-wider uppercase mb-2 md:mb-3">
                 Prime Location
               </p>
-              <h2 className="text-3xl font-semibold text-text-primary mb-4">
+              <h2 className="text-2xl md:text-3xl font-semibold text-text-primary mb-3 md:mb-4">
                 {projectConfig.location.neighborhood}
               </h2>
-              <p className="text-text-secondary mb-6">
+              <p className="text-text-secondary mb-4 md:mb-6 text-sm md:text-base">
                 Located in the prestigious {projectConfig.location.neighborhood} district of {projectConfig.location.city}, {projectConfig.name} offers unmatched convenience with easy access to the city's best shopping, dining, and entertainment destinations.
               </p>
-              <div className="bg-background rounded-xl p-4 border border-border">
+              <div className="bg-background rounded-xl p-3 md:p-4 border border-border">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
@@ -232,7 +229,7 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
-            <div className="aspect-[4/3] bg-stone-200 rounded-2xl overflow-hidden">
+            <div className="aspect-video lg:aspect-[4/3] bg-stone-200 rounded-2xl overflow-hidden">
               <iframe
                 src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d${projectConfig.location.coordinates.lng}!3d${projectConfig.location.coordinates.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDAnMjkuNSJOIDc5wrAzMCcxMi4yIlc!5e0!3m2!1sen!2sus!4v1702000000000!5m2!1sen!2sus`}
                 width="100%"
@@ -256,23 +253,17 @@ export default function AboutPage() {
             Ready to Explore?
           </h2>
           <p className="text-white/70 mb-8 max-w-xl mx-auto">
-            Browse our available units or speak with our sales team to find your perfect residence.
+            Browse our available units and find your perfect residence.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <HoverBorderGradient
-              containerClassName="rounded-xl"
-              as={Link}
-              to="/building"
-              className="flex items-center gap-2 px-6 py-3 bg-white text-primary font-medium"
-            >
-              Explore Units
-              <ChevronRight className="w-4 h-4" />
-            </HoverBorderGradient>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 transition-colors border border-white/20"
-            >
-              Contact Us
+            <Link to="/building">
+              <HoverBorderGradient
+                containerClassName="rounded-xl"
+                className="flex items-center gap-2 px-6 py-3 bg-white text-primary font-medium"
+              >
+                Explore Units
+                <ChevronRight className="w-4 h-4" />
+              </HoverBorderGradient>
             </Link>
           </div>
         </div>

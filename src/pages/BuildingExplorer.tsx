@@ -115,9 +115,6 @@ export default function BuildingExplorer() {
             <Link to="/about" className="text-sm text-slate-500 hover:text-slate-900 transition-colors font-medium">
               About
             </Link>
-            <Link to="/contact" className="text-sm text-slate-500 hover:text-slate-900 transition-colors font-medium">
-              Contact
-            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -136,7 +133,6 @@ export default function BuildingExplorer() {
             <Link to="/building" className="block py-2 text-sm text-slate-900 font-medium">Explore</Link>
             <Link to="/location" className="block py-2 text-sm text-slate-500 hover:text-slate-900">Location</Link>
             <Link to="/about" className="block py-2 text-sm text-slate-500 hover:text-slate-900">About</Link>
-            <Link to="/contact" className="block py-2 text-sm text-slate-500 hover:text-slate-900">Contact</Link>
           </div>
         )}
       </header>

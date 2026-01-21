@@ -31,7 +31,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-surface rounded-lg shadow-lg p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-primary">Pullman Hotel & Casino</h1>
+            <h1 className="text-2xl font-bold text-primary">Panama City Central</h1>
             <p className="text-muted mt-2">Admin Login</p>
           </div>
 

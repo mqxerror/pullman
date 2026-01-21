@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { projectConfig } from '@/config/project'
-import { Phone, Mail, MapPin, Download, Briefcase } from 'lucide-react'
+import { Download, Briefcase } from 'lucide-react'
 import { useState } from 'react'
 import LegalModal from './LegalModal'
 
@@ -18,31 +18,12 @@ export default function Footer() {
                 <img
                   src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
                   alt="Mercan Group"
-                  className="h-16 w-auto"
+                  className="h-24 w-auto"
                 />
               </div>
               <p className="text-white/60 text-sm leading-relaxed">
                 Premium residential tower in the heart of {projectConfig.location.city}.
               </p>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <h4 className="text-white text-xs font-semibold uppercase tracking-wide mb-4">Contact</h4>
-              <div className="space-y-3">
-                <a href={`tel:${projectConfig.contact.phone}`} className="flex items-center gap-2 text-white/70 hover:text-white text-sm transition-colors focus:outline-none focus:text-white">
-                  <Phone className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                  {projectConfig.contact.phone}
-                </a>
-                <a href={`mailto:${projectConfig.contact.email}`} className="flex items-center gap-2 text-white/70 hover:text-white text-sm transition-colors focus:outline-none focus:text-white">
-                  <Mail className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                  <span className="truncate">{projectConfig.contact.email}</span>
-                </a>
-                <p className="flex items-start gap-2 text-white/70 text-sm">
-                  <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                  <span>{projectConfig.location.address}</span>
-                </p>
-              </div>
             </div>
 
             {/* Quick Links */}
@@ -57,9 +38,6 @@ export default function Footer() {
                 </Link>
                 <Link to="/about" className="block text-white/70 hover:text-white text-sm transition-colors focus:outline-none focus:text-white">
                   About
-                </Link>
-                <Link to="/contact" className="block text-white/70 hover:text-white text-sm transition-colors focus:outline-none focus:text-white">
-                  Contact Us
                 </Link>
                 <a
                   href="/Floor_Plan_Santa_Maria.pdf"

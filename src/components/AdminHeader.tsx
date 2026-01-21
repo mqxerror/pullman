@@ -17,7 +17,7 @@ export default function AdminHeader() {
     <header className="bg-primary text-white">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold">Pullman Hotel & Casino</h1>
+          <h1 className="text-xl font-bold">Panama City Central</h1>
           <p className="text-sm text-white/70">Admin Dashboard</p>
         </div>
         <div className="flex items-center gap-4">

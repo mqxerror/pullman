@@ -34,7 +34,7 @@ export default function BuildingExplorerV2() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const { data: apartments = [], isLoading } = useQuery({
+  const { data: apartments = [] } = useQuery({
     queryKey: ['pullman_suites'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -301,7 +301,7 @@ export default function BuildingExplorerV2() {
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-8">
         <div className="max-w-screen-2xl mx-auto px-6 text-center">
-          <p className="text-slate-400 text-sm">© 2024 Pullman Hotel & Casino Panama. All rights reserved.</p>
+          <p className="text-slate-400 text-sm">© 2024 Panama City Central. All rights reserved.</p>
           <p className="text-gold-500 text-xs mt-2">Version 2: Luxury Gallery</p>
         </div>
       </footer>
