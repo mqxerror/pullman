@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.gitignore
+*.md
+.env*
+.claude
+*.log
+*.tar.gz
+*.png
+!public/**/*.png
+!src/**/*.png
