@@ -174,7 +174,7 @@ export default function LandingPage() {
             <img
               src={projectConfig.media.heroImage}
               alt={projectConfig.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain object-center"
             />
           </div>
           {/* Layered gradient for depth */}
@@ -747,7 +747,7 @@ export default function LandingPage() {
                 {/* Card */}
                 <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-accent/30 transition-all h-full">
                   <h3 className="text-lg font-bold text-white mb-2">Invest</h3>
-                  <p className="text-4xl font-bold text-accent mb-2">$280K</p>
+                  <p className="text-4xl font-bold text-accent mb-2">$300K</p>
                   <p className="text-sm text-white/60">Minimum property investment to qualify for the program</p>
                 </div>
               </div>
