@@ -7,24 +7,9 @@ import { Menu, X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDo
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
+import { getSuiteType, getSuiteImage } from '@/config/suiteData'
 
 // Dual View - Tower + Interactive SVG Floor Plan
-
-const getSuiteType = (sizeSqm: number): string => {
-  if (sizeSqm >= 80) return 'Premium Suite'
-  if (sizeSqm >= 65) return 'Deluxe Suite'
-  return 'Executive Suite'
-}
-
-const getSuiteImage = (unitNumber: number): string => {
-  if ([2, 9].includes(unitNumber)) {
-    return '/assets/gallery/suite-type-07.jpg' // Premium suites
-  }
-  if ([7, 11].includes(unitNumber)) {
-    return '/assets/gallery/suite-type-08.jpg' // Deluxe suites
-  }
-  return '/assets/gallery/suite-type-08.jpg'
-}
 
 const getFloorPlanImage = (unitNumber: number): string => {
   if (unitNumber === 1 || unitNumber === 3) return '/assets/floorplans/suite-1-3.png'

@@ -6,15 +6,9 @@ import type { ExecutiveSuite } from '@/types/database'
 import { Menu, X, Maximize2, Check, Clock, Lock, X as CloseIcon, ChevronUp, ChevronDown } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
+import { getSuiteType } from '@/config/suiteData'
 
 // Interactive Tower Version - Building-centric with overlay panels
-
-const getSuiteType = (sizeSqm: number): string => {
-  if (sizeSqm >= 80) return 'Premium Suite'
-  if (sizeSqm >= 65) return 'Deluxe Suite'
-  return 'Executive Suite'
-}
-
 
 const statusConfig = {
   available: { icon: Check, label: 'Available', color: 'text-green-500', bg: 'bg-green-500', bgLight: 'bg-green-50' },

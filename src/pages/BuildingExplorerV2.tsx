@@ -6,21 +6,9 @@ import type { ExecutiveSuite } from '@/types/database'
 import { Menu, X, ChevronLeft, ChevronRight, Maximize2, Building2, Compass, Check, Clock, Lock, ArrowRight, Sparkles } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR } from '@/config/building'
 import { cn } from '@/lib/utils'
+import { getSuiteType, getSuiteImage } from '@/config/suiteData'
 
 // Luxury Gallery Version - Horizontal scrolling, full-width heroes
-
-const getSuiteType = (sizeSqm: number): string => {
-  if (sizeSqm >= 80) return 'Premium Suite'
-  if (sizeSqm >= 65) return 'Deluxe Suite'
-  return 'Executive Suite'
-}
-
-const getSuiteImage = (unitNumber: number): string => {
-  if ([2, 7, 9, 11].includes(unitNumber)) {
-    return '/assets/gallery/suite-type-07.jpg'
-  }
-  return '/assets/gallery/suite-type-08.jpg'
-}
 
 const statusConfig = {
   available: { icon: Check, label: 'Available', color: 'text-green-500', bg: 'bg-green-500' },

@@ -10,43 +10,28 @@ import {
   PanelLeftClose, PanelLeftOpen, Home
 } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
+import { getSuiteType, getSuiteImage, getSuiteInfo } from '@/config/suiteData'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
 
 // A/B Test Variants
 type ViewMode = 'A' | 'C'
 
-const getSuiteType = (sizeSqm: number): string => {
-  if (sizeSqm >= 80) return 'Premium Suite'
-  if (sizeSqm >= 65) return 'Deluxe Suite'
-  return 'Executive Suite'
-}
-
-const getSuiteImage = (unitNumber: number): string => {
-  const images = [
-    '/assets/gallery/suite-type-07.jpg',
-    '/assets/gallery/suite-type-08.jpg',
-  ]
-  return images[unitNumber % 2]
-}
-
-const getSuiteImages = (_unitNumber: number): string[] => {
+// Helper to get multiple images for carousel
+const getSuiteImages = (unitNumber: number): string[] => {
+  const specificImage = getSuiteImage(unitNumber)
+  // Return the specific image plus gallery images as fallback
   return [
+    specificImage,
     '/assets/gallery/suite-type-07.jpg',
     '/assets/gallery/suite-type-08.jpg',
-    '/assets/gallery/suite-interior-1.jpg',
   ]
 }
 
+// Helper to get floor plan for specific unit
 const getFloorPlanImage = (unitNumber: number): string => {
-  if (unitNumber === 1 || unitNumber === 3 || unitNumber === 15 || unitNumber === 17) return '/assets/floorplans/suite-1-3.png'
-  if (unitNumber === 2 || unitNumber === 9 || unitNumber === 16 || unitNumber === 18) return '/assets/floorplans/suite-2-9.png'
-  if (unitNumber === 4 || unitNumber === 14) return '/assets/floorplans/suite-4-14.png'
-  if (unitNumber === 5 || unitNumber === 13) return '/assets/floorplans/suite-5-13.png'
-  if (unitNumber === 6 || unitNumber === 12) return '/assets/floorplans/suite-6-12.png'
-  if (unitNumber === 7 || unitNumber === 11) return '/assets/floorplans/suite-7-11.png'
-  if (unitNumber === 8 || unitNumber === 10) return '/assets/floorplans/suite-8-10.png'
-  return '/assets/floorplans/floor-overview.png'
+  const suiteInfo = getSuiteInfo(unitNumber)
+  return suiteInfo?.floorPlanFile || '/assets/floorplans/floor-overview.png'
 }
 
 // Unified gallery data structure for modal

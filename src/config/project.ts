@@ -145,22 +145,23 @@ export const projectConfig = {
   },
 }
 
-// Suite size data from floor plan
+// Suite size data from official Excel spreadsheet (January 21, 2026)
+// Source: "Copy of Standard Rooms and Executive Suites - Hotel - Areas - FD - 1-21-26.xlsx"
 export const SUITE_SIZES: Record<number, number> = {
-  1: 53.35,
-  2: 85.15,
-  3: 54.30,
-  4: 53.53,
-  5: 56.80,
-  6: 63.80,
-  7: 74.46,
-  8: 65.55,
-  9: 82.25,
-  10: 64.53,
-  11: 74.46,
-  12: 63.80,
-  13: 56.88,
-  14: 53.53,
+  1: 53.35,  // Type A LOCKOFF - Executive Suite
+  2: 85.15,  // Type B - Premium Suite
+  3: 54.30,  // Type A LOCKOFF - Executive Suite
+  4: 53.53,  // Type A LOCKOFF - Executive Suite
+  5: 56.88,  // Type C - Executive Suite
+  6: 63.80,  // Type D - Deluxe Suite
+  7: 74.46,  // Type E LOCKOFF - Deluxe Suite
+  8: 65.55,  // Type E LOCKOFF - Deluxe Suite
+  9: 85.25,  // Type B - Premium Suite
+  10: 64.53, // Type E LOCKOFF - Deluxe Suite
+  11: 74.46, // Type E LOCKOFF - Deluxe Suite
+  12: 63.80, // Type D - Deluxe Suite
+  13: 56.88, // Type C - Executive Suite
+  14: 53.10, // Type A LOCKOFF - Executive Suite
 }
 
 export type ProjectConfig = typeof projectConfig

@@ -4,27 +4,13 @@ import { supabase } from '@/lib/supabase'
 import { ArrowLeft, Maximize2, Building2, Compass, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { getSuiteInfo, getSuiteType, getSuiteImage, SUITE_SIZES } from '@/config/suiteData'
 
-// Suite metadata
-const SUITE_DATA: Record<number, { size: number; type: string }> = {
-  1: { size: 85.15, type: 'Premium Suite' },
-  2: { size: 53.35, type: 'Executive Suite' },
-  3: { size: 54.30, type: 'Executive Suite' },
-  4: { size: 56.80, type: 'Executive Suite' },
-  5: { size: 63.80, type: 'Deluxe Suite' },
-  6: { size: 74.46, type: 'Deluxe Suite' },
-  7: { size: 65.55, type: 'Deluxe Suite' },
-  8: { size: 64.53, type: 'Deluxe Suite' },
-  9: { size: 82.25, type: 'Premium Suite' },
-  10: { size: 64.53, type: 'Deluxe Suite' },
-  11: { size: 65.55, type: 'Deluxe Suite' },
-  12: { size: 74.46, type: 'Deluxe Suite' },
-  13: { size: 63.80, type: 'Deluxe Suite' },
-  14: { size: 56.80, type: 'Executive Suite' },
-  15: { size: 54.30, type: 'Executive Suite' },
-  16: { size: 53.35, type: 'Executive Suite' },
-  17: { size: 85.15, type: 'Premium Suite' },
-  18: { size: 53.53, type: 'Executive Suite' },
+// Suite metadata helper (uses accurate data from suiteData.ts)
+const getSuiteMetadata = (unitNumber: number): { size: number; type: string } => {
+  const size = SUITE_SIZES[unitNumber] || 0
+  const type = getSuiteType(size)
+  return { size, type }
 }
 
 const statusConfig = {
@@ -51,26 +37,27 @@ const statusConfig = {
   },
 }
 
-const suiteImages = [
-  'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800',
-  'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800',
-  'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800',
-]
-
-const viewImages = [
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-]
+// Get suite-specific images or fallback to gallery
+const getSuiteImages = (unitNumber: number): string[] => {
+  const specificImage = getSuiteImage(unitNumber)
+  // Return the specific image plus gallery images as fallback
+  return [
+    specificImage,
+    '/assets/gallery/suite-type-07.jpg',
+    '/assets/gallery/suite-type-08.jpg',
+  ]
+}
 
 export default function SuiteDetailPage() {
   const { floor, unit } = useParams<{ floor: string; unit: string }>()
   const navigate = useNavigate()
-  const [activeImageTab, setActiveImageTab] = useState<'interior' | 'views' | 'floorplan'>('interior')
+  const [activeImageTab, setActiveImageTab] = useState<'interior' | 'floorplan'>('interior')
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   const floorNum = parseInt(floor || '17')
   const unitNum = parseInt(unit || '1')
-  const suiteInfo = SUITE_DATA[unitNum]
+  const suiteInfo = getSuiteMetadata(unitNum)
+  const suiteImages = getSuiteImages(unitNum)
 
   // Fetch suite data
   const { data: suite, isLoading } = useQuery({
@@ -110,9 +97,12 @@ export default function SuiteDetailPage() {
   const config = statusConfig[status]
   const StatusIcon = config.icon
 
+  // Get floor plan for this specific suite
+  const suiteDetails = getSuiteInfo(unitNum)
+  const floorPlanImage = suiteDetails?.floorPlanFile || '/assets/floorplans/pullman-plan.png'
+
   const currentImages = activeImageTab === 'interior' ? suiteImages :
-                        activeImageTab === 'views' ? viewImages :
-                        ['/assets/floorplans/pullman-plan.png']
+                        [floorPlanImage]
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % currentImages.length)
@@ -165,7 +155,7 @@ export default function SuiteDetailPage() {
           <div className="space-y-4">
             {/* Image Tabs */}
             <div className="flex gap-2">
-              {(['interior', 'views', 'floorplan'] as const).map((tab) => (
+              {(['interior', 'floorplan'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => {
@@ -179,7 +169,7 @@ export default function SuiteDetailPage() {
                       : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                   )}
                 >
-                  {tab}
+                  {tab === 'floorplan' ? 'Floor Plan' : 'Interior'}
                 </button>
               ))}
             </div>

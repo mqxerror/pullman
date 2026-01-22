@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import { projectConfig } from '@/config/project'
+import { getSuiteType, getSuiteImage } from '@/config/suiteData'
 import {
   Menu, X, Check, Clock, Lock, Maximize2, ArrowRight, ArrowUpDown,
   SlidersHorizontal, Building2, Filter, Grid3X3, LayoutList,
@@ -22,20 +23,6 @@ const statusConfig = {
   available: { icon: Check, label: 'Available', color: 'text-emerald-600', bg: 'bg-emerald-500', bgLight: 'bg-emerald-50', border: 'border-emerald-200' },
   reserved: { icon: Clock, label: 'Reserved', color: 'text-amber-600', bg: 'bg-amber-500', bgLight: 'bg-amber-50', border: 'border-amber-200' },
   sold: { icon: Lock, label: 'Sold', color: 'text-slate-400', bg: 'bg-slate-400', bgLight: 'bg-slate-50', border: 'border-slate-200' },
-}
-
-const getSuiteType = (sizeSqm: number): string => {
-  if (sizeSqm >= 80) return 'Premium Suite'
-  if (sizeSqm >= 65) return 'Deluxe Suite'
-  return 'Executive Suite'
-}
-
-const getSuiteImage = (unitNumber: number): string => {
-  const images = [
-    '/assets/gallery/suite-type-07.jpg',
-    '/assets/gallery/suite-type-08.jpg',
-  ]
-  return images[unitNumber % 2]
 }
 
 const getDirectionLabel = (unitNumber: number): string => {
