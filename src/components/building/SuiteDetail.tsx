@@ -289,7 +289,8 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
                 {/* Actions */}
                 <div className="p-5 space-y-3">
                   <a
-                    href="#"
+                    href="/assets/Mercan-Group-Panama-Brochure.pdf"
+                    download="Mercan-Group-Panama-Brochure.pdf"
                     className="w-full btn-cta-premium flex items-center justify-center gap-2"
                   >
                     <Download className="w-4 h-4" />

@@ -140,10 +140,14 @@ export default function SuiteDetailPage() {
               <Share2 className="w-4 h-4" />
               Share
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-all">
+            <a
+              href="/assets/Mercan-Group-Panama-Brochure.pdf"
+              download="Mercan-Group-Panama-Brochure.pdf"
+              className="flex items-center gap-2 px-4 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-all"
+            >
               <Download className="w-4 h-4" />
               Download Brochure
-            </button>
+            </a>
           </div>
         </div>
       </header>

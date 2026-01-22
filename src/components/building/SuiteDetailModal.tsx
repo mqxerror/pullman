@@ -181,10 +181,14 @@ export default function SuiteDetailModal({
 
             {/* CTAs */}
             <div className="p-6 mt-auto bg-slate-800/50">
-              <button className="w-full flex items-center justify-center gap-2 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-medium rounded-xl transition-colors">
+              <a
+                href="/assets/Mercan-Group-Panama-Brochure.pdf"
+                download="Mercan-Group-Panama-Brochure.pdf"
+                className="w-full flex items-center justify-center gap-2 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-medium rounded-xl transition-colors"
+              >
                 <Download className="w-4 h-4" />
                 <span>Download Suite Brochure</span>
-              </button>
+              </a>
             </div>
           </div>
         </div>
