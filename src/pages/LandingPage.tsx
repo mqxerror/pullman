@@ -174,7 +174,7 @@ export default function LandingPage() {
             <img
               src={projectConfig.media.heroImage}
               alt={projectConfig.name}
-              className="w-full h-full object-contain object-center"
+              className="w-full h-full object-cover object-top"
             />
           </div>
           {/* Layered gradient for depth */}
@@ -194,13 +194,6 @@ export default function LandingPage() {
         {/* Content */}
         <div className="relative page-container z-10">
           <div className="max-w-2xl">
-            {/* Location Tag with Animation */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent/20 backdrop-blur-sm rounded-full border border-accent/30 mb-6">
-              <MapPin className="w-3.5 h-3.5 text-accent" />
-              <span className="text-accent text-xs font-medium tracking-wider uppercase">
-                {projectConfig.location.neighborhood}, {projectConfig.location.city}
-              </span>
-            </div>
 
             {/* Animated Heading */}
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
