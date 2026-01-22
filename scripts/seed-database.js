@@ -56,25 +56,26 @@ async function seedDatabase() {
   }
 
   // Suite data matching floor plan (18 suites per floor)
+  // Data source: Official Excel spreadsheet (Jan 21, 2026)
   const SUITE_DATA = {
-    1: { size: 85.15, type: 'Premium Suite' },
-    2: { size: 53.35, type: 'Executive Suite' },
-    3: { size: 54.30, type: 'Executive Suite' },
-    4: { size: 56.80, type: 'Executive Suite' },
-    5: { size: 63.80, type: 'Deluxe Suite' },
-    6: { size: 74.46, type: 'Deluxe Suite' },
-    7: { size: 65.55, type: 'Deluxe Suite' },
-    8: { size: 64.53, type: 'Deluxe Suite' },
-    9: { size: 82.25, type: 'Premium Suite' },
-    10: { size: 64.53, type: 'Deluxe Suite' },
-    11: { size: 65.55, type: 'Deluxe Suite' },
-    12: { size: 74.46, type: 'Deluxe Suite' },
-    13: { size: 63.80, type: 'Deluxe Suite' },
-    14: { size: 56.80, type: 'Executive Suite' },
-    15: { size: 54.30, type: 'Executive Suite' },
-    16: { size: 53.35, type: 'Executive Suite' },
-    17: { size: 85.15, type: 'Premium Suite' },
-    18: { size: 53.53, type: 'Executive Suite' },
+    1: { size: 53.35, type: 'Executive Suite' },    // Type A LOCKOFF
+    2: { size: 85.15, type: 'Premium Suite' },      // Type B
+    3: { size: 54.30, type: 'Executive Suite' },    // Type A LOCKOFF
+    4: { size: 53.53, type: 'Executive Suite' },    // Type A LOCKOFF
+    5: { size: 56.88, type: 'Executive Suite' },    // Type C
+    6: { size: 63.80, type: 'Deluxe Suite' },       // Type D
+    7: { size: 74.46, type: 'Deluxe Suite' },       // Type E LOCKOFF
+    8: { size: 65.55, type: 'Deluxe Suite' },       // Type E LOCKOFF
+    9: { size: 85.25, type: 'Premium Suite' },      // Type B
+    10: { size: 64.53, type: 'Deluxe Suite' },      // Type E LOCKOFF
+    11: { size: 74.46, type: 'Deluxe Suite' },      // Type E LOCKOFF
+    12: { size: 63.80, type: 'Deluxe Suite' },      // Type D
+    13: { size: 56.88, type: 'Executive Suite' },   // Type C
+    14: { size: 53.10, type: 'Executive Suite' },   // Type A LOCKOFF
+    15: { size: 54.30, type: 'Executive Suite' },   // Mirror of Unit 3
+    16: { size: 85.15, type: 'Premium Suite' },     // Mirror of Unit 2
+    17: { size: 53.35, type: 'Executive Suite' },   // Mirror of Unit 1
+    18: { size: 53.53, type: 'Executive Suite' },   // Mirror of Unit 4
   }
 
   // Generate suite data
