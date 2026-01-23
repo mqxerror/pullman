@@ -17,17 +17,6 @@ import FloorPlanSVG from '@/components/FloorPlanSVG'
 // A/B Test Variants
 type ViewMode = 'A' | 'C'
 
-// Helper to get multiple images for carousel
-const getSuiteImages = (unitNumber: number): string[] => {
-  const specificImage = getSuiteImage(unitNumber)
-  // Return the specific image plus gallery images as fallback
-  return [
-    specificImage,
-    '/assets/gallery/suite-type-07.jpg',
-    '/assets/gallery/suite-type-08.jpg',
-  ]
-}
-
 // Helper to get floor plan for specific unit
 const getFloorPlanImage = (unitNumber: number): string => {
   const suiteInfo = getSuiteInfo(unitNumber)
@@ -35,13 +24,10 @@ const getFloorPlanImage = (unitNumber: number): string => {
 }
 
 // Unified gallery data structure for modal
+// Only floor plan and one interior image - no duplicates, no placeholder views
 const getGalleryImages = (unitNumber: number): Record<string, string[]> => ({
   floorplan: [getFloorPlanImage(unitNumber)],
-  interior: getSuiteImages(unitNumber),
-  views: [
-    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-  ]
+  interior: [getSuiteImage(unitNumber)],
 })
 
 const statusConfig = {
@@ -71,7 +57,7 @@ export default function BuildingExplorerDualAB() {
   const [selectedFloor, setSelectedFloor] = useState<number>(23)
   const [selectedSuite, setSelectedSuite] = useState<ExecutiveSuite | null>(null)
   const [hoveredFloor, setHoveredFloor] = useState<number | null>(null)
-  const [activeImageTab, setActiveImageTab] = useState<'interior' | 'views' | 'floorplan'>('interior')
+  const [activeImageTab, setActiveImageTab] = useState<'interior' | 'floorplan'>('floorplan')
   const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(false)
   const [showFloorPlanFullscreen, setShowFloorPlanFullscreen] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -307,6 +293,7 @@ export default function BuildingExplorerDualAB() {
             </div>
           ) : (
             /* Expanded State: Full Building View - Responsive like main page */
+            <>
             <div className="flex-1 flex items-center justify-center overflow-hidden min-h-0 p-2">
               <div className="relative h-full max-h-[90%] w-auto" style={{ aspectRatio: '3/4', maxWidth: '100%' }}>
                 <img
@@ -350,44 +337,62 @@ export default function BuildingExplorerDualAB() {
                   })}
                 </div>
 
-                {/* Floor Navigator - Enhanced with live stats */}
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md rounded-xl shadow-lg p-2.5 border border-gold-200">
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={handleFloorDown}
-                      className="p-2 min-w-[36px] min-h-[36px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
-                    >
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-primary tabular-nums leading-none">
-                        {activeFloor || selectedFloor}
-                      </div>
-                      <div className="text-[7px] text-slate-400 uppercase tracking-wider">Floor</div>
-                    </div>
-                    <button
-                      onClick={handleFloorUp}
-                      className="p-2 min-w-[36px] min-h-[36px] rounded-lg bg-slate-100 hover:bg-amber-100 transition-colors flex items-center justify-center"
-                    >
-                      <ChevronUp className="w-4 h-4" />
-                    </button>
-                    {/* Divider */}
-                    <div className="w-px h-8 bg-slate-200" />
-                    {/* Live Stats */}
-                    <div className="flex items-center gap-2.5 text-xs">
-                      <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className="font-semibold text-emerald-600">{getFloorStats(activeFloor || selectedFloor).available}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 rounded-full bg-amber-500" />
-                        <span className="font-semibold text-amber-600">{getFloorStats(activeFloor || selectedFloor).reserved}</span>
-                      </div>
-                    </div>
+              </div>
+            </div>
+
+            {/* Floor Stats Panel - Full width below building */}
+            <div className="mt-3 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex-shrink-0">
+              {/* Floor Selector Row */}
+              <div className="flex items-center justify-between px-4 py-3 bg-slate-50 border-b border-slate-200">
+                <button
+                  onClick={handleFloorDown}
+                  disabled={selectedFloor <= MIN_FLOOR}
+                  className="p-2 min-w-[44px] min-h-[44px] rounded-xl bg-white border border-slate-200 hover:bg-amber-50 hover:border-amber-300 disabled:opacity-40 disabled:hover:bg-white transition-all flex items-center justify-center shadow-sm"
+                >
+                  <ChevronDown className="w-5 h-5 text-slate-600" />
+                </button>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-slate-900 tabular-nums">Floor {activeFloor || selectedFloor}</div>
+                  <div className="text-xs text-slate-500">of {TOTAL_FLOORS} floors</div>
+                </div>
+                <button
+                  onClick={handleFloorUp}
+                  disabled={selectedFloor >= MAX_FLOOR}
+                  className="p-2 min-w-[44px] min-h-[44px] rounded-xl bg-white border border-slate-200 hover:bg-amber-50 hover:border-amber-300 disabled:opacity-40 disabled:hover:bg-white transition-all flex items-center justify-center shadow-sm"
+                >
+                  <ChevronUp className="w-5 h-5 text-slate-600" />
+                </button>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-3 divide-x divide-slate-200">
+                {/* Available */}
+                <div className="p-3 text-center bg-green-50/50">
+                  <div className="flex items-center justify-center gap-1.5 mb-1">
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                    <span className="text-[11px] font-semibold text-green-700 uppercase tracking-wide">Available</span>
                   </div>
+                  <div className="text-2xl font-bold text-green-600">{getFloorStats(activeFloor || selectedFloor).available}</div>
+                </div>
+                {/* Reserved */}
+                <div className="p-3 text-center bg-amber-50/50">
+                  <div className="flex items-center justify-center gap-1.5 mb-1">
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                    <span className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">Reserved</span>
+                  </div>
+                  <div className="text-2xl font-bold text-amber-600">{getFloorStats(activeFloor || selectedFloor).reserved}</div>
+                </div>
+                {/* Sold */}
+                <div className="p-3 text-center bg-red-50/50">
+                  <div className="flex items-center justify-center gap-1.5 mb-1">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                    <span className="text-[11px] font-semibold text-red-700 uppercase tracking-wide">Sold</span>
+                  </div>
+                  <div className="text-2xl font-bold text-red-600">{getFloorStats(activeFloor || selectedFloor).sold}</div>
                 </div>
               </div>
             </div>
+            </>
           )}
         </div>
 
@@ -403,19 +408,19 @@ export default function BuildingExplorerDualAB() {
                 Tap any suite to view details
               </p>
             </div>
-            {/* Legend - Compact on mobile, expanded on desktop */}
-            <div className="flex items-center gap-2 lg:gap-6 px-2 lg:px-5 py-1.5 lg:py-2.5 bg-white rounded-lg lg:rounded-xl shadow-sm border border-slate-200">
-              <div className="flex items-center gap-1 lg:gap-2">
-                <div className="w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-[3px] lg:rounded-[4px] bg-green-100 border-2 border-green-500" />
-                <span className="hidden lg:inline text-[13px] text-slate-600 font-medium">Available</span>
+            {/* Legend - Always show labels for clarity */}
+            <div className="flex items-center gap-3 lg:gap-5 px-3 lg:px-5 py-2 lg:py-2.5 bg-white rounded-xl shadow-sm border border-slate-200">
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded bg-green-100 border-2 border-green-500" />
+                <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Available</span>
               </div>
-              <div className="flex items-center gap-1 lg:gap-2">
-                <div className="w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-[3px] lg:rounded-[4px] bg-amber-100 border-2 border-amber-500" />
-                <span className="hidden lg:inline text-[13px] text-slate-600 font-medium">Reserved</span>
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded bg-amber-100 border-2 border-amber-500" />
+                <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Reserved</span>
               </div>
-              <div className="flex items-center gap-1 lg:gap-2">
-                <div className="w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-[3px] lg:rounded-[4px] bg-red-100 border-2 border-red-500" />
-                <span className="hidden lg:inline text-[13px] text-slate-600 font-medium">Sold</span>
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded bg-red-100 border-2 border-red-500" />
+                <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Sold</span>
               </div>
             </div>
           </div>
@@ -430,30 +435,6 @@ export default function BuildingExplorerDualAB() {
             />
           </div>
 
-          {/* Floor Stats Bar - Compact on mobile */}
-          <div className="mt-2 p-2 lg:p-3 bg-gradient-to-r from-slate-900 to-slate-800 rounded-lg shadow-lg flex-shrink-0">
-            <div className="flex items-center justify-around text-center">
-              <div>
-                <div className="text-base lg:text-lg font-bold text-white">{floorApartments.length}</div>
-                <div className="text-[9px] lg:text-[10px] text-slate-400">Total</div>
-              </div>
-              <div className="w-px h-6 lg:h-8 bg-slate-700" />
-              <div>
-                <div className="text-base lg:text-lg font-bold text-green-400">{getFloorStats(selectedFloor).available}</div>
-                <div className="text-[9px] lg:text-[10px] text-slate-400">Available</div>
-              </div>
-              <div className="w-px h-6 lg:h-8 bg-slate-700" />
-              <div>
-                <div className="text-base lg:text-lg font-bold text-amber-400">{getFloorStats(selectedFloor).reserved}</div>
-                <div className="text-[9px] lg:text-[10px] text-slate-400">Reserved</div>
-              </div>
-              <div className="w-px h-6 lg:h-8 bg-slate-700" />
-              <div>
-                <div className="text-base lg:text-lg font-bold text-red-400">{getFloorStats(selectedFloor).sold}</div>
-                <div className="text-[9px] lg:text-[10px] text-slate-400">Sold</div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* OPTION A: Overlay Slide-in Panel - UX Enhanced */}
@@ -513,9 +494,7 @@ export default function BuildingExplorerDualAB() {
                     <img
                       src={activeImageTab === 'floorplan'
                         ? getFloorPlanImage(selectedSuite.unit_number)
-                        : activeImageTab === 'views'
-                        ? 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'
-                        : getSuiteImages(selectedSuite.unit_number)[0]}
+                        : getSuiteImage(selectedSuite.unit_number)}
                       alt={`Suite ${selectedSuite.floor}-${selectedSuite.unit_number} ${activeImageTab}`}
                       className={cn(
                         "w-full h-full object-cover",
@@ -578,50 +557,17 @@ export default function BuildingExplorerDualAB() {
                     )}
                   </div>
 
-                  {/* Image Tabs - Hide interior/views when floorplan is active */}
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    {activeImageTab === 'floorplan' ? (
-                      <button
-                        onClick={() => setActiveImageTab('interior')}
-                        className="px-4 py-2.5 min-h-[44px] rounded-full text-sm font-semibold transition-all bg-white text-slate-900 shadow-md"
-                      >
-                        ← Back to Gallery
-                      </button>
-                    ) : (
-                      ['interior', 'views'].map((tab) => (
-                        <button
-                          key={tab}
-                          onClick={() => setActiveImageTab(tab as any)}
-                          className={cn(
-                            'px-4 py-2.5 min-h-[44px] rounded-full text-sm font-semibold transition-all capitalize',
-                            activeImageTab === tab
-                              ? 'bg-white text-slate-900 shadow-md'
-                              : 'bg-black/40 backdrop-blur text-white hover:bg-black/60'
-                          )}
-                        >
-                          {tab}
-                        </button>
-                      ))
-                    )}
+                  {/* Image Tab Toggle - Switch between floor plan and interior */}
+                  <div className="absolute top-4 left-4">
+                    <button
+                      onClick={() => setActiveImageTab(activeImageTab === 'floorplan' ? 'interior' : 'floorplan')}
+                      className="px-4 py-2.5 min-h-[44px] rounded-full text-sm font-semibold transition-all bg-white text-slate-900 shadow-md hover:bg-slate-50"
+                    >
+                      {activeImageTab === 'floorplan' ? '← View Interior' : '📐 View Floor Plan'}
+                    </button>
                   </div>
                 </div>
 
-                {/* Thumbnail Strip */}
-                {activeImageTab !== 'floorplan' && (
-                  <div className="flex gap-2 p-3 bg-slate-50 border-b border-slate-100">
-                    {getSuiteImages(selectedSuite.unit_number).map((img, idx) => (
-                      <button
-                        key={idx}
-                        className={cn(
-                          'flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all',
-                          idx === 0 ? 'border-amber-500 shadow-md' : 'border-transparent opacity-60 hover:opacity-100'
-                        )}
-                      >
-                        <img src={img} alt="" className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                )}
 
                 {/* Panel Content */}
                 <div className="p-5">
@@ -690,10 +636,14 @@ export default function BuildingExplorerDualAB() {
                   {selectedSuite.status !== 'sold' && (
                     <div className="space-y-3">
                       <div className="flex gap-3">
-                        <button className="flex-1 py-3.5 bg-slate-900 text-white font-medium rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
+                        <a
+                          href="/assets/Mercan-Group-Panama-Brochure.pdf"
+                          download="Pullman-Panama-Brochure.pdf"
+                          className="flex-1 py-3.5 bg-slate-900 text-white font-medium rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+                        >
                           <Download className="w-4 h-4" />
                           Brochure
-                        </button>
+                        </a>
                         <button className="flex-1 py-3.5 bg-white border-2 border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
                           <Share2 className="w-4 h-4" />
                           Share
@@ -903,28 +853,6 @@ export default function BuildingExplorerDualAB() {
                             </button>
                           ))}
 
-                          {/* Views Thumbnails */}
-                          {galleryImages.views.map((img, idx) => (
-                            <button
-                              key={`views-${idx}`}
-                              onClick={() => {
-                                setActiveImageTab('views')
-                                setCurrentImageIndex(idx)
-                              }}
-                              className={cn(
-                                "flex-shrink-0 w-16 h-12 lg:w-20 lg:h-14 rounded-lg overflow-hidden border-2 transition-all relative group",
-                                activeImageTab === 'views' && currentImageIndex === idx
-                                  ? "border-amber-500 shadow-lg shadow-amber-500/30"
-                                  : "border-transparent opacity-70 hover:opacity-100 hover:border-white/50"
-                              )}
-                            >
-                              <img
-                                src={img}
-                                alt={`View ${idx + 1}`}
-                                className="w-full h-full object-cover"
-                              />
-                            </button>
-                          ))}
                         </div>
                       </div>
                     </div>
@@ -1011,10 +939,14 @@ export default function BuildingExplorerDualAB() {
                     {selectedSuite.status !== 'sold' && (
                       <div className="space-y-2 mb-4">
                         <div className="flex gap-2">
-                          <button className="flex-1 py-2.5 min-h-[44px] bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]">
+                          <a
+                            href="/assets/Mercan-Group-Panama-Brochure.pdf"
+                            download="Pullman-Panama-Brochure.pdf"
+                            className="flex-1 py-2.5 min-h-[44px] bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]"
+                          >
                             <Download className="w-3.5 h-3.5" />
                             Brochure
-                          </button>
+                          </a>
                           <button className="flex-1 py-2.5 min-h-[44px] bg-white border border-slate-200 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]">
                             <Share2 className="w-3.5 h-3.5" />
                             Share
