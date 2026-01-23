@@ -96,7 +96,17 @@
       "Bash(claude mcp add:*)",
       "WebFetch(domain:help.figma.com)",
       "Bash(copy:*)",
-      "Bash(PGPASSWORD=postgres123 psql -h 38.97.60.181 -p 5433 -U postgres -d postgres -c \"ALTER TABLE pullman_suites DROP CONSTRAINT pullman_suites_unit_number_check; ALTER TABLE pullman_suites ADD CONSTRAINT pullman_suites_unit_number_check CHECK \\(unit_number >= 1 AND unit_number <= 18\\);\")"
+      "Bash(PGPASSWORD=postgres123 psql -h 38.97.60.181 -p 5433 -U postgres -d postgres -c \"ALTER TABLE pullman_suites DROP CONSTRAINT pullman_suites_unit_number_check; ALTER TABLE pullman_suites ADD CONSTRAINT pullman_suites_unit_number_check CHECK \\(unit_number >= 1 AND unit_number <= 18\\);\")",
+      "Bash(cmd /c \"copy ace-ui.skill ace-ui.zip\")",
+      "WebFetch(domain:globalresidencysolution.com)",
+      "Bash(npx shadcn:*)",
+      "Bash(npm run test:*)",
+      "Bash(agent-browser install:*)",
+      "Bash(ssh:*)",
+      "Bash(tar:*)",
+      "Bash(scp:*)",
+      "Bash(python3:*)",
+      "Bash(pip install:*)"
     ]
   }
 }

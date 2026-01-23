@@ -10,7 +10,7 @@ interface FloorPlanSVGProps {
   selectedSuiteId?: string
 }
 
-// Suite metadata with sizes (from the floor plan - 18 suites)
+// Suite metadata with sizes (from the floor plan - 14 suites)
 const SUITE_DATA: Record<number, { size: number; type: string }> = {
   1: { size: 85.15, type: 'Premium Suite' },
   2: { size: 53.35, type: 'Executive Suite' },
@@ -26,10 +26,6 @@ const SUITE_DATA: Record<number, { size: number; type: string }> = {
   12: { size: 74.46, type: 'Deluxe Suite' },
   13: { size: 63.80, type: 'Deluxe Suite' },
   14: { size: 56.80, type: 'Executive Suite' },
-  15: { size: 54.30, type: 'Executive Suite' },
-  16: { size: 53.35, type: 'Executive Suite' },
-  17: { size: 85.15, type: 'Premium Suite' },
-  18: { size: 53.53, type: 'Executive Suite' },
 }
 
 // SVG paths in pixel coordinates matching pullman-plan.png (1188 x 1238 pixels)
@@ -49,10 +45,6 @@ const SUITE_PATHS: Record<number, string> = {
   12: 'M 948,830 L 1180,830 L 1174,1006 L 958,1015 Z',
   13: 'M 952,820 L 1179,816 L 1179,629 L 1016,626 L 1016,589 L 950,589 Z',
   14: 'M 953,585 L 1015,586 L 1019,621 L 1179,620 L 1175,418 L 952,421 Z',
-  15: 'M 952,414 L 1179,412 L 1179,213 L 1018,212 L 1016,262 L 958,265 Z',
-  16: 'M 952,19 L 1179,22 L 1176,204 L 1015,209 L 1013,258 L 956,258 Z',
-  17: 'M 705,19 L 945,24 L 943,173 L 880,173 L 880,279 L 703,279 Z',
-  18: 'M 490,16 L 696,22 L 700,461 L 490,462 Z',
 }
 
 // Sophisticated hotel-appropriate color palette
@@ -214,7 +206,7 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
           {/* Floor label */}
           <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg border border-gold-200">
             <div className="text-lg font-bold text-slate-900 heading-display">Floor {floor}</div>
-            <div className="text-xs text-gold-600 font-medium">18 Luxury Suites</div>
+            <div className="text-xs text-gold-600 font-medium">14 Luxury Suites</div>
           </div>
         </div>
 

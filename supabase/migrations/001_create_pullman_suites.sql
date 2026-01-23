@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS pullman_suites (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   floor INTEGER NOT NULL CHECK (floor >= 17 AND floor <= 25),
-  unit_number INTEGER NOT NULL CHECK (unit_number >= 1 AND unit_number <= 18),
+  unit_number INTEGER NOT NULL CHECK (unit_number >= 1 AND unit_number <= 14),
   size_sqm NUMERIC(6,2) NOT NULL CHECK (size_sqm > 0),
   suite_type VARCHAR(50) NOT NULL DEFAULT 'Executive Suite',
   status VARCHAR(20) NOT NULL DEFAULT 'available' CHECK (status IN ('available', 'reserved', 'sold')),
@@ -64,11 +64,11 @@ CREATE POLICY "Allow authenticated update" ON pullman_suites
   USING (true)
   WITH CHECK (true);
 
--- Seed data: 162 suites across floors 17-25 (18 units per floor)
+-- Seed data: 98 suites across floors 17-23 (14 units per floor)
 -- Suite data matching floor plan layout:
--- Premium Suites (85 sqm): Units 1, 9, 17
+-- Premium Suites (85 sqm): Units 1, 9
 -- Deluxe Suites (63-75 sqm): Units 5, 6, 7, 8, 10, 11, 12, 13
--- Executive Suites (53-57 sqm): Units 2, 3, 4, 14, 15, 16, 18
+-- Executive Suites (53-57 sqm): Units 2, 3, 4, 14
 
 INSERT INTO pullman_suites (floor, unit_number, size_sqm, suite_type, status, price_usd, price_display, notes)
 SELECT
@@ -90,14 +90,10 @@ SELECT
     WHEN 12 THEN 74.46
     WHEN 13 THEN 63.80
     WHEN 14 THEN 56.80
-    WHEN 15 THEN 54.30
-    WHEN 16 THEN 53.35
-    WHEN 17 THEN 85.15
-    WHEN 18 THEN 53.53
   END AS size_sqm,
   -- Suite type based on unit
   CASE
-    WHEN unit_number IN (1, 9, 17) THEN 'Premium Suite'
+    WHEN unit_number IN (1, 9) THEN 'Premium Suite'
     WHEN unit_number IN (5, 6, 7, 8, 10, 11, 12, 13) THEN 'Deluxe Suite'
     ELSE 'Executive Suite'
   END AS suite_type,
@@ -109,7 +105,7 @@ SELECT
   END AS status,
   -- Price based on floor and suite type (higher floors = premium)
   CASE
-    WHEN unit_number IN (1, 9, 17) THEN 280000 + ((floor - 17) * 10000) + (RANDOM() * 20000)::INTEGER
+    WHEN unit_number IN (1, 9) THEN 280000 + ((floor - 17) * 10000) + (RANDOM() * 20000)::INTEGER
     WHEN unit_number IN (5, 6, 7, 8, 10, 11, 12, 13) THEN 220000 + ((floor - 17) * 8000) + (RANDOM() * 15000)::INTEGER
     ELSE 180000 + ((floor - 17) * 6000) + (RANDOM() * 10000)::INTEGER
   END AS price_usd,
@@ -117,7 +113,7 @@ SELECT
   NULL AS notes
 FROM
   generate_series(17, 25) AS floor,
-  generate_series(1, 18) AS unit_number;
+  generate_series(1, 14) AS unit_number;
 
 -- Verify the data
 -- SELECT floor, COUNT(*) as units,

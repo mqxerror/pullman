@@ -55,7 +55,7 @@ async function seedDatabase() {
     return
   }
 
-  // Suite data matching floor plan (18 suites per floor)
+  // Suite data matching floor plan (14 suites per floor)
   // Data source: Official Excel spreadsheet (Jan 21, 2026)
   const SUITE_DATA = {
     1: { size: 53.35, type: 'Executive Suite' },    // Type A LOCKOFF
@@ -72,18 +72,14 @@ async function seedDatabase() {
     12: { size: 63.80, type: 'Deluxe Suite' },      // Type D
     13: { size: 56.88, type: 'Executive Suite' },   // Type C
     14: { size: 53.10, type: 'Executive Suite' },   // Type A LOCKOFF
-    15: { size: 54.30, type: 'Executive Suite' },   // Mirror of Unit 3
-    16: { size: 85.15, type: 'Premium Suite' },     // Mirror of Unit 2
-    17: { size: 53.35, type: 'Executive Suite' },   // Mirror of Unit 1
-    18: { size: 53.53, type: 'Executive Suite' },   // Mirror of Unit 4
   }
 
   // Generate suite data
-  console.log('\n🏗️  Generating 162 executive suites (18 per floor × 9 floors)...')
+  console.log('\n🏗️  Generating 126 executive suites (14 per floor × 9 floors)...')
   const suites = []
 
   for (let floor = 17; floor <= 25; floor++) {
-    for (let unit = 1; unit <= 18; unit++) {
+    for (let unit = 1; unit <= 14; unit++) {
       const suiteInfo = SUITE_DATA[unit]
       const size_sqm = suiteInfo.size
       const suite_type = suiteInfo.type
