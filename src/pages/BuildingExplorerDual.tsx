@@ -220,7 +220,7 @@ export default function BuildingExplorerDual() {
             <div>
               <h2 className="text-2xl font-bold heading-display text-slate-900">Floor {selectedFloor} Layout</h2>
               <p className="text-sm text-slate-500 mt-1">
-                Click on any suite to view details • <span className="text-gold-600">18 executive suites per floor</span>
+                Click on any suite to view details • <span className="text-gold-600">14 executive suites per floor</span>
               </p>
             </div>
             {/* Refined Legend */}

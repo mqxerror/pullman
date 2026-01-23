@@ -74,28 +74,29 @@ INSERT INTO pullman_suites (floor, unit_number, size_sqm, suite_type, status, pr
 SELECT
   floor,
   unit_number,
-  -- Sizes from floor plan
+  -- Accurate sizes from official Excel spreadsheet (Jan 21, 2026)
+  -- Must match suiteData.ts SUITE_SIZES for consistency
   CASE unit_number
-    WHEN 1 THEN 85.15
-    WHEN 2 THEN 53.35
-    WHEN 3 THEN 54.30
-    WHEN 4 THEN 56.80
-    WHEN 5 THEN 63.80
-    WHEN 6 THEN 74.46
-    WHEN 7 THEN 65.55
-    WHEN 8 THEN 64.53
-    WHEN 9 THEN 82.25
-    WHEN 10 THEN 64.53
-    WHEN 11 THEN 65.55
-    WHEN 12 THEN 74.46
-    WHEN 13 THEN 63.80
-    WHEN 14 THEN 56.80
+    WHEN 1 THEN 53.35   -- Type A LOCKOFF
+    WHEN 2 THEN 85.15   -- Type B
+    WHEN 3 THEN 54.30   -- Type A LOCKOFF
+    WHEN 4 THEN 53.53   -- Type A LOCKOFF
+    WHEN 5 THEN 56.88   -- Type C
+    WHEN 6 THEN 63.80   -- Type D
+    WHEN 7 THEN 74.46   -- Type E LOCKOFF
+    WHEN 8 THEN 65.55   -- Type E LOCKOFF
+    WHEN 9 THEN 85.25   -- Type B
+    WHEN 10 THEN 64.53  -- Type E LOCKOFF
+    WHEN 11 THEN 74.46  -- Type E LOCKOFF
+    WHEN 12 THEN 63.80  -- Type D
+    WHEN 13 THEN 56.88  -- Type C
+    WHEN 14 THEN 53.10  -- Type A LOCKOFF
   END AS size_sqm,
-  -- Suite type based on unit
+  -- Suite type classification (matching suiteData.ts)
   CASE
-    WHEN unit_number IN (1, 9) THEN 'Premium Suite'
-    WHEN unit_number IN (5, 6, 7, 8, 10, 11, 12, 13) THEN 'Deluxe Suite'
-    ELSE 'Executive Suite'
+    WHEN unit_number IN (2, 9) THEN 'Premium Suite'      -- Type B (largest suites)
+    WHEN unit_number IN (6, 7, 8, 10, 11, 12) THEN 'Deluxe Suite'  -- Types D & E
+    ELSE 'Executive Suite'  -- Types A & C (units 1, 3, 4, 5, 13, 14)
   END AS suite_type,
   -- Status distribution: 70% available, 20% reserved, 10% sold
   CASE
