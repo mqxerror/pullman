@@ -10,9 +10,7 @@ interface FloorPlanSVGProps {
 }
 
 // SVG paths in pixel coordinates matching pullman-plan.png (1188 x 1238 pixels)
-// 14 Executive Suites per floor (units 1-14)
 const SUITE_PATHS: Record<number, string> = {
-  // Left side (top to bottom)
   1: 'M 241,19 L 486,20 L 481,267 L 484,274 L 310,277 L 308,175 L 244,173 Z',
   2: 'M 13,22 L 236,22 L 234,262 L 173,265 L 172,207 L 10,210 Z',
   3: 'M 13,213 L 165,218 L 170,266 L 238,266 L 236,418 L 13,418 Z',
@@ -20,11 +18,9 @@ const SUITE_PATHS: Record<number, string> = {
   5: 'M 6,628 L 169,625 L 173,589 L 236,593 L 238,816 L 10,817 Z',
   6: 'M 11,824 L 236,828 L 236,1008 L 10,1010 Z',
   7: 'M 10,1015 L 238,1012 L 240,1226 L 10,1228 Z',
-  // Bottom (left to right)
   8: 'M 244,1092 L 246,1226 L 484,1228 L 490,890 L 305,888 L 307,1092 L 248,1090 Z',
   9: 'M 492,1192 L 700,1188 L 697,744 L 490,742 Z',
   10: 'M 703,1229 L 947,1224 L 952,1091 L 884,1093 L 883,893 L 703,890 Z',
-  // Right side (bottom to top)
   11: 'M 952,1227 L 1179,1227 L 1176,1011 L 956,1016 Z',
   12: 'M 948,830 L 1180,830 L 1174,1006 L 958,1015 Z',
   13: 'M 952,820 L 1179,816 L 1179,629 L 1016,626 L 1016,589 L 950,589 Z',
