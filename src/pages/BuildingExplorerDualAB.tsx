@@ -61,6 +61,40 @@ export default function BuildingExplorerDualAB() {
   const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(false)
   const [showFloorPlanFullscreen, setShowFloorPlanFullscreen] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [shareMessage, setShareMessage] = useState<string | null>(null)
+
+  // Share handler - uses Web Share API or falls back to clipboard
+  const handleShare = async () => {
+    if (!selectedSuite) return
+
+    const suiteInfo = getSuiteInfo(selectedSuite.unit_number)
+    const shareData = {
+      title: `Suite ${selectedSuite.floor}-${selectedSuite.unit_number} | Pullman Hotel Panama`,
+      text: `Check out this ${suiteInfo?.type || 'Executive Suite'} (${selectedSuite.size_sqm}m²) at Pullman Hotel & Casino Panama - Floor ${selectedSuite.floor}`,
+      url: `${window.location.origin}/building?floor=${selectedSuite.floor}&unit=${selectedSuite.unit_number}`,
+    }
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData)
+      } else {
+        // Fallback: copy link to clipboard
+        await navigator.clipboard.writeText(shareData.url)
+        setShareMessage('Link copied!')
+        setTimeout(() => setShareMessage(null), 2000)
+      }
+    } catch (err) {
+      // User cancelled or error - try clipboard fallback
+      try {
+        await navigator.clipboard.writeText(shareData.url)
+        setShareMessage('Link copied!')
+        setTimeout(() => setShareMessage(null), 2000)
+      } catch {
+        setShareMessage('Could not share')
+        setTimeout(() => setShareMessage(null), 2000)
+      }
+    }
+  }
 
   const { data: apartments = [] } = useQuery({
     queryKey: ['pullman_suites'],
@@ -644,9 +678,12 @@ export default function BuildingExplorerDualAB() {
                           <Download className="w-4 h-4" />
                           Brochure
                         </a>
-                        <button className="flex-1 py-3.5 bg-white border-2 border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
+                        <button
+                          onClick={handleShare}
+                          className="flex-1 py-3.5 bg-white border-2 border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2 active:scale-[0.98] relative"
+                        >
                           <Share2 className="w-4 h-4" />
-                          Share
+                          {shareMessage || 'Share'}
                         </button>
                       </div>
                     </div>
@@ -947,9 +984,12 @@ export default function BuildingExplorerDualAB() {
                             <Download className="w-3.5 h-3.5" />
                             Brochure
                           </a>
-                          <button className="flex-1 py-2.5 min-h-[44px] bg-white border border-slate-200 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]">
+                          <button
+                            onClick={handleShare}
+                            className="flex-1 py-2.5 min-h-[44px] bg-white border border-slate-200 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]"
+                          >
                             <Share2 className="w-3.5 h-3.5" />
-                            Share
+                            {shareMessage || 'Share'}
                           </button>
                         </div>
                       </div>
