@@ -84,23 +84,22 @@ INSERT INTO pullman_suites (floor, unit_number, size_sqm, suite_type, status, pr
 SELECT
   floor,
   unit_number,
-  -- Accurate sizes from official Excel spreadsheet (Jan 21, 2026)
-  -- Must match suiteData.ts SUITE_SIZES for consistency
+  -- Accurate sizes from official PDF: 01_EXECUTIVE SUITES N1700@2500.pdf
   CASE unit_number
-    WHEN 1 THEN 53.35   -- Type A LOCKOFF
-    WHEN 2 THEN 85.15   -- Type B
-    WHEN 3 THEN 54.30   -- Type A LOCKOFF
-    WHEN 4 THEN 53.53   -- Type A LOCKOFF
-    WHEN 5 THEN 56.88   -- Type C
-    WHEN 6 THEN 63.80   -- Type D
-    WHEN 7 THEN 74.46   -- Type E LOCKOFF
-    WHEN 8 THEN 65.55   -- Type E LOCKOFF
-    WHEN 9 THEN 85.25   -- Type B
-    WHEN 10 THEN 64.53  -- Type E LOCKOFF
-    WHEN 11 THEN 74.46  -- Type E LOCKOFF
-    WHEN 12 THEN 63.80  -- Type D
-    WHEN 13 THEN 56.88  -- Type C
-    WHEN 14 THEN 53.10  -- Type A LOCKOFF
+    WHEN 1 THEN 53.35
+    WHEN 2 THEN 85.10
+    WHEN 3 THEN 54.30
+    WHEN 4 THEN 53.53
+    WHEN 5 THEN 56.80
+    WHEN 6 THEN 63.80
+    WHEN 7 THEN 74.46
+    WHEN 8 THEN 65.55
+    WHEN 9 THEN 84.60
+    WHEN 10 THEN 64.53
+    WHEN 11 THEN 74.46
+    WHEN 12 THEN 63.80
+    WHEN 13 THEN 56.88
+    WHEN 14 THEN 53.53
   END AS size_sqm,
   -- Suite type classification (matching suiteData.ts)
   CASE

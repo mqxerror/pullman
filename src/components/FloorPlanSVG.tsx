@@ -1,7 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import type { ExecutiveSuite } from '@/types/database'
-import { cn } from '@/lib/utils'
-import { Check, Clock, Lock, Maximize2 } from 'lucide-react'
+import { Check, Clock, Lock } from 'lucide-react'
 
 interface FloorPlanSVGProps {
   floor: number
@@ -10,27 +9,7 @@ interface FloorPlanSVGProps {
   selectedSuiteId?: string
 }
 
-// Suite metadata with sizes (from official Excel spreadsheet - Jan 21, 2026)
-// Must match suiteData.ts SUITE_SIZES for consistency
-const SUITE_DATA: Record<number, { size: number; type: string }> = {
-  1: { size: 53.35, type: 'Executive Suite' },   // Type A LOCKOFF
-  2: { size: 85.15, type: 'Premium Suite' },     // Type B
-  3: { size: 54.30, type: 'Executive Suite' },   // Type A LOCKOFF
-  4: { size: 53.53, type: 'Executive Suite' },   // Type A LOCKOFF
-  5: { size: 56.88, type: 'Executive Suite' },   // Type C
-  6: { size: 63.80, type: 'Deluxe Suite' },      // Type D
-  7: { size: 74.46, type: 'Deluxe Suite' },      // Type E LOCKOFF
-  8: { size: 65.55, type: 'Deluxe Suite' },      // Type E LOCKOFF
-  9: { size: 85.25, type: 'Premium Suite' },     // Type B
-  10: { size: 64.53, type: 'Deluxe Suite' },     // Type E LOCKOFF
-  11: { size: 74.46, type: 'Deluxe Suite' },     // Type E LOCKOFF
-  12: { size: 63.80, type: 'Deluxe Suite' },     // Type D
-  13: { size: 56.88, type: 'Executive Suite' },  // Type C
-  14: { size: 53.10, type: 'Executive Suite' },  // Type A LOCKOFF
-}
-
 // SVG paths in pixel coordinates matching pullman-plan.png (1188 x 1238 pixels)
-// Using actual image dimensions for proper alignment
 const SUITE_PATHS: Record<number, string> = {
   1: 'M 241,19 L 486,20 L 481,267 L 484,274 L 310,277 L 308,175 L 244,173 Z',
   2: 'M 13,22 L 236,22 L 234,262 L 173,265 L 172,207 L 10,210 Z',
@@ -48,65 +27,40 @@ const SUITE_PATHS: Record<number, string> = {
   14: 'M 953,585 L 1015,586 L 1019,621 L 1179,620 L 1175,418 L 952,421 Z',
 }
 
-// Sophisticated hotel-appropriate color palette
+// Status color configuration
 const statusConfig = {
   available: {
-    fill: 'rgba(76, 175, 119, 0.18)',      // Soft sage green
-    stroke: '#2D8A5E',                      // Deep forest
+    fill: 'rgba(76, 175, 119, 0.18)',
+    stroke: '#2D8A5E',
     hoverFill: 'rgba(76, 175, 119, 0.35)',
     selectedFill: 'rgba(76, 175, 119, 0.45)',
     icon: Check,
-    label: 'Available',
-    badgeBg: 'bg-emerald-50',
-    badgeText: 'text-emerald-700',
-    badgeBorder: 'border-emerald-200',
   },
   reserved: {
-    fill: 'rgba(212, 160, 0, 0.15)',        // Warm champagne
-    stroke: '#D4A000',                       // Gold accent
+    fill: 'rgba(212, 160, 0, 0.15)',
+    stroke: '#D4A000',
     hoverFill: 'rgba(212, 160, 0, 0.30)',
     selectedFill: 'rgba(212, 160, 0, 0.40)',
     icon: Clock,
-    label: 'Reserved',
-    badgeBg: 'bg-amber-50',
-    badgeText: 'text-amber-700',
-    badgeBorder: 'border-amber-200',
   },
   sold: {
-    fill: 'rgba(180, 83, 83, 0.30)',         // Soft burgundy/rose
-    stroke: '#9B4D4D',                        // Muted burgundy
+    fill: 'rgba(180, 83, 83, 0.30)',
+    stroke: '#9B4D4D',
     hoverFill: 'rgba(180, 83, 83, 0.42)',
     selectedFill: 'rgba(180, 83, 83, 0.52)',
     icon: Lock,
-    label: 'Sold',
-    badgeBg: 'bg-red-50',
-    badgeText: 'text-red-600',
-    badgeBorder: 'border-red-200',
   },
 }
 
 export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuiteId }: FloorPlanSVGProps) {
   const [hoveredSuite, setHoveredSuite] = useState<number | null>(null)
-  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
 
   const getSuiteByUnit = (unitNumber: number) => {
     return suites.find((s) => s.unit_number === unitNumber)
   }
 
-  const handleMouseMove = (e: React.MouseEvent, unitNumber: number) => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      setTooltipPos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top - 10
-      })
-    }
-    setHoveredSuite(unitNumber)
-  }
-
   return (
-    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center overflow-hidden">
+    <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
       {/* Floor plan container - maintains aspect ratio for SVG alignment */}
       <div
         className="relative h-[90%] max-w-full"
@@ -125,148 +79,68 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
           preserveAspectRatio="xMidYMid meet"
           className="absolute inset-0 w-full h-full"
         >
-            <defs>
-              {/* Refined glow effect for selected suites */}
-              <filter id="selectedGlow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#D4A000" floodOpacity="0.4"/>
-              </filter>
+          <defs>
+            <filter id="selectedGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#D4A000" floodOpacity="0.4"/>
+            </filter>
+            <filter id="hoverGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="1" stdDeviation="2" floodColor="#1E293B" floodOpacity="0.15"/>
+            </filter>
+            <filter id="availableGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#2D8A5E" floodOpacity="0.25"/>
+            </filter>
+            <filter id="reservedGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#D4A000" floodOpacity="0.25"/>
+            </filter>
+          </defs>
 
-              {/* Subtle shadow for hover state */}
-              <filter id="hoverGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="1" stdDeviation="2" floodColor="#1E293B" floodOpacity="0.15"/>
-              </filter>
-
-              {/* Available suite hover glow */}
-              <filter id="availableGlow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#2D8A5E" floodOpacity="0.25"/>
-              </filter>
-
-              {/* Reserved suite hover glow */}
-              <filter id="reservedGlow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#D4A000" floodOpacity="0.25"/>
-              </filter>
-            </defs>
-
-            {/* Suite polygons */}
-            {Object.entries(SUITE_PATHS).map(([unitStr, path]) => {
-              const unitNumber = parseInt(unitStr)
-              const suite = getSuiteByUnit(unitNumber)
-              const isHovered = hoveredSuite === unitNumber
-              const isSelected = suite?.id === selectedSuiteId
-              const status = suite?.status || 'available'
-              const config = statusConfig[status]
-
-              // Determine the appropriate filter based on status and state
-              const getFilter = () => {
-                if (isSelected) return 'url(#selectedGlow)'
-                if (isHovered) {
-                  if (status === 'available') return 'url(#availableGlow)'
-                  if (status === 'reserved') return 'url(#reservedGlow)'
-                  return 'url(#hoverGlow)'
-                }
-                return undefined
-              }
-
-              return (
-                <path
-                  key={unitNumber}
-                  d={path}
-                  fill={isSelected ? config.selectedFill : isHovered ? config.hoverFill : config.fill}
-                  stroke={config.stroke}
-                  strokeWidth={isSelected ? 2.5 : isHovered ? 2 : 1.5}
-                  strokeLinejoin="round"
-                  className="cursor-pointer transition-all duration-200 ease-out touch-manipulation"
-                  style={{
-                    vectorEffect: 'non-scaling-stroke',
-                    opacity: status === 'sold' && !isHovered && !isSelected ? 0.7 : 1
-                  }}
-                  filter={getFilter()}
-                  onMouseEnter={(e) => handleMouseMove(e, unitNumber)}
-                  onMouseMove={(e) => handleMouseMove(e, unitNumber)}
-                  onMouseLeave={() => {
-                    setHoveredSuite(null)
-                    setTooltipPos(null)
-                  }}
-                  onTouchStart={(e) => {
-                    if (containerRef.current) {
-                      const touch = e.touches[0]
-                      const rect = containerRef.current.getBoundingClientRect()
-                      setTooltipPos({
-                        x: touch.clientX - rect.left,
-                        y: touch.clientY - rect.top - 10
-                      })
-                    }
-                    setHoveredSuite(unitNumber)
-                  }}
-                  onClick={() => suite && onSuiteClick(suite)}
-                />
-              )
-            })}
-          </svg>
-
-          {/* Floor label */}
-          <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg border border-gold-200">
-            <div className="text-lg font-bold text-slate-900 heading-display">Floor {floor}</div>
-            <div className="text-xs text-gold-600 font-medium">14 Luxury Suites</div>
-          </div>
-        </div>
-
-      {/* Floating Tooltip - Refined Design */}
-      {hoveredSuite && tooltipPos && (
-        <div
-          className="absolute z-50 pointer-events-none animate-fade-in"
-          style={{
-            left: tooltipPos.x,
-            top: tooltipPos.y,
-            transform: 'translate(-50%, -100%)'
-          }}
-        >
-          {(() => {
-            const suite = getSuiteByUnit(hoveredSuite)
-            const suiteInfo = SUITE_DATA[hoveredSuite]
+          {/* Suite polygons */}
+          {Object.entries(SUITE_PATHS).map(([unitStr, path]) => {
+            const unitNumber = parseInt(unitStr)
+            const suite = getSuiteByUnit(unitNumber)
+            const isHovered = hoveredSuite === unitNumber
+            const isSelected = suite?.id === selectedSuiteId
             const status = suite?.status || 'available'
             const config = statusConfig[status]
-            const StatusIcon = config.icon
+
+            const getFilter = () => {
+              if (isSelected) return 'url(#selectedGlow)'
+              if (isHovered) {
+                if (status === 'available') return 'url(#availableGlow)'
+                if (status === 'reserved') return 'url(#reservedGlow)'
+                return 'url(#hoverGlow)'
+              }
+              return undefined
+            }
 
             return (
-              <div className="bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.12)] px-5 py-4 min-w-[220px] border border-slate-200">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-lg font-bold text-slate-900 tracking-tight">
-                    Suite {floor}-{hoveredSuite}
-                  </span>
-                  <span className={cn(
-                    'flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide border',
-                    config.badgeBg,
-                    config.badgeText,
-                    config.badgeBorder
-                  )}>
-                    <StatusIcon className="w-3 h-3" />
-                    {config.label}
-                  </span>
-                </div>
-
-                {/* Suite Type */}
-                <div className="text-sm text-slate-500 mb-3">{suiteInfo?.type || 'Suite'}</div>
-
-                {/* Size */}
-                <div className="flex items-center gap-2 text-sm text-slate-700 bg-slate-50 rounded-lg px-3 py-2">
-                  <Maximize2 className="w-4 h-4 text-slate-400" />
-                  <span className="font-semibold">{suiteInfo?.size || '--'} m²</span>
-                </div>
-
-                {/* CTA */}
-                <div className="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-400 text-center">
-                  Click to view full details →
-                </div>
-
-                {/* Arrow pointer */}
-                <div className="absolute left-1/2 -translate-x-1/2 top-full w-3 h-3 bg-white border-r border-b border-slate-200 transform rotate-45 -mt-1.5" />
-              </div>
+              <path
+                key={unitNumber}
+                d={path}
+                fill={isSelected ? config.selectedFill : isHovered ? config.hoverFill : config.fill}
+                stroke={config.stroke}
+                strokeWidth={isSelected ? 2.5 : isHovered ? 2 : 1.5}
+                strokeLinejoin="round"
+                className="cursor-pointer transition-all duration-200 ease-out touch-manipulation"
+                style={{
+                  vectorEffect: 'non-scaling-stroke',
+                  opacity: status === 'sold' && !isHovered && !isSelected ? 0.7 : 1
+                }}
+                filter={getFilter()}
+                onMouseEnter={() => setHoveredSuite(unitNumber)}
+                onMouseLeave={() => setHoveredSuite(null)}
+                onClick={() => suite && onSuiteClick(suite)}
+              />
             )
-          })()}
+          })}
+        </svg>
+
+        {/* Floor label */}
+        <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg border border-gold-200">
+          <div className="text-lg font-bold text-slate-900 heading-display">Floor {floor}</div>
+          <div className="text-xs text-gold-600 font-medium">14 Luxury Suites</div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
