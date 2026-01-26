@@ -1,12 +1,23 @@
 "use client";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 type SpotlightProps = {
   className?: string;
   fill?: string;
 };
 
-export const Spotlight = ({ className, fill }: SpotlightProps) => {
+// Check for reduced motion preference
+const prefersReducedMotion = typeof window !== 'undefined'
+  ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  : false;
+
+export const Spotlight = React.memo(({ className, fill }: SpotlightProps) => {
+  // Skip rendering entirely if user prefers reduced motion
+  if (prefersReducedMotion) {
+    return null;
+  }
+
   return (
     <svg
       className={cn(
@@ -14,16 +25,18 @@ export const Spotlight = ({ className, fill }: SpotlightProps) => {
         className
       )}
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 3787 2842"
+      // Reduced viewBox by 50% for better performance
+      viewBox="0 0 1894 1421"
       fill="none"
     >
       <g filter="url(#filter)">
         <ellipse
-          cx="1924.71"
-          cy="273.501"
-          rx="1924.71"
-          ry="273.501"
-          transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
+          // Scaled down ellipse proportionally
+          cx="962"
+          cy="137"
+          rx="962"
+          ry="137"
+          transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 1816 1146)"
           fill={fill || "white"}
           fillOpacity="0.21"
         ></ellipse>
@@ -31,10 +44,10 @@ export const Spotlight = ({ className, fill }: SpotlightProps) => {
       <defs>
         <filter
           id="filter"
-          x="0.860352"
-          y="0.838989"
-          width="3785.16"
-          height="2840.26"
+          x="0"
+          y="0"
+          width="1894"
+          height="1421"
           filterUnits="userSpaceOnUse"
           colorInterpolationFilters="sRGB"
         >
@@ -45,12 +58,15 @@ export const Spotlight = ({ className, fill }: SpotlightProps) => {
             in2="BackgroundImageFix"
             result="shape"
           ></feBlend>
+          {/* Reduced blur from 151 to 50 for much better performance */}
           <feGaussianBlur
-            stdDeviation="151"
+            stdDeviation="50"
             result="effect1_foregroundBlur_1065_8"
           ></feGaussianBlur>
         </filter>
       </defs>
     </svg>
   );
-};
+});
+
+Spotlight.displayName = "Spotlight";
