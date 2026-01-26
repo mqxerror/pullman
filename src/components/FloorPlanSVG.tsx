@@ -200,7 +200,18 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, onSuiteLongP
                 onClick={(e) => {
                   // Prevent double-firing on touch devices
                   if (e.detail === 0) return // Touch events handle this
-                  if (suite) onSuiteClick(suite)
+                  if (!suite) return
+
+                  // Shift+click or Ctrl+click to add to compare (desktop equivalent of long-press)
+                  if ((e.shiftKey || e.ctrlKey) && onSuiteLongPress) {
+                    e.preventDefault()
+                    setShowLongPressHint(unitNumber)
+                    onSuiteLongPress(suite)
+                    setTimeout(() => setShowLongPressHint(null), 1000)
+                    return
+                  }
+
+                  onSuiteClick(suite)
                 }}
               />
             )

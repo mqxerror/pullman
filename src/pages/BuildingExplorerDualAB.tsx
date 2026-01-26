@@ -570,8 +570,9 @@ export default function BuildingExplorerDualAB() {
                     <Scale className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="font-semibold">Hold to Compare</div>
-                    <div className="text-violet-200 text-xs">Long-press any suite to add it</div>
+                    <div className="font-semibold">Compare Suites</div>
+                    <div className="text-violet-200 text-xs hidden lg:block">Shift+click any suite to add</div>
+                    <div className="text-violet-200 text-xs lg:hidden">Long-press any suite to add</div>
                   </div>
                   <button
                     className="ml-2 p-1 hover:bg-white/20 rounded-full transition-colors"

@@ -111,7 +111,9 @@
       "Bash(docker build:*)",
       "Bash(python.exe:*)",
       "Bash(git checkout:*)",
-      "Bash(git revert:*)"
+      "Bash(git revert:*)",
+      "Bash(ping:*)",
+      "WebFetch(domain:pullman.mercan.com)"
     ]
   }
 }
