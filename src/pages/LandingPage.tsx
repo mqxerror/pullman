@@ -35,10 +35,10 @@ export default function LandingPage() {
   }, [])
 
   const { data: apartments = [] } = useQuery({
-    queryKey: ['apartments'],
+    queryKey: ['pullman_suites'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('apartments')
+        .from('pullman_suites')
         .select('*')
         .order('floor', { ascending: false })
 
