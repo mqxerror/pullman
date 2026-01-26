@@ -106,7 +106,12 @@
       "Bash(tar:*)",
       "Bash(scp:*)",
       "Bash(python3:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(PGPASSWORD=postgres123 psql:*)",
+      "Bash(docker build:*)",
+      "Bash(python.exe:*)",
+      "Bash(git checkout:*)",
+      "Bash(git revert:*)"
     ]
   }
 }

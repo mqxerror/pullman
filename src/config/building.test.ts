@@ -25,9 +25,8 @@ describe('Building Configuration', () => {
     })
 
     it('should calculate total suites correctly', () => {
-      // Only residential floors (17-23 = 7 floors) have suites
-      // TOTAL_FLOORS includes amenity floors 24-25
-      expect(7 * UNITS_PER_FLOOR).toBe(98)
+      // All 9 floors (17-25) have 14 suites each = 126 total
+      expect(TOTAL_FLOORS * UNITS_PER_FLOOR).toBe(126)
     })
   })
 

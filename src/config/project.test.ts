@@ -21,14 +21,13 @@ describe('Project Configuration', () => {
     })
 
     it('should have correct unit configuration', () => {
-      expect(projectConfig.building.totalUnits).toBe(98) // 7 floors × 14 units
+      expect(projectConfig.building.totalUnits).toBe(126) // 14 units × 9 floors
       expect(projectConfig.building.unitsPerFloor).toBe(14)
     })
 
     it('should have consistent totals', () => {
-      // Only residential floors have units (totalFloors - 2 amenity floors)
-      const residentialFloors = projectConfig.building.totalFloors - 2
-      const calculatedTotal = residentialFloors * projectConfig.building.unitsPerFloor
+      // All floors have units (9 floors × 14 units = 126)
+      const calculatedTotal = projectConfig.building.totalFloors * projectConfig.building.unitsPerFloor
       expect(calculatedTotal).toBe(projectConfig.building.totalUnits)
     })
   })

@@ -23,7 +23,7 @@ export const projectConfig = {
   building: {
     totalFloors: 9, // All floors 17-25 (7 residential + 2 amenity)
     floorRange: { min: 17, max: 25 },
-    totalUnits: 98, // 14 units × 7 residential floors
+    totalUnits: 126, // 14 units × 9 floors
     unitsPerFloor: 14,
     unitTypes: ['Executive Suite'],
     completionYear: 2026,
