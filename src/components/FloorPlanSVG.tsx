@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import type { ExecutiveSuite } from '@/types/database'
 import { Check, Clock, Lock } from 'lucide-react'
 
@@ -6,7 +6,9 @@ interface FloorPlanSVGProps {
   floor: number
   suites: ExecutiveSuite[]
   onSuiteClick: (suite: ExecutiveSuite) => void
+  onSuiteLongPress?: (suite: ExecutiveSuite) => void
   selectedSuiteId?: string
+  compareSuiteIds?: string[]
 }
 
 // SVG paths in pixel coordinates matching pullman-plan.png (1188 x 1238 pixels)
@@ -52,13 +54,18 @@ const statusConfig = {
   },
 }
 
-export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuiteId }: FloorPlanSVGProps) {
+export default function FloorPlanSVG({ floor, suites, onSuiteClick, onSuiteLongPress, selectedSuiteId, compareSuiteIds = [] }: FloorPlanSVGProps) {
   const [hoveredSuite, setHoveredSuite] = useState<number | null>(null)
   const [pressedSuite, setPressedSuite] = useState<number | null>(null)
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [showLongPressHint, setShowLongPressHint] = useState<number | null>(null)
 
   const getSuiteByUnit = (unitNumber: number) => {
     return suites.find((s) => s.unit_number === unitNumber)
   }
+
+  // Long press duration in ms
+  const LONG_PRESS_DURATION = 500
 
   return (
     <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
@@ -93,6 +100,9 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
             <filter id="reservedGlow" x="-30%" y="-30%" width="160%" height="160%">
               <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#D4A000" floodOpacity="0.25"/>
             </filter>
+            <filter id="compareGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="2" stdDeviation="5" floodColor="#8B5CF6" floodOpacity="0.5"/>
+            </filter>
           </defs>
 
           {/* Suite polygons */}
@@ -102,12 +112,16 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
             const isHovered = hoveredSuite === unitNumber
             const isPressed = pressedSuite === unitNumber
             const isSelected = suite?.id === selectedSuiteId
+            const isComparing = suite && compareSuiteIds.includes(suite.id)
+            const _showHint = showLongPressHint === unitNumber // Visual hint on long-press
+            void _showHint
             const status = suite?.status || 'available'
             const config = statusConfig[status]
             // Pressed/active state takes priority for touch feedback
             const isActive = isPressed || isHovered
 
             const getFilter = () => {
+              if (isComparing) return 'url(#compareGlow)'
               if (isSelected) return 'url(#selectedGlow)'
               if (isActive) {
                 if (status === 'available') return 'url(#availableGlow)'
@@ -121,9 +135,9 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
               <path
                 key={unitNumber}
                 d={path}
-                fill={isSelected ? config.selectedFill : isActive ? config.hoverFill : config.fill}
-                stroke={config.stroke}
-                strokeWidth={isSelected ? 2.5 : isActive ? 2 : 1.5}
+                fill={isComparing ? 'rgba(139, 92, 246, 0.25)' : isSelected ? config.selectedFill : isActive ? config.hoverFill : config.fill}
+                stroke={isComparing ? '#8B5CF6' : config.stroke}
+                strokeWidth={isComparing ? 3 : isSelected ? 2.5 : isActive ? 2 : 1.5}
                 strokeLinejoin="round"
                 className="cursor-pointer transition-all duration-150 ease-out touch-manipulation select-none"
                 style={{
@@ -136,13 +150,50 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, selectedSuit
                 filter={getFilter()}
                 onMouseEnter={() => setHoveredSuite(unitNumber)}
                 onMouseLeave={() => setHoveredSuite(null)}
-                // Touch events for mobile/tablet feedback
-                onTouchStart={() => setPressedSuite(unitNumber)}
-                onTouchEnd={() => {
-                  setPressedSuite(null)
-                  if (suite) onSuiteClick(suite)
+                // Touch events for mobile/tablet feedback with haptics + long press
+                onTouchStart={() => {
+                  setPressedSuite(unitNumber)
+                  // Subtle haptic feedback on touch start
+                  if (navigator.vibrate) {
+                    navigator.vibrate(5)
+                  }
+                  // Start long press timer for compare mode
+                  if (onSuiteLongPress && suite) {
+                    longPressTimerRef.current = setTimeout(() => {
+                      // Long press detected - add to compare
+                      if (navigator.vibrate) {
+                        navigator.vibrate([20, 50, 20])
+                      }
+                      setShowLongPressHint(unitNumber)
+                      onSuiteLongPress(suite)
+                      setPressedSuite(null)
+                      setTimeout(() => setShowLongPressHint(null), 1000)
+                    }, LONG_PRESS_DURATION)
+                  }
                 }}
-                onTouchCancel={() => setPressedSuite(null)}
+                onTouchEnd={() => {
+                  // Clear long press timer
+                  if (longPressTimerRef.current) {
+                    clearTimeout(longPressTimerRef.current)
+                    longPressTimerRef.current = null
+                  }
+                  // Only trigger click if not a long press
+                  if (pressedSuite === unitNumber && suite) {
+                    // Stronger haptic on selection
+                    if (navigator.vibrate) {
+                      navigator.vibrate(15)
+                    }
+                    onSuiteClick(suite)
+                  }
+                  setPressedSuite(null)
+                }}
+                onTouchCancel={() => {
+                  if (longPressTimerRef.current) {
+                    clearTimeout(longPressTimerRef.current)
+                    longPressTimerRef.current = null
+                  }
+                  setPressedSuite(null)
+                }}
                 // Mouse events for desktop
                 onMouseDown={() => setPressedSuite(unitNumber)}
                 onMouseUp={() => setPressedSuite(null)}

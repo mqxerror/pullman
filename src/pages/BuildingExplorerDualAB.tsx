@@ -7,7 +7,7 @@ import {
   X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
   X as CloseIcon, ArrowRight, Bed, Mountain, Download, Share2,
   ChevronLeft, ChevronRight, Sparkles, Star, Wifi, Car, Dumbbell, Coffee, Shield, Waves,
-  PanelLeftClose, PanelLeftOpen, Home
+  PanelLeftClose, PanelLeftOpen, Home, Scale, Plus
 } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { getSuiteType, getSuiteImage, getSuiteInfo } from '@/config/suiteData'
@@ -62,6 +62,59 @@ export default function BuildingExplorerDualAB() {
   const [showFloorPlanFullscreen, setShowFloorPlanFullscreen] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [shareMessage, setShareMessage] = useState<string | null>(null)
+
+  // Swipe navigation state
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
+
+  // Minimum swipe distance (in px) to trigger navigation
+  const minSwipeDistance = 50
+
+  // Image loading state for blur-up effect
+  const [imageLoaded, setImageLoaded] = useState(false)
+
+  // Compare mode state (max 3 suites)
+  const [compareSuites, setCompareSuites] = useState<ExecutiveSuite[]>([])
+  const [showCompareView, setShowCompareView] = useState(false)
+  const [showCompareHint, setShowCompareHint] = useState(true)
+
+  // Dismiss compare hint after first compare or after timeout
+  useEffect(() => {
+    if (compareSuites.length > 0) {
+      setShowCompareHint(false)
+    }
+  }, [compareSuites.length])
+
+  // Auto-dismiss hint after 8 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => setShowCompareHint(false), 8000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Add/remove suite from comparison
+  const toggleCompare = useCallback((suite: ExecutiveSuite) => {
+    setCompareSuites(prev => {
+      const isAlreadyComparing = prev.some(s => s.id === suite.id)
+      if (isAlreadyComparing) {
+        return prev.filter(s => s.id !== suite.id)
+      }
+      if (prev.length >= 3) {
+        // Replace oldest with new
+        return [...prev.slice(1), suite]
+      }
+      return [...prev, suite]
+    })
+    // Haptic feedback
+    if (navigator.vibrate) {
+      navigator.vibrate([10, 50, 10])
+    }
+  }, [])
+
+  // Reset image loaded state when suite changes
+  useEffect(() => {
+    setImageLoaded(false)
+  }, [selectedSuite?.id, activeImageTab])
 
   // Share handler - uses Web Share API or falls back to clipboard
   const handleShare = async () => {
@@ -153,6 +206,62 @@ export default function BuildingExplorerDualAB() {
     setCurrentImageIndex(0) // Reset image index
   }
 
+  // Get adjacent suites for swipe navigation
+  const getAdjacentSuites = useCallback(() => {
+    if (!selectedSuite) return { prev: null, next: null }
+    const currentIndex = floorApartments.findIndex(apt => apt.id === selectedSuite.id)
+    return {
+      prev: currentIndex > 0 ? floorApartments[currentIndex - 1] : null,
+      next: currentIndex < floorApartments.length - 1 ? floorApartments[currentIndex + 1] : null,
+    }
+  }, [selectedSuite, floorApartments])
+
+  // Navigate to adjacent suite
+  const navigateToSuite = useCallback((direction: 'prev' | 'next') => {
+    const { prev, next } = getAdjacentSuites()
+    const targetSuite = direction === 'prev' ? prev : next
+    if (targetSuite) {
+      // Trigger haptic feedback if available
+      if (navigator.vibrate) {
+        navigator.vibrate(10)
+      }
+      setSelectedSuite(targetSuite)
+      setActiveImageTab('floorplan')
+      setCurrentImageIndex(0)
+    }
+  }, [getAdjacentSuites])
+
+  // Touch handlers for swipe navigation
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+    // Show swipe direction indicator
+    if (touchStart && e.targetTouches[0].clientX) {
+      const diff = touchStart - e.targetTouches[0].clientX
+      if (Math.abs(diff) > 20) {
+        setSwipeDirection(diff > 0 ? 'left' : 'right')
+      }
+    }
+  }
+
+  const onTouchEnd = () => {
+    setSwipeDirection(null)
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      navigateToSuite('next')
+    } else if (isRightSwipe) {
+      navigateToSuite('prev')
+    }
+  }
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && selectedSuite) {
@@ -206,26 +315,7 @@ export default function BuildingExplorerDualAB() {
                 <img src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png" alt="Mercan Group" className="h-10 lg:h-14 w-auto" />
               </Link>
 
-              {/* Mobile Floor Selector - Only visible on mobile */}
-              <div className="flex lg:hidden items-center gap-1 bg-slate-100 rounded-xl p-1">
-                <button
-                  onClick={handleFloorDown}
-                  className="p-2 min-w-[40px] min-h-[40px] rounded-lg hover:bg-white transition-colors flex items-center justify-center"
-                  aria-label="Previous floor"
-                >
-                  <ChevronDown className="w-5 h-5 text-slate-600" />
-                </button>
-                <div className="text-center min-w-[50px] px-2">
-                  <div className="text-lg font-bold text-slate-900 tabular-nums">F{selectedFloor}</div>
-                </div>
-                <button
-                  onClick={handleFloorUp}
-                  className="p-2 min-w-[40px] min-h-[40px] rounded-lg hover:bg-white transition-colors flex items-center justify-center"
-                  aria-label="Next floor"
-                >
-                  <ChevronUp className="w-5 h-5 text-slate-600" />
-                </button>
-              </div>
+              {/* Mobile Floor Selector removed - using bottom floating badge instead */}
 
               {/* Breadcrumb Navigation - Desktop only */}
               <nav className="hidden lg:flex items-center gap-2 text-sm ml-4 pl-4 border-l border-slate-200">
@@ -460,13 +550,43 @@ export default function BuildingExplorerDualAB() {
           </div>
 
           {/* SVG Floor Plan */}
-          <div className="flex-1 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 p-2 overflow-hidden">
+          <div className="flex-1 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 p-2 overflow-hidden relative">
             <FloorPlanSVG
               floor={selectedFloor}
               suites={floorApartments}
               onSuiteClick={handleSuiteClick}
+              onSuiteLongPress={toggleCompare}
               selectedSuiteId={selectedSuite?.id}
+              compareSuiteIds={compareSuites.map(s => s.id)}
             />
+            {/* Compare feature onboarding - prominent tooltip */}
+            {showCompareHint && compareSuites.length === 0 && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+                <div
+                  className="relative px-4 py-2.5 bg-violet-600 text-white text-sm rounded-xl shadow-lg shadow-violet-500/30 flex items-center gap-2 cursor-pointer"
+                  onClick={() => setShowCompareHint(false)}
+                >
+                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                    <Scale className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">Hold to Compare</div>
+                    <div className="text-violet-200 text-xs">Long-press any suite to add it</div>
+                  </div>
+                  <button
+                    className="ml-2 p-1 hover:bg-white/20 rounded-full transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setShowCompareHint(false)
+                    }}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                  {/* Arrow pointing down */}
+                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-violet-600 rotate-45" />
+                </div>
+              </div>
+            )}
           </div>
 
         </div>
@@ -736,13 +856,59 @@ export default function BuildingExplorerDualAB() {
         {/* OPTION C: Large Modal Overlay - Mobile Optimized Bottom Sheet / Desktop Modal */}
         {viewMode === 'C' && selectedSuite && (
           <div
-            className="fixed inset-0 z-50 flex items-end lg:items-center justify-center lg:p-4 bg-black/50 backdrop-blur-sm animate-fade-in"
+            className="fixed inset-0 z-50 flex items-end lg:items-center justify-center lg:p-4 bg-black/60 lg:bg-black/50 lg:backdrop-blur-sm animate-fade-in"
             onClick={handleClosePanel}
           >
             <div
-              className="bg-white w-full lg:rounded-2xl rounded-t-3xl shadow-2xl lg:max-w-6xl max-h-[95vh] lg:max-h-[80vh] overflow-hidden animate-modal-in"
+              className="bg-white w-full lg:rounded-2xl rounded-t-3xl shadow-2xl lg:max-w-6xl max-h-[95vh] lg:max-h-[80vh] overflow-hidden animate-modal-in relative"
               onClick={(e) => e.stopPropagation()}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
             >
+              {/* Swipe Direction Indicators */}
+              {swipeDirection && (
+                <>
+                  {swipeDirection === 'right' && getAdjacentSuites().prev && (
+                    <div className="absolute left-2 top-1/2 -translate-y-1/2 z-20 lg:hidden">
+                      <div className="w-10 h-10 rounded-full bg-amber-500/90 flex items-center justify-center shadow-lg animate-pulse">
+                        <ChevronLeft className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
+                  )}
+                  {swipeDirection === 'left' && getAdjacentSuites().next && (
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 z-20 lg:hidden">
+                      <div className="w-10 h-10 rounded-full bg-amber-500/90 flex items-center justify-center shadow-lg animate-pulse">
+                        <ChevronRight className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Suite Navigation Dots - Mobile */}
+              <div className="lg:hidden absolute top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1.5 bg-black/50 backdrop-blur-sm rounded-full">
+                {floorApartments.slice(0, 7).map((apt) => (
+                  <button
+                    key={apt.id}
+                    onClick={() => {
+                      setSelectedSuite(apt)
+                      setActiveImageTab('floorplan')
+                      setCurrentImageIndex(0)
+                    }}
+                    className={cn(
+                      "w-2 h-2 rounded-full transition-all",
+                      apt.id === selectedSuite?.id
+                        ? "bg-amber-400 w-4"
+                        : "bg-white/50 hover:bg-white/80"
+                    )}
+                    aria-label={`Suite ${apt.unit_number}`}
+                  />
+                ))}
+                {floorApartments.length > 7 && (
+                  <span className="text-white/70 text-[10px] ml-1">+{floorApartments.length - 7}</span>
+                )}
+              </div>
               {/* Mobile: Stacked layout | Desktop: Side-by-side */}
               <div className="flex flex-col lg:flex-row h-full max-h-[95vh] lg:max-h-[80vh]">
                 {/* Image Gallery - Full width on mobile, 50% on desktop */}
@@ -761,14 +927,24 @@ export default function BuildingExplorerDualAB() {
 
                   return (
                     <div className="w-full lg:w-[50%] bg-slate-900 flex flex-col flex-shrink-0">
-                      {/* Main Image */}
-                      <div className="relative h-[200px] sm:h-[250px] lg:flex-1 lg:min-h-[300px]">
+                      {/* Main Image with blur-up loading */}
+                      <div className="relative h-[200px] sm:h-[250px] lg:flex-1 lg:min-h-[300px] overflow-hidden">
+                        {/* Blur placeholder */}
+                        {!imageLoaded && (
+                          <div className="absolute inset-0 bg-slate-200 animate-pulse flex items-center justify-center">
+                            <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+                          </div>
+                        )}
                         <img
                           src={currentImage}
                           alt={`Suite ${selectedSuite.floor}-${selectedSuite.unit_number}`}
+                          loading="lazy"
+                          onLoad={() => setImageLoaded(true)}
                           className={cn(
-                            "w-full h-full object-cover",
-                            activeImageTab === 'floorplan' && "cursor-pointer hover:opacity-90 transition-opacity object-contain bg-white"
+                            "w-full h-full object-cover transition-all duration-300",
+                            activeImageTab === 'floorplan' && "cursor-pointer hover:opacity-90 object-contain bg-white",
+                            !imageLoaded && "opacity-0 scale-105",
+                            imageLoaded && "opacity-100 scale-100"
                           )}
                           onClick={() => {
                             if (activeImageTab === 'floorplan') {
@@ -1066,6 +1242,184 @@ export default function BuildingExplorerDualAB() {
           </div>
         )}
       </main>
+
+      {/* Persistent Floor Badge - Mobile only, stays visible even with modal */}
+      <div className={cn(
+        "lg:hidden fixed bottom-4 left-4 z-[45] animate-fade-in transition-all",
+        compareSuites.length > 0 && "bottom-20" // Move up when compare bar is visible
+      )}>
+        <div className="flex items-center gap-2 px-3 py-2 bg-slate-900/90 backdrop-blur-md rounded-full shadow-lg border border-white/10">
+          <Building2 className="w-4 h-4 text-amber-400" />
+          <span className="text-white font-bold text-sm tabular-nums">Floor {selectedFloor}</span>
+          <div className="flex items-center gap-0.5 ml-1 border-l border-white/20 pl-2">
+            <button
+              onClick={handleFloorDown}
+              disabled={selectedFloor <= MIN_FLOOR}
+              className="p-1 rounded-full hover:bg-white/10 disabled:opacity-30 transition-colors"
+              aria-label="Previous floor"
+            >
+              <ChevronDown className="w-4 h-4 text-white" />
+            </button>
+            <button
+              onClick={handleFloorUp}
+              disabled={selectedFloor >= MAX_FLOOR}
+              className="p-1 rounded-full hover:bg-white/10 disabled:opacity-30 transition-colors"
+              aria-label="Next floor"
+            >
+              <ChevronUp className="w-4 h-4 text-white" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Compare Bar - Shows when suites are selected for comparison */}
+      {compareSuites.length > 0 && !selectedSuite && (
+        <div className="fixed bottom-0 left-0 right-0 z-[55] animate-slide-up">
+          <div className="bg-slate-900/95 backdrop-blur-md border-t border-white/10 px-4 py-3 safe-area-bottom">
+            <div className="max-w-screen-xl mx-auto flex items-center justify-between gap-3">
+              {/* Selected Suites */}
+              <div className="flex items-center gap-2 flex-1 overflow-x-auto">
+                <Scale className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <span className="text-white/70 text-xs font-medium flex-shrink-0">Compare:</span>
+                <div className="flex gap-2">
+                  {compareSuites.map((suite) => (
+                    <div
+                      key={suite.id}
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 rounded-lg border border-white/20"
+                    >
+                      <span className="text-white text-xs font-semibold">{suite.floor}-{suite.unit_number}</span>
+                      <button
+                        onClick={() => toggleCompare(suite)}
+                        className="p-0.5 hover:bg-white/20 rounded-full transition-colors"
+                        aria-label={`Remove Suite ${suite.floor}-${suite.unit_number} from comparison`}
+                      >
+                        <X className="w-3 h-3 text-white/70" />
+                      </button>
+                    </div>
+                  ))}
+                  {compareSuites.length < 3 && (
+                    <div className="flex items-center gap-1 px-2 py-1.5 border border-dashed border-white/30 rounded-lg text-white/50 text-xs">
+                      <Plus className="w-3 h-3" />
+                      <span className="hidden sm:inline">Add suite</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={() => setCompareSuites([])}
+                  className="px-3 py-2 text-white/70 text-xs font-medium hover:text-white transition-colors"
+                >
+                  Clear
+                </button>
+                <button
+                  onClick={() => setShowCompareView(true)}
+                  disabled={compareSuites.length < 2}
+                  className="px-4 py-2 bg-amber-500 hover:bg-amber-400 disabled:bg-white/20 disabled:text-white/50 text-slate-900 text-xs font-semibold rounded-lg transition-colors"
+                >
+                  Compare ({compareSuites.length})
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Compare View Modal */}
+      {showCompareView && compareSuites.length >= 2 && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 lg:backdrop-blur-sm animate-fade-in"
+          onClick={() => setShowCompareView(false)}
+        >
+          <div
+            className="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden animate-modal-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <Scale className="w-5 h-5 text-amber-500" />
+                <h2 className="text-lg font-bold text-slate-900">Compare Suites</h2>
+              </div>
+              <button
+                onClick={() => setShowCompareView(false)}
+                className="p-2 hover:bg-slate-200 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-slate-600" />
+              </button>
+            </div>
+
+            {/* Comparison Grid */}
+            <div className="p-4 overflow-y-auto max-h-[calc(90vh-60px)]">
+              <div className={cn(
+                "grid gap-4",
+                compareSuites.length === 2 ? "grid-cols-2" : "grid-cols-3"
+              )}>
+                {compareSuites.map((suite) => {
+                  const suiteInfo = getSuiteInfo(suite.unit_number)
+                  return (
+                    <div key={suite.id} className="border border-slate-200 rounded-xl overflow-hidden">
+                      {/* Suite Image */}
+                      <div className="relative h-32 bg-slate-100">
+                        <img
+                          src={getSuiteImage(suite.unit_number)}
+                          alt={`Suite ${suite.floor}-${suite.unit_number}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-2 right-2">
+                          <span className={cn(
+                            'px-2 py-1 rounded-full text-[10px] font-semibold',
+                            suite.status === 'available' ? 'bg-green-500 text-white' :
+                            suite.status === 'reserved' ? 'bg-amber-500 text-white' :
+                            'bg-slate-500 text-white'
+                          )}>
+                            {suite.status}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Suite Details */}
+                      <div className="p-3">
+                        <h3 className="font-bold text-slate-900">Suite {suite.floor}-{suite.unit_number}</h3>
+                        <p className="text-xs text-amber-600 font-medium mb-3">{suiteInfo?.type || 'Executive Suite'}</p>
+
+                        {/* Stats */}
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">Size</span>
+                            <span className="font-semibold text-slate-900">{suite.size_sqm} m²</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">Floor</span>
+                            <span className="font-semibold text-slate-900">{suite.floor}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">View</span>
+                            <span className="font-semibold text-slate-900">Ocean</span>
+                          </div>
+                        </div>
+
+                        {/* Action */}
+                        <button
+                          onClick={() => {
+                            setShowCompareView(false)
+                            setSelectedSuite(suite)
+                          }}
+                          className="w-full mt-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-colors"
+                        >
+                          View Details
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
