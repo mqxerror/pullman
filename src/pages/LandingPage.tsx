@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
@@ -25,12 +25,19 @@ export default function LandingPage() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // Track scroll for sticky search bar
+  // Track scroll for sticky search bar - throttled with RAF
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 500)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 500)
+          ticking = false
+        })
+        ticking = true
+      }
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -47,15 +54,15 @@ export default function LandingPage() {
     },
   })
 
-  // Calculate stats
-  const stats = {
+  // Calculate stats - memoized to prevent recalculation on every render
+  const stats = useMemo(() => ({
     available: apartments.filter((a) => a.status === 'available').length,
     reserved: apartments.filter((a) => a.status === 'reserved').length,
     floors: projectConfig.building.totalFloors,
     totalUnits: projectConfig.building.totalUnits,
     startingPrice: projectConfig.pricing.startingFrom,
     deliveryYear: projectConfig.building.completionYear,
-  }
+  }), [apartments])
 
   const handleSearch = () => {
     const params = new URLSearchParams()

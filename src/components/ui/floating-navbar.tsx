@@ -18,26 +18,33 @@ export const FloatingNav = ({
   className?: string;
 }) => {
   const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
+  // Fixed scroll handler - no longer causes re-attachment on every scroll
   useEffect(() => {
+    let lastScrollY = 0;
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY < 100) {
-        setVisible(true);
-      } else if (currentScrollY > lastScrollY) {
-        setVisible(false);
-      } else {
-        setVisible(true);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          if (currentScrollY < 100) {
+            setVisible(true);
+          } else if (currentScrollY > lastScrollY) {
+            setVisible(false);
+          } else {
+            setVisible(true);
+          }
+          lastScrollY = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
       }
-
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []); // Empty dependency - listener attached once
 
   return (
     <AnimatePresence mode="wait">
