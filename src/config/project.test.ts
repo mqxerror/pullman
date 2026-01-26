@@ -15,19 +15,19 @@ describe('Project Configuration', () => {
 
   describe('Building Configuration', () => {
     it('should have correct floor configuration', () => {
-      expect(projectConfig.building.totalFloors).toBe(9) // All floors 17-25
+      expect(projectConfig.building.totalFloors).toBe(11) // All floors 17-27
       expect(projectConfig.building.floorRange.min).toBe(17)
-      expect(projectConfig.building.floorRange.max).toBe(25)
+      expect(projectConfig.building.floorRange.max).toBe(27)
     })
 
     it('should have correct unit configuration', () => {
-      expect(projectConfig.building.totalUnits).toBe(126) // 14 units × 9 floors
+      expect(projectConfig.building.totalUnits).toBe(126) // 14 units × 9 residential floors
       expect(projectConfig.building.unitsPerFloor).toBe(14)
     })
 
     it('should have consistent totals', () => {
-      // All floors have units (9 floors × 14 units = 126)
-      const calculatedTotal = projectConfig.building.totalFloors * projectConfig.building.unitsPerFloor
+      // Only residential floors have units (9 floors × 14 units = 126)
+      const calculatedTotal = projectConfig.building.residentialFloors * projectConfig.building.unitsPerFloor
       expect(calculatedTotal).toBe(projectConfig.building.totalUnits)
     })
   })

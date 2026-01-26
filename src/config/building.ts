@@ -10,10 +10,10 @@
  * Run the app and adjust values until hotspots align with actual floors.
  */
 
-// Floor range for building visualization (all floors 17-25)
+// Floor range for building visualization (all floors 17-27)
 export const MIN_FLOOR = 17
-export const MAX_FLOOR = 25  // All floors including amenities
-export const TOTAL_FLOORS = MAX_FLOOR - MIN_FLOOR + 1 // 9 floors total
+export const MAX_FLOOR = 27  // All floors including amenities (26=Pool, 27=Beverage)
+export const TOTAL_FLOORS = MAX_FLOOR - MIN_FLOOR + 1 // 11 floors total
 export const UNITS_PER_FLOOR = 14
 
 /**
@@ -21,24 +21,24 @@ export const UNITS_PER_FLOOR = 14
  * These percentages map to the pullman-facade-v2.png image
  *
  * Calibrated by visual inspection:
- * - top: Where floor 25 (top floor) starts
+ * - top: Where floor 27 (top floor) starts
  * - bottom: Where floor 17 (bottom floor) ends
  * - left/right: Horizontal bounds of the building facade
  */
 export const BUILDING_CONFIG = {
-  top: 25,      // Start of executive floors (floor 25) - shifted down
-  bottom: 47,   // End of executive floors (floor 17) - shifted down to match
+  top: 26.5,    // Start of floor 27 (top of windowed facade)
+  bottom: 47,   // End of executive floors (floor 17)
   left: 30,     // Left edge of building
   right: 70,    // Right edge of building
 }
 
 // Residential vs Amenity floor classification
-export const MAX_RESIDENTIAL_FLOOR = 23  // Floors 17-23 have apartments
-export const RESIDENTIAL_FLOORS = 7  // 7 residential floors (17-23)
-export const AMENITY_FLOORS = [24, 25] as const
+export const MAX_RESIDENTIAL_FLOOR = 25  // Floors 17-25 have apartments
+export const RESIDENTIAL_FLOORS = 9  // 9 residential floors (17-25)
+export const AMENITY_FLOORS = [26, 27] as const
 export const AMENITY_FLOOR_LABELS: Record<number, string> = {
-  24: 'Sky Lounge & Gym',
-  25: 'Rooftop Pool & Bar',
+  26: 'Rooftop Pool',
+  27: 'Sky Bar & Lounge',
 }
 
 // Helper to check if floor is amenity

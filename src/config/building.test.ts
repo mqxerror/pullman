@@ -16,17 +16,19 @@ describe('Building Configuration', () => {
   describe('Constants', () => {
     it('should have correct floor range', () => {
       expect(MIN_FLOOR).toBe(17)
-      expect(MAX_FLOOR).toBe(25) // All floors including amenities
-      expect(TOTAL_FLOORS).toBe(9)
+      expect(MAX_FLOOR).toBe(27) // All floors including amenities (26=Pool, 27=Bar)
+      expect(TOTAL_FLOORS).toBe(11)
     })
 
     it('should have correct units per floor', () => {
       expect(UNITS_PER_FLOOR).toBe(14)
     })
 
-    it('should calculate total suites correctly', () => {
-      // All 9 floors (17-25) have 14 suites each = 126 total
-      expect(TOTAL_FLOORS * UNITS_PER_FLOOR).toBe(126)
+    it('should calculate total floors correctly', () => {
+      // All 11 floors (17-27) - 9 residential + 2 amenity
+      expect(TOTAL_FLOORS).toBe(11)
+      // Only 9 residential floors have suites (17-25)
+      expect(9 * UNITS_PER_FLOOR).toBe(126)
     })
   })
 
@@ -60,14 +62,14 @@ describe('Building Configuration', () => {
     })
 
     it('should have reasonable floor band coverage', () => {
-      // Floor 23 should be near top, Floor 17 near bottom of residential section
-      const topFloor = FLOOR_POSITIONS[23]
+      // Floor 27 should be near top, Floor 17 near bottom
+      const topFloor = FLOOR_POSITIONS[27]
       const bottomFloor = FLOOR_POSITIONS[17]
 
       // Top floor should start higher (lower %) than bottom floor
       expect(topFloor.top).toBeLessThan(bottomFloor.top)
 
-      // Coverage should span reasonable portion of image (15-40%)
+      // Coverage should span reasonable portion of image (15-50%)
       const coverage = (bottomFloor.top + bottomFloor.height) - topFloor.top
       expect(coverage).toBeGreaterThan(15)
       expect(coverage).toBeLessThan(50)

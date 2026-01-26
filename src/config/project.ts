@@ -5,7 +5,7 @@ export const projectConfig = {
   // Basic Info
   name: 'Panama City Central',
   tagline: 'Premium Hotel Investment in the Heart of Panama City',
-  description: '126 Executive Suites across 9 floors (17-25), managed by Pullman Hotels & Resorts, part of the Accor ALL ecosystem.',
+  description: '126 Executive Suites across 11 floors (17-27), managed by Pullman Hotels & Resorts, part of the Accor ALL ecosystem.',
 
   // Location
   location: {
@@ -21,14 +21,14 @@ export const projectConfig = {
 
   // Building Stats
   building: {
-    totalFloors: 9, // All floors 17-25 (7 residential + 2 amenity)
-    floorRange: { min: 17, max: 25 },
-    totalUnits: 126, // 14 units × 9 floors
+    totalFloors: 11, // All floors 17-27 (9 residential + 2 amenity)
+    floorRange: { min: 17, max: 27 },
+    totalUnits: 126, // 14 units × 9 residential floors
     unitsPerFloor: 14,
     unitTypes: ['Executive Suite'],
     completionYear: 2026,
-    amenityFloors: [24, 25], // Pool, gym, sky lounge
-    residentialFloors: 7, // Floors 17-23 have apartments
+    amenityFloors: [26, 27], // Pool (26), Sky Bar (27)
+    residentialFloors: 9, // Floors 17-25 have apartments
   },
 
   // Pricing

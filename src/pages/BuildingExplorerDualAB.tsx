@@ -7,9 +7,9 @@ import {
   X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
   X as CloseIcon, ArrowRight, Bed, Mountain, Download, Share2,
   ChevronLeft, ChevronRight, Sparkles, Star, Wifi, Car, Dumbbell, Coffee, Shield, Waves,
-  PanelLeftClose, PanelLeftOpen, Home, Scale, Plus
+  PanelLeftClose, PanelLeftOpen, Home, Scale, Plus, Sun, Users
 } from 'lucide-react'
-import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
+import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG, isAmenityFloor, AMENITY_FLOOR_LABELS } from '@/config/building'
 import { getSuiteType, getSuiteImage, getSuiteInfo } from '@/config/suiteData'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
@@ -527,66 +527,176 @@ export default function BuildingExplorerDualAB() {
         )}>
           <div className="mb-2 flex items-center justify-between flex-shrink-0">
             <div>
-              <h2 className="text-lg lg:text-2xl font-bold text-slate-900">Floor {selectedFloor} Layout</h2>
+              <h2 className="text-lg lg:text-2xl font-bold text-slate-900">
+                {isAmenityFloor(selectedFloor)
+                  ? AMENITY_FLOOR_LABELS[selectedFloor] || `Floor ${selectedFloor}`
+                  : `Floor ${selectedFloor} Layout`}
+              </h2>
               <p className="text-xs lg:text-sm text-slate-500 mt-0.5 lg:mt-1">
-                Tap any suite to view details
+                {isAmenityFloor(selectedFloor)
+                  ? 'Exclusive amenity floor for residents'
+                  : 'Tap any suite to view details'}
               </p>
             </div>
-            {/* Legend - Always show labels for clarity */}
-            <div className="flex items-center gap-3 lg:gap-5 px-3 lg:px-5 py-2 lg:py-2.5 bg-white rounded-xl shadow-sm border border-slate-200">
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded bg-green-100 border-2 border-green-500" />
-                <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Available</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded bg-amber-100 border-2 border-amber-500" />
-                <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Reserved</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded bg-red-100 border-2 border-red-500" />
-                <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Sold</span>
-              </div>
-            </div>
-          </div>
-
-          {/* SVG Floor Plan */}
-          <div className="flex-1 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 p-2 overflow-hidden relative">
-            <FloorPlanSVG
-              floor={selectedFloor}
-              suites={floorApartments}
-              onSuiteClick={handleSuiteClick}
-              onSuiteLongPress={toggleCompare}
-              selectedSuiteId={selectedSuite?.id}
-              compareSuiteIds={compareSuites.map(s => s.id)}
-            />
-            {/* Compare feature onboarding - prominent tooltip */}
-            {showCompareHint && compareSuites.length === 0 && (
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 animate-bounce">
-                <div
-                  className="relative px-4 py-2.5 bg-violet-600 text-white text-sm rounded-xl shadow-lg shadow-violet-500/30 flex items-center gap-2 cursor-pointer"
-                  onClick={() => setShowCompareHint(false)}
-                >
-                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-                    <Scale className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="font-semibold">Compare Suites</div>
-                    <div className="text-violet-200 text-xs hidden lg:block">Shift+click any suite to add</div>
-                    <div className="text-violet-200 text-xs lg:hidden">Long-press any suite to add</div>
-                  </div>
-                  <button
-                    className="ml-2 p-1 hover:bg-white/20 rounded-full transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setShowCompareHint(false)
-                    }}
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                  {/* Arrow pointing down */}
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-violet-600 rotate-45" />
+            {/* Legend - Only show for residential floors */}
+            {!isAmenityFloor(selectedFloor) && (
+              <div className="flex items-center gap-3 lg:gap-5 px-3 lg:px-5 py-2 lg:py-2.5 bg-white rounded-xl shadow-sm border border-slate-200">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded bg-green-100 border-2 border-green-500" />
+                  <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Available</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded bg-amber-100 border-2 border-amber-500" />
+                  <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Reserved</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded bg-red-100 border-2 border-red-500" />
+                  <span className="text-[11px] lg:text-[13px] text-slate-600 font-medium">Sold</span>
                 </div>
               </div>
+            )}
+          </div>
+
+          {/* Amenity Floor Display or SVG Floor Plan */}
+          <div className="flex-1 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 p-2 overflow-hidden relative">
+            {isAmenityFloor(selectedFloor) ? (
+              /* Amenity Floor Content with Hero Image */
+              <div className="w-full h-full relative rounded-lg overflow-hidden">
+                {/* Background Image */}
+                <img
+                  src={selectedFloor === 26
+                    ? "/assets/gallery/rooftop-pool.jpg"
+                    : "/assets/gallery/lobby.jpg"}
+                  alt={AMENITY_FLOOR_LABELS[selectedFloor]}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {/* Gradient Overlay */}
+                <div className={cn(
+                  "absolute inset-0",
+                  selectedFloor === 27
+                    ? "bg-gradient-to-t from-amber-900/90 via-amber-900/50 to-amber-900/30"
+                    : "bg-gradient-to-t from-blue-900/90 via-blue-900/50 to-blue-900/30"
+                )} />
+
+                {/* Content */}
+                <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center p-6 lg:p-8">
+                  {/* Icon Badge */}
+                  <div className={cn(
+                    "w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center mb-4 lg:mb-6 backdrop-blur-sm",
+                    selectedFloor === 27 ? "bg-amber-500/30 ring-2 ring-amber-400/50" : "bg-blue-500/30 ring-2 ring-blue-400/50"
+                  )}>
+                    {selectedFloor === 27 ? (
+                      <Coffee className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+                    ) : (
+                      <Waves className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
+                    )}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-2xl lg:text-4xl font-bold text-white mb-2 lg:mb-3 drop-shadow-lg">
+                    {AMENITY_FLOOR_LABELS[selectedFloor]}
+                  </h3>
+
+                  {/* Floor Badge */}
+                  <div className={cn(
+                    "px-3 py-1 rounded-full text-xs lg:text-sm font-medium mb-4 lg:mb-6",
+                    selectedFloor === 27 ? "bg-amber-500/40 text-amber-100" : "bg-blue-500/40 text-blue-100"
+                  )}>
+                    Floor {selectedFloor}
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-white/90 max-w-md mb-6 lg:mb-8 text-sm lg:text-base leading-relaxed drop-shadow">
+                    {selectedFloor === 27
+                      ? 'Experience panoramic views of Panama City while enjoying premium cocktails and gourmet dining at our exclusive Sky Bar & Lounge.'
+                      : 'Unwind at our stunning rooftop infinity pool with breathtaking views of the Panama City skyline. Open daily for all residents.'}
+                  </p>
+
+                  {/* Feature Cards */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full max-w-lg lg:max-w-2xl">
+                    {selectedFloor === 27 ? (
+                      <>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 lg:p-4 border border-white/20">
+                          <Star className="w-5 h-5 lg:w-6 lg:h-6 text-amber-300 mx-auto mb-1.5 lg:mb-2" />
+                          <div className="text-xs lg:text-sm font-medium text-white">Premium Bar</div>
+                        </div>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 lg:p-4 border border-white/20">
+                          <Coffee className="w-5 h-5 lg:w-6 lg:h-6 text-amber-300 mx-auto mb-1.5 lg:mb-2" />
+                          <div className="text-xs lg:text-sm font-medium text-white">Fine Dining</div>
+                        </div>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 lg:p-4 border border-white/20">
+                          <Sparkles className="w-5 h-5 lg:w-6 lg:h-6 text-amber-300 mx-auto mb-1.5 lg:mb-2" />
+                          <div className="text-xs lg:text-sm font-medium text-white">City Views</div>
+                        </div>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 lg:p-4 border border-white/20">
+                          <Users className="w-5 h-5 lg:w-6 lg:h-6 text-amber-300 mx-auto mb-1.5 lg:mb-2" />
+                          <div className="text-xs lg:text-sm font-medium text-white">VIP Lounge</div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 lg:p-4 border border-white/20">
+                          <Waves className="w-5 h-5 lg:w-6 lg:h-6 text-blue-300 mx-auto mb-1.5 lg:mb-2" />
+                          <div className="text-xs lg:text-sm font-medium text-white">Infinity Pool</div>
+                        </div>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 lg:p-4 border border-white/20">
+                          <Sun className="w-5 h-5 lg:w-6 lg:h-6 text-blue-300 mx-auto mb-1.5 lg:mb-2" />
+                          <div className="text-xs lg:text-sm font-medium text-white">Sun Deck</div>
+                        </div>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 lg:p-4 border border-white/20">
+                          <Dumbbell className="w-5 h-5 lg:w-6 lg:h-6 text-blue-300 mx-auto mb-1.5 lg:mb-2" />
+                          <div className="text-xs lg:text-sm font-medium text-white">Pool Cabanas</div>
+                        </div>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 lg:p-4 border border-white/20">
+                          <Sparkles className="w-5 h-5 lg:w-6 lg:h-6 text-blue-300 mx-auto mb-1.5 lg:mb-2" />
+                          <div className="text-xs lg:text-sm font-medium text-white">Skyline Views</div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Regular Floor Plan */
+              <>
+                <FloorPlanSVG
+                  floor={selectedFloor}
+                  suites={floorApartments}
+                  onSuiteClick={handleSuiteClick}
+                  onSuiteLongPress={toggleCompare}
+                  selectedSuiteId={selectedSuite?.id}
+                  compareSuiteIds={compareSuites.map(s => s.id)}
+                />
+                {/* Compare feature onboarding - prominent tooltip */}
+                {showCompareHint && compareSuites.length === 0 && (
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+                    <div
+                      className="relative px-4 py-2.5 bg-violet-600 text-white text-sm rounded-xl shadow-lg shadow-violet-500/30 flex items-center gap-2 cursor-pointer"
+                      onClick={() => setShowCompareHint(false)}
+                    >
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                        <Scale className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="font-semibold">Compare Suites</div>
+                        <div className="text-violet-200 text-xs hidden lg:block">Shift+click any suite to add</div>
+                        <div className="text-violet-200 text-xs lg:hidden">Long-press any suite to add</div>
+                      </div>
+                      <button
+                        className="ml-2 p-1 hover:bg-white/20 rounded-full transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setShowCompareHint(false)
+                        }}
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      {/* Arrow pointing down */}
+                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-violet-600 rotate-45" />
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
