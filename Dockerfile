@@ -7,12 +7,17 @@ WORKDIR /app
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
 
+# Cache busting - change this value or pass --build-arg CACHEBUST=$(date +%s) to force rebuild
+ARG CACHEBUST=1
+
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
 RUN npm ci
 
+# Invalidate cache for source code (triggered by CACHEBUST change)
+ARG CACHEBUST
 # Copy source code
 COPY . .
 
