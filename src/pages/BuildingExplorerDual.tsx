@@ -7,7 +7,7 @@ import { Menu, X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDo
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
-import { getSuiteType, getSuiteImage } from '@/config/suiteData'
+import { getSuiteType, getSuiteImage, SUITE_PRICES, formatPriceUSD } from '@/config/suiteData'
 
 // Dual View - Tower + Interactive SVG Floor Plan
 
@@ -327,8 +327,8 @@ export default function BuildingExplorerDual() {
                     <p className="text-gold-300 text-xl mt-1">{getSuiteType(selectedSuite.size_sqm)}</p>
                   </div>
                   <div className="text-right">
-                    <div className="text-white/70 text-sm">Starting from</div>
-                    <div className="text-2xl font-bold text-white">Contact for Price</div>
+                    <div className="text-white/70 text-sm">Investment Price</div>
+                    <div className="text-2xl font-bold text-white">{formatPriceUSD(SUITE_PRICES[selectedSuite.unit_number])}</div>
                   </div>
                 </div>
               </div>

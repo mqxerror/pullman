@@ -266,3 +266,71 @@ export const DEFAULT_SUITE_IMAGE = '/assets/gallery/suite-type-07.jpg'
 export const getSuiteImage = (unitNumber: number): string => {
   return SUITE_IMAGES[unitNumber] || DEFAULT_SUITE_IMAGE
 }
+
+// ===================================
+// PRICING CONFIGURATION
+// Official rates from January 2026 spreadsheet
+// ===================================
+
+// Price per square meter (base $5,500 + 5% modifier)
+export const PRICE_PER_SQM = 5775
+
+// Individual suite prices by unit number
+export const SUITE_PRICES: Record<number, number> = {
+  1: 308096.25,
+  2: 491741.25,
+  3: 313582.50,
+  4: 309135.75,
+  5: 328482.00,
+  6: 368445.00,
+  7: 430006.50,
+  8: 378551.25,
+  9: 492318.75,
+  10: 372660.75,
+  11: 430006.50,
+  12: 368445.00,
+  13: 328482.00,
+  14: 306652.50,
+}
+
+// Type mapping: Spreadsheet Type (1-6) to Codebase Type (A-E)
+export const SUITE_TYPE_MAP: Record<number, number> = {
+  1: 1, 2: 6, 3: 5, 4: 1, 5: 2, 6: 3, 7: 4, 8: 5, 9: 6, 10: 5, 11: 4, 12: 3, 13: 2, 14: 1
+}
+
+// ===================================
+// PRICING HELPER FUNCTIONS
+// ===================================
+
+// Get suite price by unit number
+export const getSuitePrice = (unitNumber: number): number => {
+  return SUITE_PRICES[unitNumber] || 0
+}
+
+// Format price as USD currency (e.g., "$308,096")
+export const formatPriceUSD = (price: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(price)
+}
+
+// Format price in short form (e.g., "$308K" or "$1.2M")
+export const formatPriceShort = (price: number): string => {
+  if (price >= 1000000) {
+    return `$${(price / 1000000).toFixed(1)}M`
+  }
+  return `$${Math.round(price / 1000)}K`
+}
+
+// Calculate price breakdown info
+export const getPriceBreakdown = (unitNumber: number): { price: number; pricePerSqm: number; size: number } => {
+  const price = SUITE_PRICES[unitNumber] || 0
+  const size = SUITE_SIZES[unitNumber] || 0
+  return {
+    price,
+    pricePerSqm: PRICE_PER_SQM,
+    size,
+  }
+}

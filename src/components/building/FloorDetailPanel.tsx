@@ -5,6 +5,7 @@ import { ArrowLeft, Maximize2, Check, Clock, Lock, Grid3X3, LayoutGrid } from 'l
 import type { ExecutiveSuite } from '@/types/database'
 import { cn } from '@/lib/utils'
 import FloorPlanInteractive from './FloorPlanInteractive'
+import { SUITE_PRICES, formatPriceShort } from '@/config/suiteData'
 
 interface FloorDetailPanelProps {
   floor: number
@@ -221,7 +222,7 @@ export default function FloorDetailPanel({
                   <div className="mt-3 pt-3 border-t border-slate-700/50">
                     <p className="text-xs text-slate-500">Price</p>
                     <p className="text-sm text-white font-medium">
-                      {suite.price_display || 'Contact for pricing'}
+                      {suite.price_display || formatPriceShort(SUITE_PRICES[suite.unit_number])}
                     </p>
                   </div>
                 )}

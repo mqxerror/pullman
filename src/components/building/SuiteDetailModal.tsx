@@ -10,6 +10,7 @@ import {
 import type { ExecutiveSuite } from '@/types/database'
 import { projectConfig } from '@/config/project'
 import { cn } from '@/lib/utils'
+import { SUITE_PRICES, formatPriceUSD } from '@/config/suiteData'
 
 interface SuiteDetailModalProps {
   suite: ExecutiveSuite
@@ -138,7 +139,7 @@ export default function SuiteDetailModal({
               <div className="mt-4 bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
                 <p className="text-sm text-amber-400/70">Investment Price</p>
                 <p className="text-2xl font-bold text-amber-400">
-                  {suite.price_display || 'Contact for Pricing'}
+                  {suite.price_display || formatPriceUSD(SUITE_PRICES[suite.unit_number])}
                 </p>
               </div>
             </div>

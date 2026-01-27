@@ -6,7 +6,7 @@ import type { ExecutiveSuite } from '@/types/database'
 import { Menu, X, ChevronLeft, ChevronRight, Maximize2, Building2, Compass, Check, Clock, Lock, ArrowRight, Sparkles } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR } from '@/config/building'
 import { cn } from '@/lib/utils'
-import { getSuiteType, getSuiteImage } from '@/config/suiteData'
+import { getSuiteType, getSuiteImage, SUITE_PRICES, formatPriceShort } from '@/config/suiteData'
 
 // Luxury Gallery Version - Horizontal scrolling, full-width heroes
 
@@ -255,7 +255,7 @@ export default function BuildingExplorerV2() {
 
                       <div className="pt-3 border-t border-slate-100">
                         <p className="text-xs text-slate-400 uppercase tracking-wide">Starting from</p>
-                        <p className="text-lg font-semibold text-slate-900">Contact for Pricing</p>
+                        <p className="text-lg font-semibold text-slate-900">{formatPriceShort(SUITE_PRICES[suite.unit_number])}</p>
                       </div>
                     </div>
                   </div>

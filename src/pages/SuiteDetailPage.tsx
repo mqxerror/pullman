@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { ArrowLeft, Maximize2, Building2, Compass, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import { getSuiteInfo, getSuiteType, getSuiteImage, SUITE_SIZES } from '@/config/suiteData'
+import { getSuiteInfo, getSuiteType, getSuiteImage, SUITE_SIZES, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM } from '@/config/suiteData'
 
 // Suite metadata helper (uses accurate data from suiteData.ts)
 const getSuiteMetadata = (unitNumber: number): { size: number; type: string } => {
@@ -271,8 +271,9 @@ export default function SuiteDetailPage() {
 
             {/* Pricing */}
             <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-6 text-white">
-              <div className="text-sm text-slate-300 mb-1">Starting from</div>
-              <div className="text-3xl font-bold">Contact for Pricing</div>
+              <div className="text-sm text-slate-300 mb-1">Investment Price</div>
+              <div className="text-3xl font-bold">{formatPriceUSD(SUITE_PRICES[unitNum])}</div>
+              <div className="text-sm text-slate-400 mt-1">${PRICE_PER_SQM.toLocaleString()}/m² × {suiteInfo.size}m²</div>
             </div>
 
             {/* Suite Features */}

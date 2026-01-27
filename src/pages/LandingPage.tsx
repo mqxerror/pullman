@@ -61,6 +61,8 @@ export default function LandingPage() {
     floors: projectConfig.building.totalFloors,
     totalUnits: projectConfig.building.totalUnits,
     startingPrice: projectConfig.pricing.startingFrom,
+    maxPrice: projectConfig.pricing.maxPrice,
+    pricePerSqm: projectConfig.pricing.pricePerSqmDisplay,
     deliveryYear: projectConfig.building.completionYear,
   }), [apartments])
 
@@ -479,6 +481,34 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Investment Overview */}
+      <section className="py-16 bg-gradient-to-br from-slate-900 to-slate-800">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-2">Investment Opportunity</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">Premium Investment Returns</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            <div className="text-center p-5 md:p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="text-3xl md:text-4xl font-bold text-amber-400">{stats.startingPrice}</div>
+              <div className="text-white/70 text-sm mt-1">Starting From</div>
+            </div>
+            <div className="text-center p-5 md:p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="text-3xl md:text-4xl font-bold text-amber-400">{stats.maxPrice}</div>
+              <div className="text-white/70 text-sm mt-1">Premium Suites</div>
+            </div>
+            <div className="text-center p-5 md:p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="text-3xl md:text-4xl font-bold text-amber-400">{stats.pricePerSqm}</div>
+              <div className="text-white/70 text-sm mt-1">Per m²</div>
+            </div>
+            <div className="text-center p-5 md:p-6 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="text-3xl md:text-4xl font-bold text-amber-400">$47M+</div>
+              <div className="text-white/70 text-sm mt-1">Project Value</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Gallery Showcase - FocusCards */}
       <section className="py-12 bg-white">
         <div className="page-container">
@@ -748,8 +778,8 @@ export default function LandingPage() {
                 {/* Card */}
                 <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 hover:border-accent/30 transition-all h-full">
                   <h3 className="text-lg font-bold text-white mb-2">Invest</h3>
-                  <p className="text-4xl font-bold text-accent mb-2">$300K</p>
-                  <p className="text-sm text-white/60">Minimum property investment to qualify for the program</p>
+                  <p className="text-4xl font-bold text-accent mb-2">{stats.startingPrice}</p>
+                  <p className="text-sm text-white/60">Starting investment for executive suites</p>
                 </div>
               </div>
 

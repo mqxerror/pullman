@@ -31,10 +31,13 @@ export const projectConfig = {
     residentialFloors: 9, // Floors 17-25 have apartments
   },
 
-  // Pricing
+  // Pricing (January 2026 official rates)
   pricing: {
-    startingFrom: 'Contact for Pricing',
-    pricePerSqm: 'Contact Sales',
+    startingFrom: '$307K',
+    maxPrice: '$492K',
+    pricePerSqm: 5775,
+    pricePerSqmDisplay: '$5,775',
+    averagePrice: 373329,
     currency: 'USD',
   },
 

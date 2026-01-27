@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import type { ExecutiveSuite } from '@/types/database'
 import { Check, Clock, Lock, Maximize2, ArrowRight } from 'lucide-react'
+import { SUITE_PRICES, formatPriceShort } from '@/config/suiteData'
 
 interface SuiteCardProps {
   suite: ExecutiveSuite
@@ -14,18 +15,10 @@ const getSuiteType = (sizeSqm: number): string => {
   return 'Executive Suite'
 }
 
-// Get estimated price
-const getEstimatedPrice = (floor: number, sizeSqm: number): string => {
-  // Base price calculation (adjust based on actual pricing)
-  const basePrice = 4000 // USD per sqm
-  const floorPremium = (floor - 17) * 100 // Premium for higher floors
-  const pricePerSqm = basePrice + floorPremium
-  const totalPrice = pricePerSqm * sizeSqm
-
-  if (totalPrice >= 1000000) {
-    return `$${(totalPrice / 1000000).toFixed(1)}M`
-  }
-  return `$${Math.round(totalPrice / 1000)}K`
+// Get price from config (with fallback to DB price)
+const getSuitePrice = (suite: ExecutiveSuite): string => {
+  const price = suite.price_usd || SUITE_PRICES[suite.unit_number]
+  return price ? formatPriceShort(price) : 'Contact'
 }
 
 // Get view direction based on unit number with compass position
@@ -81,7 +74,7 @@ const statusConfig = {
 export default function SuiteCard({ suite, onClick }: SuiteCardProps) {
   const config = statusConfig[suite.status]
   const suiteType = getSuiteType(suite.size_sqm)
-  const price = suite.price_display || getEstimatedPrice(suite.floor, suite.size_sqm)
+  const price = suite.price_display || getSuitePrice(suite)
   const viewDirection = getViewDirection(suite.unit_number)
   const StatusIcon = config.icon
   const isSold = suite.status === 'sold'

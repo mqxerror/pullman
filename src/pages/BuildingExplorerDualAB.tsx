@@ -10,7 +10,8 @@ import {
   PanelLeftClose, PanelLeftOpen, Home, Scale, Plus, Sun, Users
 } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG, isAmenityFloor, AMENITY_FLOOR_LABELS } from '@/config/building'
-import { getSuiteType, getSuiteImage, getSuiteInfo } from '@/config/suiteData'
+import { getSuiteType, getSuiteImage, getSuiteInfo, SUITE_PRICES, formatPriceUSD, formatPriceShort, PRICE_PER_SQM } from '@/config/suiteData'
+import { PriceTierBar } from '@/components/pricing/PriceTierBar'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
 
@@ -855,11 +856,26 @@ export default function BuildingExplorerDualAB() {
                     </div>
                   </div>
 
-                  {/* Price Card - Cleaner */}
-                  <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-5 mb-5 shadow-lg">
-                    <div className="text-slate-400 text-sm font-medium">Starting from</div>
-                    <div className="text-2xl font-bold text-white mt-1">Contact for Pricing</div>
-                    <div className="text-amber-400 text-sm mt-2 font-medium">Flexible payment plans available</div>
+                  {/* Investment Price Card */}
+                  <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-5 mb-5 border border-amber-200">
+                    <div className="text-xs font-medium text-amber-700 mb-1">Investment Price</div>
+                    <div className="text-2xl font-bold text-slate-900">
+                      {formatPriceUSD(SUITE_PRICES[selectedSuite.unit_number])}
+                    </div>
+                    <div className="text-sm text-slate-600 mt-1">
+                      ${PRICE_PER_SQM.toLocaleString()}/m² × {selectedSuite.size_sqm}m²
+                    </div>
+                    <PriceTierBar price={SUITE_PRICES[selectedSuite.unit_number]} />
+                    <div className="mt-4 pt-4 border-t border-amber-200 space-y-2">
+                      <div className="flex items-center gap-2 text-sm text-slate-700">
+                        <Check className="w-4 h-4 text-emerald-500" />
+                        Qualifies for Investment Visa
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-slate-700">
+                        <Check className="w-4 h-4 text-emerald-500" />
+                        Hotel Management Program
+                      </div>
+                    </div>
                   </div>
 
                   {/* Features & Amenities - Unified check color */}
@@ -1188,8 +1204,9 @@ export default function BuildingExplorerDualAB() {
                   {/* Sticky Header - Mobile optimized */}
                   <div className="sticky top-0 bg-white z-10 px-4 lg:px-5 py-3 border-b border-slate-200 flex items-center justify-between">
                     <div>
-                      <div className="text-slate-500 text-xs lg:text-sm font-medium">Starting from</div>
-                      <div className="text-xl lg:text-3xl font-bold text-slate-900">Contact for Pricing</div>
+                      <div className="text-slate-500 text-xs lg:text-sm font-medium">Investment Price</div>
+                      <div className="text-xl lg:text-3xl font-bold text-slate-900">{formatPriceUSD(SUITE_PRICES[selectedSuite.unit_number])}</div>
+                      <div className="text-xs text-slate-500 mt-0.5">${PRICE_PER_SQM.toLocaleString()}/m²</div>
                     </div>
                     <button
                       onClick={handleClosePanel}
@@ -1498,6 +1515,10 @@ export default function BuildingExplorerDualAB() {
 
                         {/* Stats */}
                         <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">Price</span>
+                            <span className="font-semibold text-amber-600">{formatPriceShort(SUITE_PRICES[suite.unit_number])}</span>
+                          </div>
                           <div className="flex justify-between">
                             <span className="text-slate-500">Size</span>
                             <span className="font-semibold text-slate-900">{suite.size_sqm} m²</span>
