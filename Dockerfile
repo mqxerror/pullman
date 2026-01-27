@@ -7,21 +7,17 @@ WORKDIR /app
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
 
-# IMPORTANT: Cache bust arg - Dokploy should pass current timestamp
-# This invalidates all layers after this point
-ARG CACHEBUST=1
-
-# Copy package files
+# Copy package files first (cached unless package.json changes)
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies (cached unless package.json changes)
 RUN npm ci
 
-# Force fresh code pull - this MUST come BEFORE the COPY command
-# The ARG invalidates Docker cache for all subsequent layers
-RUN echo "Cache bust: ${CACHEBUST}"
+# CRITICAL: Disable Docker cache for source code
+# This fetches current git commit hash at build time, ensuring fresh code
+ADD "https://api.github.com/repos/mqxerror/pullman/commits/main?per_page=1" /tmp/git-version.json
 
-# Copy source code (this layer will now be rebuilt every time)
+# Copy source code (this layer rebuilds when git commit changes)
 COPY . .
 
 # Build the app with environment variables
