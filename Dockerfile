@@ -14,7 +14,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Force cache invalidation - this line changes with each commit
-RUN echo "Build version: 2025-01-26-v2"
+RUN echo "Build version: 2026-01-27-pricing-update"
 
 # Copy source code
 COPY . .
