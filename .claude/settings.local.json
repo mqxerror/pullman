@@ -114,7 +114,10 @@
       "Bash(git revert:*)",
       "Bash(ping:*)",
       "WebFetch(domain:pullman.mercan.com)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(python -m json.tool:*)",
+      "Skill(agent-browser)",
+      "Bash(agent-browser close:*)"
     ]
   }
 }

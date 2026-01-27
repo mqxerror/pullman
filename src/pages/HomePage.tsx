@@ -11,13 +11,13 @@ export default function HomePage() {
   const [selectedApartment, setSelectedApartment] = useState<Apartment | null>(null)
 
   const { data: apartments = [], isLoading } = useQuery({
-    queryKey: ['apartments'],
+    queryKey: ['pullman_suites'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('apartments')
+        .from('pullman_suites')
         .select('*')
         .order('floor', { ascending: true })
-        .order('unit', { ascending: true })
+        .order('unit_number', { ascending: true })
 
       if (error) throw error
       return data as Apartment[]

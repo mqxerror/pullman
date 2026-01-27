@@ -17,13 +17,13 @@ export default function AdminDashboard() {
   const queryClient = useQueryClient()
 
   const { data: apartments = [], isLoading } = useQuery({
-    queryKey: ['apartments'],
+    queryKey: ['pullman_suites'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('apartments')
+        .from('pullman_suites')
         .select('*')
         .order('floor', { ascending: true })
-        .order('unit', { ascending: true })
+        .order('unit_number', { ascending: true })
 
       if (error) throw error
       return data as Apartment[]
@@ -33,14 +33,14 @@ export default function AdminDashboard() {
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: ApartmentStatus }) => {
       const { error } = await supabase
-        .from('apartments')
+        .from('pullman_suites')
         .update({ status, updated_by: user?.email })
         .eq('id', id)
 
       if (error) throw error
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['apartments'] })
+      queryClient.invalidateQueries({ queryKey: ['pullman_suites'] })
       toast.success('Status updated')
     },
     onError: () => {
@@ -51,14 +51,14 @@ export default function AdminDashboard() {
   const updateNotesMutation = useMutation({
     mutationFn: async ({ id, notes }: { id: string; notes: string }) => {
       const { error } = await supabase
-        .from('apartments')
+        .from('pullman_suites')
         .update({ notes, updated_by: user?.email })
         .eq('id', id)
 
       if (error) throw error
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['apartments'] })
+      queryClient.invalidateQueries({ queryKey: ['pullman_suites'] })
       toast.success('Notes saved')
     },
     onError: () => {
@@ -69,14 +69,14 @@ export default function AdminDashboard() {
   const bulkUpdateMutation = useMutation({
     mutationFn: async ({ ids, status }: { ids: string[]; status: ApartmentStatus }) => {
       const { error } = await supabase
-        .from('apartments')
+        .from('pullman_suites')
         .update({ status, updated_by: user?.email })
         .in('id', ids)
 
       if (error) throw error
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['apartments'] })
+      queryClient.invalidateQueries({ queryKey: ['pullman_suites'] })
       toast.success(`${variables.ids.length} units updated to ${variables.status}`)
       setSelectedIds(new Set())
     },
