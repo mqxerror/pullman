@@ -7,16 +7,21 @@ WORKDIR /app
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
 
+# IMPORTANT: Cache bust arg - Dokploy should pass current timestamp
+# This invalidates all layers after this point
+ARG CACHEBUST=1
+
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
 RUN npm ci
 
-# Force cache invalidation - this line changes with each commit
-RUN echo "Build version: 2026-01-27-pricing-update"
+# Force fresh code pull - this MUST come BEFORE the COPY command
+# The ARG invalidates Docker cache for all subsequent layers
+RUN echo "Cache bust: ${CACHEBUST}"
 
-# Copy source code
+# Copy source code (this layer will now be rebuilt every time)
 COPY . .
 
 # Build the app with environment variables
