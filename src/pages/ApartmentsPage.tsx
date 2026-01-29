@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
@@ -35,14 +35,28 @@ const getDirectionLabel = (unitNumber: number): string => {
 
 export default function ApartmentsPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
-  const [availableOnly, setAvailableOnly] = useState(false)
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(() => {
+    const s = searchParams.get('status')
+    return s === 'all' || s === 'available' || s === 'reserved' || s === 'sold' ? s : 'all'
+  })
+  const [availableOnly, setAvailableOnly] = useState(() => !searchParams.get('status') || searchParams.get('status') === 'available')
   const [sortBy, setSortBy] = useState<SortOption>('unit')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [floorFilter, setFloorFilter] = useState<number | 'all'>('all')
-  const [sizeFilter, setSizeFilter] = useState<'all' | 'small' | 'medium' | 'large'>('all')
-  const [showFilters, setShowFilters] = useState(false)
+  const [sizeFilter, setSizeFilter] = useState<'all' | 'small' | 'medium' | 'large'>(() => {
+    const s = searchParams.get('size')
+    return s === 'small' || s === 'medium' || s === 'large' ? s : 'all'
+  })
+  const [budgetFilter, setBudgetFilter] = useState<'all' | '300' | '500' | '750' | '1000'>(() => {
+    const b = searchParams.get('budget')
+    return b === '300' || b === '500' || b === '750' || b === '1000' ? b : 'all'
+  })
+  const [showFilters, setShowFilters] = useState(() => {
+    // Auto-show filters panel if any filter came from URL
+    return !!(searchParams.get('size') || searchParams.get('budget') || searchParams.get('status'))
+  })
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 12 // Show 12 items per page (4x3 grid)
@@ -96,6 +110,16 @@ export default function ApartmentsPage() {
       })
     }
 
+    // Budget filter
+    if (budgetFilter !== 'all') {
+      const threshold = Number(budgetFilter) * 1000
+      result = result.filter(apt => {
+        const price = SUITE_PRICES[apt.unit_number] || 0
+        if (budgetFilter === '1000') return price >= 1000000
+        return price > 0 && price <= threshold
+      })
+    }
+
     // Sort
     switch (sortBy) {
       case 'size_asc':
@@ -115,12 +139,12 @@ export default function ApartmentsPage() {
     }
 
     return result
-  }, [apartments, statusFilter, availableOnly, sortBy, floorFilter, sizeFilter])
+  }, [apartments, statusFilter, availableOnly, sortBy, floorFilter, sizeFilter, budgetFilter])
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1)
-  }, [statusFilter, availableOnly, floorFilter, sizeFilter, sortBy])
+  }, [statusFilter, availableOnly, floorFilter, sizeFilter, budgetFilter, sortBy])
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredApartments.length / itemsPerPage)
@@ -412,6 +436,22 @@ export default function ApartmentsPage() {
                 </select>
               </div>
 
+              {/* Budget Filter */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-slate-500">Budget:</label>
+                <select
+                  value={budgetFilter}
+                  onChange={(e) => setBudgetFilter(e.target.value as 'all' | '300' | '500' | '750' | '1000')}
+                  className="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="all">Any Budget</option>
+                  <option value="300">Under $300K</option>
+                  <option value="500">Under $500K</option>
+                  <option value="750">Under $750K</option>
+                  <option value="1000">$1M+</option>
+                </select>
+              </div>
+
               {/* Available Only Toggle */}
               <label className="flex items-center gap-2 cursor-pointer">
                 <div className="relative">
@@ -428,12 +468,13 @@ export default function ApartmentsPage() {
               </label>
 
               {/* Clear Filters */}
-              {(statusFilter !== 'all' || floorFilter !== 'all' || sizeFilter !== 'all' || availableOnly) && (
+              {(statusFilter !== 'all' || floorFilter !== 'all' || sizeFilter !== 'all' || budgetFilter !== 'all' || availableOnly) && (
                 <button
                   onClick={() => {
                     setStatusFilter('all')
                     setFloorFilter('all')
                     setSizeFilter('all')
+                    setBudgetFilter('all')
                     setAvailableOnly(false)
                   }}
                   className="text-sm text-primary hover:text-primary-dark font-medium"
@@ -477,6 +518,7 @@ export default function ApartmentsPage() {
                   setStatusFilter('all')
                   setFloorFilter('all')
                   setSizeFilter('all')
+                  setBudgetFilter('all')
                   setAvailableOnly(false)
                 }}
                 className="px-6 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors"

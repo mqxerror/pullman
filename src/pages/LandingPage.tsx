@@ -68,11 +68,11 @@ export default function LandingPage() {
 
   const handleSearch = () => {
     const params = new URLSearchParams()
-    if (selectedBeds !== 'any') params.set('beds', selectedBeds)
+    if (selectedBeds !== 'any') params.set('size', selectedBeds === '1' ? 'small' : selectedBeds === '2' ? 'medium' : 'large')
     if (selectedStatus !== 'available') params.set('status', selectedStatus)
     if (selectedBudget !== 'any') params.set('budget', selectedBudget)
     const queryString = params.toString()
-    navigate(`/building${queryString ? `?${queryString}` : ''}`)
+    navigate(`/apartments${queryString ? `?${queryString}` : ''}`)
   }
 
   return (
@@ -292,15 +292,13 @@ export default function LandingPage() {
                 <select
                   value={selectedBeds}
                   onChange={(e) => setSelectedBeds(e.target.value)}
-                  aria-label="Filter by bedrooms"
+                  aria-label="Filter by size"
                   className="px-3 py-2.5 sm:py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 >
-                  <option value="any">All Bedrooms</option>
-                  <option value="studio">Studio</option>
-                  <option value="1">1 Bedroom</option>
-                  <option value="2">2 Bedrooms</option>
-                  <option value="3">3 Bedrooms</option>
-                  <option value="penthouse">Penthouse</option>
+                  <option value="any">All Sizes</option>
+                  <option value="1">Executive (&lt;60 m²)</option>
+                  <option value="2">Deluxe (60-75 m²)</option>
+                  <option value="3">Premium (75+ m²)</option>
                 </select>
                 <select
                   value={selectedStatus}
@@ -359,14 +357,13 @@ export default function LandingPage() {
               <select
                 value={selectedBeds}
                 onChange={(e) => setSelectedBeds(e.target.value)}
-                aria-label="Filter by bedrooms"
+                aria-label="Filter by size"
                 className="hidden sm:block px-3 py-1.5 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               >
-                <option value="any">Beds</option>
-                <option value="studio">Studio</option>
-                <option value="1">1 Bed</option>
-                <option value="2">2 Beds</option>
-                <option value="3">3 Beds</option>
+                <option value="any">Size</option>
+                <option value="1">Executive</option>
+                <option value="2">Deluxe</option>
+                <option value="3">Premium</option>
               </select>
               <select
                 value={selectedBudget}
