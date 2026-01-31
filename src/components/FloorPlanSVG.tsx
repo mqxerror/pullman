@@ -11,22 +11,23 @@ interface FloorPlanSVGProps {
   compareSuiteIds?: string[]
 }
 
-// SVG paths in pixel coordinates matching pullman-plan.png (1188 x 1238 pixels)
+// SVG paths in pixel coordinates matching pullman-plan.png (1550 x 1586 pixels)
+// Manually traced unit boundaries
 const SUITE_PATHS: Record<number, string> = {
-  1: 'M 241,19 L 486,20 L 481,267 L 484,274 L 310,277 L 308,175 L 244,173 Z',
-  2: 'M 13,22 L 236,22 L 234,262 L 173,265 L 172,207 L 10,210 Z',
-  3: 'M 13,213 L 165,218 L 170,266 L 238,266 L 236,418 L 13,418 Z',
-  4: 'M 7,421 L 238,418 L 236,587 L 172,587 L 170,621 L 10,624 Z',
-  5: 'M 6,628 L 169,625 L 173,589 L 236,593 L 238,816 L 10,817 Z',
-  6: 'M 11,824 L 236,828 L 236,1008 L 10,1010 Z',
-  7: 'M 10,1015 L 238,1012 L 240,1226 L 10,1228 Z',
-  8: 'M 244,1092 L 246,1226 L 484,1228 L 490,890 L 305,888 L 307,1092 L 248,1090 Z',
-  9: 'M 492,1192 L 700,1188 L 697,744 L 490,742 Z',
-  10: 'M 703,1229 L 947,1224 L 952,1091 L 884,1093 L 883,893 L 703,890 Z',
-  11: 'M 952,1227 L 1179,1227 L 1176,1011 L 956,1016 Z',
-  12: 'M 948,830 L 1180,830 L 1174,1006 L 958,1015 Z',
-  13: 'M 952,820 L 1179,816 L 1179,629 L 1016,626 L 1016,589 L 950,589 Z',
-  14: 'M 953,585 L 1015,586 L 1019,621 L 1179,620 L 1175,418 L 952,421 Z',
+  1:  'M 327,32 L 329,166 L 354,164 L 354,231 L 307,231 L 309,293 L 415,282 L 410,357 L 617,356 L 615,282 L 663,279 L 638,265 L 640,35 Z',
+  2:  'M 640,32 L 906,41 L 906,586 L 636,591 L 620,356 L 622,281 L 640,281 Z',
+  3:  'M 910,34 L 1218,41 L 1216,167 L 1191,169 L 1194,234 L 1241,232 L 1241,295 L 1131,298 L 1131,359 L 908,357 L 908,32 Z',
+  4:  'M 1223,35 L 1218,162 L 1198,167 L 1200,227 L 1241,232 L 1243,297 L 1218,298 L 1221,361 L 1503,361 L 1506,39 L 1223,35 Z',
+  5:  'M 1218,363 L 1506,363 L 1501,708 L 1219,711 L 1218,361 Z',
+  6:  'M 1214,710 L 1503,713 L 1503,1100 L 1216,1098 L 1212,708 Z',
+  7:  'M 1216,1103 L 1505,1103 L 1499,1550 L 1209,1550 L 1214,1100 Z',
+  8:  'M 1205,1271 L 1203,1549 L 910,1547 L 908,1127 L 1129,1125 L 1135,1264 L 1203,1269 Z',
+  9:  'M 644,943 L 903,941 L 906,1500 L 642,1498 L 644,941 Z',
+  10: 'M 413,1124 L 638,1124 L 636,1546 L 338,1548 L 343,1267 L 410,1269 L 412,1126 Z',
+  11: 'M 336,1548 L 340,1272 L 325,1265 L 329,1101 L 38,1101 L 42,1548 L 332,1544 Z',
+  12: 'M 325,1094 L 329,715 L 40,713 L 45,1094 L 322,1099 Z',
+  13: 'M 42,363 L 329,361 L 332,710 L 43,705 L 43,363 Z',
+  14: 'M 43,354 L 331,359 L 329,299 L 300,293 L 304,227 L 343,222 L 345,168 L 323,162 L 323,36 L 42,34 L 40,354 Z',
 }
 
 // Status color configuration
@@ -72,7 +73,7 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, onSuiteLongP
       {/* Floor plan container - maintains aspect ratio for SVG alignment */}
       <div
         className="relative h-[90%] max-w-full"
-        style={{ aspectRatio: '1188 / 1238' }}
+        style={{ aspectRatio: '1550 / 1586' }}
       >
         {/* Clean Floor Plan Image */}
         <img
@@ -81,9 +82,9 @@ export default function FloorPlanSVG({ floor, suites, onSuiteClick, onSuiteLongP
           className="absolute inset-0 w-full h-full object-contain"
         />
 
-        {/* SVG Overlay - matches image dimensions for proper alignment */}
+        {/* SVG Overlay - matches pullman-plan.png (1550x1586) */}
         <svg
-          viewBox="0 0 1188 1238"
+          viewBox="0 0 1550 1586"
           preserveAspectRatio="xMidYMid meet"
           className="absolute inset-0 w-full h-full"
         >
