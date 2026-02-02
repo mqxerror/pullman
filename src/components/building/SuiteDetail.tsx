@@ -104,9 +104,10 @@ const hotelFeatures = [
   { icon: Car, label: 'Valet Parking' },
 ]
 
-export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDetailProps) {
+export default function SuiteDetail({ suite, onBack }: SuiteDetailProps) {
   const [activeMedia, setActiveMedia] = useState<MediaType>('render')
   const [showModal, setShowModal] = useState(false)
+  const [showFullscreen, setShowFullscreen] = useState(false)
   const [expandedSection, setExpandedSection] = useState<'suite' | 'hotel' | null>('suite')
 
   const config = statusConfig[suite.status]
@@ -115,11 +116,6 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
   const viewDirection = getViewDirection(suite.unit_number)
   const suiteImage = getSuiteImage(suite.unit_number)
   const StatusIcon = config.icon
-
-  // Similar units
-  const similarUnits = allSuites.filter(
-    (s) => s.id !== suite.id && Math.abs(s.size_sqm - suite.size_sqm) < 15
-  ).slice(0, 4)
 
   return (
     <>
@@ -426,19 +422,8 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
             </div>
           </div>
 
-          {/* ROW 4: Similar Units */}
-          {similarUnits.length > 0 && (
-            <div className="grid-12">
-              <div className="col-12">
-                <h3 className="text-sm text-slate-900 font-semibold mb-3">Similar Suites</h3>
-                <div className="grid grid-cols-4 gap-3">
-                  {similarUnits.map((s) => (
-                    <SimilarSuiteCard key={s.id} suite={s} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Bottom spacer for mobile fixed bar */}
+          <div className="h-20 xl:hidden" />
         </div>
       </div>
 
@@ -456,6 +441,36 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
           <Share2 className="w-5 h-5 text-slate-500" />
         </button>
       </div>
+
+      {/* Fullscreen Floor Plan Zoom — pinch-to-zoom enabled */}
+      {showFullscreen && suite.floor_plan_url && (
+        <div
+          className="fixed inset-0 z-[60] bg-white flex flex-col"
+          onClick={() => setShowFullscreen(false)}
+        >
+          <div className="flex items-center justify-between p-3 border-b border-slate-200 flex-shrink-0">
+            <p className="text-sm text-slate-500">Pinch or scroll to zoom</p>
+            <button
+              onClick={() => setShowFullscreen(false)}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
+            >
+              <X className="w-5 h-5 text-slate-600" />
+            </button>
+          </div>
+          <div
+            className="flex-1 overflow-auto overscroll-contain"
+            onClick={(e) => e.stopPropagation()}
+            style={{ touchAction: 'pan-x pan-y pinch-zoom' }}
+          >
+            <img
+              src={suite.floor_plan_url}
+              alt={`Suite ${suite.unit_number} floor plan`}
+              className="w-[200vw] md:w-[150vw] max-w-none h-auto mx-auto"
+              draggable={false}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Gallery Modal */}
       {showModal && (
@@ -513,11 +528,20 @@ export default function SuiteDetail({ suite, onBack, allSuites = [] }: SuiteDeta
               {activeMedia === 'floorplan' && (
                 <div className="absolute inset-0 bg-white flex items-center justify-center p-8">
                   {suite.floor_plan_url ? (
-                    <img
-                      src={suite.floor_plan_url}
-                      alt={`Suite ${suite.unit_number} floor plan`}
-                      className="max-w-full max-h-full object-contain"
-                    />
+                    <div
+                      className="relative w-full h-full flex items-center justify-center cursor-pointer group/fp"
+                      onClick={() => setShowFullscreen(true)}
+                    >
+                      <img
+                        src={suite.floor_plan_url}
+                        alt={`Suite ${suite.unit_number} floor plan`}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 bg-black/60 backdrop-blur-sm text-white text-sm rounded-full opacity-80 group-hover/fp:opacity-100 transition-opacity">
+                        <Expand className="w-4 h-4" />
+                        <span>Click to enlarge</span>
+                      </div>
+                    </div>
                   ) : (
                     <div className="text-center">
                       <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shadow-sm">
@@ -578,8 +602,8 @@ function StatChip({ icon, label, value }: { icon: React.ReactNode; label: string
     <div className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-lg">
       <span className="text-slate-400">{icon}</span>
       <div className="flex items-center gap-1.5">
-        <span className="text-xs text-slate-400">{label}</span>
-        <span className="text-sm text-slate-900 font-semibold">{value}</span>
+        <span className="text-sm text-slate-400">{label}</span>
+        <span className="text-base text-slate-900 font-semibold">{value}</span>
       </div>
     </div>
   )
@@ -603,7 +627,7 @@ function FeatureCard({
         onClick={onToggle}
         className="w-full flex items-center justify-between p-3 xl:cursor-default"
       >
-        <h4 className="text-xs text-slate-400 uppercase tracking-wide font-medium">{title}</h4>
+        <h4 className="text-sm text-slate-400 uppercase tracking-wide font-medium">{title}</h4>
         <ChevronDown className={cn('w-4 h-4 text-slate-400 xl:hidden transition-transform', expanded && 'rotate-180')} />
       </button>
       <div className={cn('px-3 pb-3 space-y-2', !expanded && 'hidden xl:block')}>
@@ -612,7 +636,7 @@ function FeatureCard({
             <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center">
               <item.icon className="w-3 h-3 text-amber-500" />
             </div>
-            <span className="text-xs text-slate-600">{item.label}</span>
+            <span className="text-sm text-slate-600">{item.label}</span>
           </div>
         ))}
       </div>
@@ -620,21 +644,3 @@ function FeatureCard({
   )
 }
 
-// Similar Suite Card
-function SimilarSuiteCard({ suite }: { suite: ExecutiveSuite }) {
-  const config = statusConfig[suite.status]
-  const price = suite.price_usd || getEstimatedPrice(suite.floor, suite.size_sqm)
-
-  return (
-    <div className="bg-white rounded-xl border border-slate-200 p-3 hover:border-slate-300 transition-colors cursor-pointer">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-slate-900 font-semibold">
-          {suite.floor}-{suite.unit_number}
-        </span>
-        <div className={cn('w-2 h-2 rounded-full', config.dotClass)} />
-      </div>
-      <p className="text-xs text-slate-400 mb-1">{suite.size_sqm} m²</p>
-      <p className="text-sm text-slate-600 font-medium">{suite.price_display || formatPrice(price)}</p>
-    </div>
-  )
-}
