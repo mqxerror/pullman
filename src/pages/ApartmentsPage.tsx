@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import { projectConfig } from '@/config/project'
-import { getSuiteType, getSuiteImage, SUITE_PRICES, formatPriceShort, formatPriceUSD } from '@/config/suiteData'
+import { getSuiteType, getSuiteImage, SUITE_PRICES, formatPriceUSD } from '@/config/suiteData'
 import {
   Menu, X, Check, Clock, Lock, Maximize2, ArrowRight, ArrowUpDown,
   SlidersHorizontal, Building2, Filter, Grid3X3, LayoutList,
@@ -599,8 +599,7 @@ export default function ApartmentsPage() {
                       {/* Price */}
                       <div className="mb-4">
                         <p className="text-xs text-slate-400 uppercase tracking-wider">From</p>
-                        <p className="text-2xl font-bold text-primary">{formatPriceShort(SUITE_PRICES[apt.unit_number])}</p>
-                        <p className="text-xs text-slate-500 mt-0.5">{formatPriceUSD(SUITE_PRICES[apt.unit_number])}</p>
+                        <p className="text-2xl font-bold text-primary">{formatPriceUSD(SUITE_PRICES[apt.unit_number])}</p>
                       </div>
 
                       {/* CTA Button */}
@@ -670,7 +669,7 @@ export default function ApartmentsPage() {
                     {/* Price */}
                     <div className="text-right">
                       <p className="text-xs text-slate-400 uppercase">From</p>
-                      <p className="text-lg font-bold text-primary">{formatPriceShort(SUITE_PRICES[apt.unit_number])}</p>
+                      <p className="text-lg font-bold text-primary">{formatPriceUSD(SUITE_PRICES[apt.unit_number])}</p>
                     </div>
 
                     {/* Status */}
