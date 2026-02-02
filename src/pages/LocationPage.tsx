@@ -247,17 +247,15 @@ export default function LocationPage() {
             {transportInfo.map((item, i) => (
               <div
                 key={i}
-                className="group bg-white rounded-3xl p-6 border border-stone-100 shadow-sm hover:shadow-2xl hover:shadow-stone-200/50 hover:border-accent/20 transition-all duration-500 hover:-translate-y-1"
+                className="bg-white rounded-3xl p-6 border border-stone-100 shadow-sm"
               >
-                {/* Icon with Glow */}
-                <div className="relative mb-5">
-                  <div className="absolute inset-0 bg-accent/20 rounded-2xl blur-xl scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/10 to-accent/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                <div className="mb-5">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent/10 to-accent/5 flex items-center justify-center">
                     <item.icon className="w-8 h-8 text-accent" />
                   </div>
                 </div>
 
-                <h3 className="text-lg font-bold text-text-primary mb-2 group-hover:text-accent transition-colors">
+                <h3 className="text-lg font-bold text-text-primary mb-2">
                   {item.title}
                 </h3>
                 <p className="text-sm text-text-secondary mb-4 leading-relaxed">
