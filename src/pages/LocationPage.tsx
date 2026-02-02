@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { projectConfig } from '@/config/project'
+import LocationMap from '@/components/LocationMap'
 import {
   MapPin,
   Navigation,
@@ -126,8 +127,6 @@ export default function LocationPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { location } = projectConfig
 
-  const mapEmbedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d${location.coordinates.lng}!3d${location.coordinates.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDAnMjkuNSJOIDc5wrAzMCcxMi4yIlc!5e0!3m2!1sen!2sus!4v1702000000000!5m2!1sen!2sus`
-
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -181,17 +180,7 @@ export default function LocationPage() {
       {/* Hero Section with Map */}
       <section id="main-content" className="relative h-[60vh] min-h-[400px] md:min-h-[500px]">
         <div className="absolute inset-0">
-          <iframe
-            src={mapEmbedUrl}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title={`${projectConfig.name} location map`}
-            className="w-full h-full"
-          />
+          <LocationMap />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
         </div>
 
