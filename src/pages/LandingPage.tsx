@@ -863,7 +863,7 @@ export default function LandingPage() {
                 <p className="text-accent text-xs font-semibold tracking-widest uppercase mb-2">Trusted Partner</p>
                 <h3 className="text-2xl font-bold text-white mb-3">Globally Supported by Mercan</h3>
                 <p className="text-white/60 text-sm mb-4">
-                  Since 1989, Mercan has operated globally with expertise in investment and immigration services across 30+ countries.
+                  Since 1989, Mercan has operated globally with expertise in real estate investment and development across 30+ countries.
                 </p>
                 <a
                   href="https://mercan.com"
@@ -910,7 +910,7 @@ export default function LandingPage() {
               </HoverBorderGradient>
             </Link>
             <p className="text-xs text-white/40 mt-6 max-w-xl mx-auto">
-              Programs vary by country; eligibility and timelines depend on individual circumstances. This is not immigration advice.
+              Programs vary by country; eligibility and timelines depend on individual circumstances. This is not investment advice.
             </p>
           </div>
         </div>

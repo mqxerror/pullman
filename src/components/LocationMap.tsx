@@ -48,7 +48,7 @@ export default function LocationMap({ className, defaultView = 'neighborhood', s
         src="/assets/maps/neighborhood-map.png"
         alt="Neighborhood map showing nearby points of interest and walking distances"
         className={cn(
-          'w-full h-full object-cover transition-opacity duration-300',
+          'w-full h-full object-cover object-top transition-opacity duration-300',
           activeView === 'neighborhood' ? 'opacity-100' : 'opacity-0 absolute inset-0'
         )}
       />
