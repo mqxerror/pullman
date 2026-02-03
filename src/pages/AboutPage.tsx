@@ -22,7 +22,7 @@ export default function AboutPage() {
               />
             </Link>
             <nav className="hidden md:flex items-center gap-6">
-              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+              <Link to="/building-wizard" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Interactive Map
               </Link>
               <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
@@ -250,7 +250,7 @@ export default function AboutPage() {
             Browse our available units and find your perfect residence.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link to="/building">
+            <Link to="/building-wizard">
               <HoverBorderGradient
                 containerClassName="rounded-xl"
                 className="flex items-center gap-2 px-6 py-3 bg-white text-primary font-medium"

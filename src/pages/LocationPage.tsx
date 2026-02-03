@@ -142,7 +142,7 @@ export default function LocationPage() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+              <Link to="/building-wizard" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Interactive Map
               </Link>
               <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
@@ -170,7 +170,7 @@ export default function LocationPage() {
           {mobileMenuOpen && (
             <nav className="md:hidden mt-4 p-4 bg-white rounded-xl border border-slate-200 shadow-lg">
               <div className="flex flex-col gap-1">
-                <Link to="/building" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Interactive Map</Link>
+                <Link to="/building-wizard" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Interactive Map</Link>
                 <Link to="/apartments" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Apartments</Link>
                 <Link to="/virtual-tour" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">360° Tour</Link>
                 <Link to="/location" className="px-4 py-3 bg-primary/10 text-primary rounded-lg font-medium">Location</Link>
@@ -464,7 +464,7 @@ export default function LocationPage() {
               </p>
             </div>
             <Link
-              to="/building"
+              to="/building-wizard"
               className="flex items-center gap-2 px-8 py-4 bg-white text-primary font-semibold rounded-xl hover:shadow-xl hover:shadow-white/20 transition-all duration-300 hover:-translate-y-0.5"
             >
               Explore Units

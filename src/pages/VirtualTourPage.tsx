@@ -71,7 +71,7 @@ export default function VirtualTourPage() {
               />
             </Link>
             <nav className="hidden md:flex items-center gap-6">
-              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+              <Link to="/building-wizard" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Interactive Map
               </Link>
               <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
@@ -175,7 +175,7 @@ export default function VirtualTourPage() {
                   <p className="text-2xl font-bold text-amber-600">{suite.price}</p>
                 </div>
                 <Link
-                  to="/building"
+                  to="/building-wizard"
                   className="flex items-center gap-2 px-5 py-3 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-xl transition-colors"
                 >
                   View Units
@@ -302,7 +302,7 @@ export default function VirtualTourPage() {
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link
-              to="/building"
+              to="/building-wizard"
               className="flex items-center gap-2 px-8 py-4 bg-white text-primary font-semibold rounded-xl hover:bg-amber-50 transition-colors"
             >
               Explore Available Units

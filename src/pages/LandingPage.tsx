@@ -100,7 +100,7 @@ export default function LandingPage() {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
-              <Link to="/building" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
+              <Link to="/building-wizard" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
                 Interactive Map
               </Link>
               <Link to="/apartments" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
@@ -136,7 +136,7 @@ export default function LandingPage() {
             <nav className="md:hidden mt-4 p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20" aria-label="Mobile navigation">
               <div className="flex flex-col gap-1">
                 <Link
-                  to="/building"
+                  to="/building-wizard"
                   onClick={() => setMobileMenuOpen(false)}
                   className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
                 >
@@ -239,7 +239,7 @@ export default function LandingPage() {
 
             {/* CTAs with HoverBorderGradient */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10">
-              <Link to="/building">
+              <Link to="/building-wizard">
                 <HoverBorderGradient
                   containerClassName="rounded-xl"
                   className="flex items-center gap-2 px-6 py-3 bg-slate-950 text-white font-medium"
@@ -592,7 +592,7 @@ export default function LandingPage() {
                   <p className="text-white/70 text-sm mb-2">Ready to explore?</p>
                   <p className="text-white text-xl font-semibold">Browse our interactive building explorer</p>
                 </div>
-                <Link to="/building">
+                <Link to="/building-wizard">
                   <HoverBorderGradient
                     containerClassName="rounded-xl"
                     className="flex items-center gap-2 px-6 py-3 bg-white text-primary font-medium"
@@ -636,7 +636,7 @@ export default function LandingPage() {
             <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed">
               From executive suites to premium residences — explore floor plans, views, and availability in our interactive building explorer.
             </p>
-            <Link to="/building">
+            <Link to="/building-wizard">
               <HoverBorderGradient
                 containerClassName="rounded-xl"
                 className="flex items-center gap-3 px-10 py-5 bg-slate-950 text-white font-semibold text-lg"
@@ -910,7 +910,7 @@ export default function LandingPage() {
 
           {/* CTA */}
           <div className="mt-12 text-center">
-            <Link to="/building" className="inline-block">
+            <Link to="/building-wizard" className="inline-block">
               <HoverBorderGradient
                 containerClassName="rounded-xl"
                 className="flex items-center gap-2 px-8 py-3 bg-slate-950 text-white font-medium"
