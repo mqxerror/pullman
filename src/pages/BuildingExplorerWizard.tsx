@@ -201,12 +201,13 @@ export default function BuildingExplorerWizard() {
         {step === 'building' && (
           <div className="h-full flex flex-col lg:flex-row">
             {/* Building Visualization - Takes most space */}
-            <div className="flex-1 flex items-center justify-center p-4 lg:p-8 bg-gradient-to-br from-slate-100 to-stone-100">
-              <div className="relative h-full max-h-[85vh] w-auto" style={{ aspectRatio: '3/4' }}>
+            <div className="flex-1 flex items-center justify-center p-2 lg:p-6 bg-gradient-to-br from-slate-100 to-stone-100 overflow-hidden">
+              <div className="relative h-full max-h-[90vh] w-auto" style={{ aspectRatio: '3/5' }}>
                 <img
                   src="/assets/pullman-facade-v2.png"
                   alt="Pullman Hotel Panama"
-                  className="h-full w-full object-cover rounded-2xl shadow-2xl"
+                  className="h-full w-full object-cover object-bottom rounded-2xl shadow-2xl"
+                  style={{ objectPosition: 'center 85%' }}
                 />
 
                 {/* Floor Overlays */}
