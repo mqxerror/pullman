@@ -191,6 +191,7 @@ export default function BuildingExplorerDualAB() {
             <div className="hidden lg:flex items-center gap-4">
               <nav className="flex items-center gap-6">
                 <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Apartments</Link>
+                <Link to="/virtual-tour" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">360° Tour</Link>
                 <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Location</Link>
                 <Link to="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">About</Link>
               </nav>
