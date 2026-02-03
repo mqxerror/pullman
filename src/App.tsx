@@ -10,6 +10,7 @@ import BuildingExplorerV2 from './pages/BuildingExplorerV2'
 import BuildingExplorerV3 from './pages/BuildingExplorerV3'
 import BuildingExplorerDual from './pages/BuildingExplorerDual'
 import BuildingExplorerDualAB from './pages/BuildingExplorerDualAB'
+import BuildingExplorerWizard from './pages/BuildingExplorerWizard'
 import SuiteDetailPage from './pages/SuiteDetailPage'
 import SuitesExplorer from './pages/SuitesExplorer'
 import AboutPage from './pages/AboutPage'
@@ -33,6 +34,7 @@ function AppRoutes() {
         <Route path="/building-v2" element={<BuildingExplorerV2 />} />
         <Route path="/building-v3" element={<BuildingExplorerV3 />} />
         <Route path="/building-dual" element={<BuildingExplorerDual />} />
+        <Route path="/building-wizard" element={<BuildingExplorerWizard />} />
         <Route path="/suite/:floor/:unit" element={<SuiteDetailPage />} />
         <Route path="/suites" element={<SuitesExplorer />} />
         <Route path="/about" element={<AboutPage />} />
