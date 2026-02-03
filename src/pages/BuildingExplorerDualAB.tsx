@@ -204,7 +204,7 @@ export default function BuildingExplorerDualAB() {
         {/* LEFT: Floor Navigator + Building Image - Santa Maria Style - HIDDEN on mobile */}
         <div className="hidden lg:flex flex-row border-r border-slate-200/50 bg-gradient-to-b from-white to-slate-50 lg:w-[38%] xl:w-[36%] 2xl:w-[34%] overflow-hidden">
           {/* Left: Compact Floor Navigator */}
-          <div className="w-[100px] flex flex-col bg-slate-50 border-r border-slate-200 p-2">
+          <div data-tour="floor-navigator" className="w-[100px] flex flex-col bg-slate-50 border-r border-slate-200 p-2">
             {/* Header */}
             <div className="text-center py-2 border-b border-slate-200 mb-2">
               <Building2 className="w-5 h-5 text-amber-600 mx-auto mb-1" />
@@ -265,7 +265,7 @@ export default function BuildingExplorerDualAB() {
             </div>
 
             {/* Floor Stats Summary */}
-            <div className="pt-2 mt-2 border-t border-slate-200">
+            <div data-tour="floor-stats" className="pt-2 mt-2 border-t border-slate-200">
               <div className="bg-white rounded-lg p-2 border border-slate-200 space-y-1.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1">
@@ -293,7 +293,7 @@ export default function BuildingExplorerDualAB() {
           </div>
 
           {/* Right: Building Image with SVG Overlay */}
-          <div className="flex-1 flex items-center justify-center p-2 overflow-hidden">
+          <div data-tour="building-image" className="flex-1 flex items-center justify-center p-2 overflow-hidden">
             <BuildingFacadeSVG
               selectedFloor={selectedFloor}
               hoveredFloor={hoveredFloor}
@@ -338,7 +338,7 @@ export default function BuildingExplorerDualAB() {
           </div>
 
           {/* Amenity Floor Display or SVG Floor Plan */}
-          <div className="flex-1 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 p-2 overflow-hidden relative">
+          <div data-tour="floor-plan" className="flex-1 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 p-2 overflow-hidden relative">
             {isAmenityFloor(selectedFloor) ? (
               /* Amenity Floor Content with Hero Image */
               <div className="w-full h-full relative rounded-lg overflow-hidden">

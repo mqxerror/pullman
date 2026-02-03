@@ -173,18 +173,18 @@ export const TOUR_STEPS: Record<string, DriveStep[]> = {
       },
     },
     {
-      element: '[data-tour="view-floor-plan"]',
+      element: '[data-tour="floor-plan"]',
       popover: {
-        title: 'View Floor Plan',
-        description: 'Click this button to see the detailed floor plan and select a specific unit.',
-        side: 'top',
+        title: 'Interactive Floor Plan',
+        description: 'Click any unit on the floor plan to view its details. Colors indicate availability: green = available, amber = reserved, red = sold.',
+        side: 'left',
         align: 'center',
       },
     },
     {
       popover: {
         title: 'You\'re Ready!',
-        description: 'Now you know how to navigate the building! Select a floor, view the floor plan, and choose your perfect unit.',
+        description: 'Now you know how to navigate the building! Select a floor, then click a unit to see details and pricing.',
         side: 'bottom',
         align: 'center',
       },
