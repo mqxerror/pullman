@@ -106,6 +106,9 @@ export default function LandingPage() {
               <Link to="/apartments" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
                 Apartments
               </Link>
+              <Link to="/virtual-tour" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
+                360° Tour
+              </Link>
               <Link to="/location" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
                 Location
               </Link>
@@ -145,6 +148,13 @@ export default function LandingPage() {
                   className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
                 >
                   Apartments
+                </Link>
+                <Link
+                  to="/virtual-tour"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
+                >
+                  360° Tour
                 </Link>
                 <Link
                   to="/location"
