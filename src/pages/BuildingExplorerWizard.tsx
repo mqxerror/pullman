@@ -24,6 +24,7 @@ import { getSuiteInfo, getSuiteImage, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQ
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
 import BuildingFacadeSVG from '@/components/BuildingFacadeSVG'
+import TourGuide from '@/components/TourGuide'
 
 type WizardStep = 'building' | 'floorplan'
 
@@ -191,7 +192,7 @@ export default function BuildingExplorerWizard() {
           <div className="h-full flex flex-col lg:flex-row">
             {/* Building Visualization - Takes most space */}
             <div className="flex-1 flex items-center justify-center p-2 lg:p-6 bg-gradient-to-br from-slate-100 to-stone-100 overflow-hidden">
-              <div className="relative h-full max-h-[90vh] w-auto flex flex-col items-center">
+              <div data-tour="building-image" className="relative h-full max-h-[90vh] w-auto flex flex-col items-center">
                 <BuildingFacadeSVG
                   selectedFloor={selectedFloor}
                   hoveredFloor={hoveredFloor}
@@ -209,13 +210,16 @@ export default function BuildingExplorerWizard() {
 
             {/* Right Panel - Floor Info & Stats */}
             <div className="lg:w-80 xl:w-96 bg-white border-t lg:border-t-0 lg:border-l border-slate-200 p-4 lg:p-6 flex flex-col">
-              <div className="mb-4">
-                <h2 className="text-2xl font-bold text-slate-900">Select a Floor</h2>
-                <p className="text-sm text-slate-500 mt-1">Click on the building to explore</p>
+              <div className="mb-4 flex items-start justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900">Select a Floor</h2>
+                  <p className="text-sm text-slate-500 mt-1">Click on the building to explore</p>
+                </div>
+                <TourGuide tourId="buildingWizard" variant="icon" />
               </div>
 
               {/* Floor Navigator */}
-              <div className="flex items-center justify-between bg-slate-50 rounded-xl p-3 mb-4">
+              <div data-tour="floor-navigator" className="flex items-center justify-between bg-slate-50 rounded-xl p-3 mb-4">
                 <button
                   onClick={() => setSelectedFloor(Math.max(MIN_FLOOR, selectedFloor - 1))}
                   disabled={selectedFloor <= MIN_FLOOR}
@@ -238,7 +242,7 @@ export default function BuildingExplorerWizard() {
 
               {/* Floor Stats */}
               {!isAmenityFloor(activeFloor) ? (
-                <div className="grid grid-cols-3 gap-3 mb-6">
+                <div data-tour="floor-stats" className="grid grid-cols-3 gap-3 mb-6">
                   <div className="text-center p-3 bg-green-50 rounded-xl">
                     <div className="text-2xl font-bold text-green-600">{getFloorStats(activeFloor).available}</div>
                     <div className="text-xs text-green-700 font-medium">Available</div>
@@ -267,6 +271,7 @@ export default function BuildingExplorerWizard() {
               {/* CTA Button */}
               {!isAmenityFloor(activeFloor) && (
                 <button
+                  data-tour="view-floor-plan"
                   onClick={() => setStep('floorplan')}
                   className="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-amber-500/30"
                 >

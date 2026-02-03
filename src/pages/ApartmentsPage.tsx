@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Footer from '@/components/Footer'
+import TourGuide from '@/components/TourGuide'
 // Aceternity UI Components
 import { BackgroundBeams, TextGenerateEffect, HoverBorderGradient, Spotlight } from '@/components/ui'
 
@@ -248,10 +249,11 @@ export default function ApartmentsPage() {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               <TextGenerateEffect words="Explore All Apartments" className="text-white" filter={false} duration={0.6} />
             </h1>
-            <p className="text-white/70 text-lg">
+            <p className="text-white/70 text-lg mb-6">
               Browse our complete collection of {projectConfig.building.totalUnits} executive suites across {projectConfig.building.totalFloors} floors.
               Filter by size, floor, or availability to find your perfect residence.
             </p>
+            <TourGuide tourId="apartments" buttonText="Take a Tour" />
           </div>
 
           {/* Quick Stats Row */}
@@ -294,7 +296,7 @@ export default function ApartmentsPage() {
           {/* Filter Tabs */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
             {/* Status Filter Tabs - Scrollable on mobile */}
-            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+            <div data-tour="filters" className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
               <button
                 onClick={() => setStatusFilter('all')}
                 className={cn(
@@ -347,7 +349,7 @@ export default function ApartmentsPage() {
             {/* Right Controls */}
             <div className="flex items-center gap-2 md:gap-3">
               {/* Sort Dropdown - Hidden on small mobile */}
-              <div className="relative hidden sm:block">
+              <div data-tour="sort" className="relative hidden sm:block">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -525,15 +527,17 @@ export default function ApartmentsPage() {
             </div>
           ) : viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {paginatedApartments.map((apt) => {
+              {paginatedApartments.map((apt, index) => {
                 const config = statusConfig[apt.status]
                 const StatusIcon = config.icon
                 // Track hover state for potential animations
                 void hoveredCard
+                const isFirstCard = index === 0
 
                 return (
                   <div
                     key={apt.id}
+                    data-tour={isFirstCard ? 'apartment-card' : undefined}
                     onClick={() => handleCardClick(apt)}
                     onMouseEnter={() => setHoveredCard(apt.id)}
                     onMouseLeave={() => setHoveredCard(null)}
@@ -600,6 +604,7 @@ export default function ApartmentsPage() {
 
                       {/* CTA Button */}
                       <button
+                        data-tour={isFirstCard ? 'view-details' : undefined}
                         className={cn(
                           'w-full py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2',
                           apt.status === 'available'
