@@ -12,22 +12,22 @@ import 'driver.js/dist/driver.css'
 import { HelpCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// Custom styles for Driver.js to match our design
+// Custom styles for Driver.js - Light theme to match the website
 const driverStyles = `
   .driver-popover {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border: 1px solid rgba(251, 191, 36, 0.3);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 16px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(251, 191, 36, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
   }
   .driver-popover-title {
-    color: #fbbf24;
+    color: #0f172a;
     font-size: 18px;
     font-weight: 700;
     letter-spacing: -0.025em;
   }
   .driver-popover-description {
-    color: #e2e8f0;
+    color: #475569;
     font-size: 14px;
     line-height: 1.6;
   }
@@ -38,7 +38,7 @@ const driverStyles = `
   .driver-popover-prev-btn,
   .driver-popover-next-btn {
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: #1e293b;
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     font-weight: 600;
@@ -51,12 +51,12 @@ const driverStyles = `
     box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
   }
   .driver-popover-prev-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #e2e8f0;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
   }
   .driver-popover-prev-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #e2e8f0;
     box-shadow: none;
   }
   .driver-popover-close-btn {
@@ -72,7 +72,7 @@ const driverStyles = `
     border-color: transparent;
   }
   .driver-overlay {
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.5);
   }
   .driver-active-element {
     box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.5), 0 0 30px rgba(251, 191, 36, 0.3);
