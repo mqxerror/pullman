@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html><head><style>
+body{margin:0;overflow:auto}
+canvas{cursor:crosshair}
+#coords{position:fixed;top:10px;left:10px;background:black;color:lime;padding:8px;font:14px monospace;z-index:10}
+#points{position:fixed;top:10px;right:10px;background:#222;color:#fff;padding:8px;font:12px monospace;z-index:10;max-height:90vh;overflow-y:auto;width:400px}
+</style></head><body>
+<div id="coords">Move mouse over image</div>
+<div id="points"><b>Click to add points. Press Enter for new unit. Press 'u' to undo.</b><br><br></div>
+<canvas id="c"></canvas>
+<script>
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+const img=new Image();
+let allUnits=[],currentPoints=[];
+let unitNum=1;
+img.onload=()=>{canvas.width=img.width;canvas.height=img.height;draw()};
+img.src='pullman-plan.png';
+
+function draw(){
+  ctx.drawImage(img,0,0);
+  allUnits.forEach((u,i)=>{
+    ctx.beginPath();
+    u.forEach((p,j)=>{j===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1])});
+    ctx.closePath();
+    ctx.fillStyle='rgba(76,175,119,0.2)';ctx.fill();
+    ctx.strokeStyle='#2D8A5E';ctx.lineWidth=2;ctx.stroke();
+    const cx=u.reduce((s,p)=>s+p[0],0)/u.length;
+    const cy=u.reduce((s,p)=>s+p[1],0)/u.length;
+    ctx.fillStyle='red';ctx.font='bold 24px Arial';ctx.textAlign='center';
+    ctx.fillText(''+(i+1),cx,cy+8);
+  });
+  if(currentPoints.length>0){
+    ctx.beginPath();
+    currentPoints.forEach((p,j)=>{j===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1])});
+    ctx.strokeStyle='#ff0';ctx.lineWidth=2;ctx.stroke();
+    currentPoints.forEach(p=>{
+      ctx.beginPath();ctx.arc(p[0],p[1],4,0,Math.PI*2);
+      ctx.fillStyle='#ff0';ctx.fill();
+    });
+  }
+}
+
+canvas.addEventListener('mousemove',e=>{
+  const r=canvas.getBoundingClientRect();
+  const x=Math.round((e.clientX-r.left)*(canvas.width/r.width));
+  const y=Math.round((e.clientY-r.top)*(canvas.height/r.height));
+  document.getElementById('coords').textContent='Unit '+unitNum+' | x:'+x+' y:'+y;
+});
+
+canvas.addEventListener('click',e=>{
+  const r=canvas.getBoundingClientRect();
+  const x=Math.round((e.clientX-r.left)*(canvas.width/r.width));
+  const y=Math.round((e.clientY-r.top)*(canvas.height/r.height));
+  currentPoints.push([x,y]);
+  draw();
+  updateOutput();
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&currentPoints.length>=3){
+    allUnits.push([...currentPoints]);
+    currentPoints=[];
+    unitNum++;
+    draw();
+    updateOutput();
+  }
+  if(e.key==='u'&&currentPoints.length>0){
+    currentPoints.pop();
+    draw();
+    updateOutput();
+  }
+});
+
+function updateOutput(){
+  let html='<b>Click to add points. Enter=save unit. u=undo.</b><br><br>';
+  allUnits.forEach((u,i)=>{
+    const path=u.map(p=>'L '+p[0]+','+p[1]).join(' ');
+    html+='<b>Unit '+(i+1)+':</b> M '+u[0][0]+','+u[0][1]+' '+path.substring(2)+'<br>';
+  });
+  if(currentPoints.length>0){
+    html+='<br><b style="color:yellow">Current (Unit '+unitNum+'):</b> ';
+    html+=currentPoints.map(p=>p[0]+','+p[1]).join(' &rarr; ');
+  }
+  html+='<br><br><b>Copy-paste for code:</b><br><pre style="white-space:pre-wrap">';
+  allUnits.forEach((u,i)=>{
+    const pathStr="'M "+u.map(p=>p[0]+','+p[1]).join(' L ')+" Z'";
+    html+="  "+(i+1)+": "+pathStr+",\n";
+  });
+  html+='</pre>';
+  document.getElementById('points').innerHTML=html;
+}
+</script></body></html>
