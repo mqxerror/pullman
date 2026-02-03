@@ -207,8 +207,8 @@ export default function SuiteDetailModal({
             {/* CTA */}
             <div className="p-4 md:p-6 mt-auto bg-slate-800/50">
               <a
-                href="/assets/Mercan-Group-Panama-Brochure.pdf"
-                download="Mercan-Group-Panama-Brochure.pdf"
+                href="/assets/Pullman-Technical-Layouts-Brochure.pdf"
+                download="Pullman-Technical-Layouts-Brochure.pdf"
                 className="w-full flex items-center justify-center gap-2 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-medium rounded-xl transition-colors"
               >
                 <Download className="w-4 h-4" />

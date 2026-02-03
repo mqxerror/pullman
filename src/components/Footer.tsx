@@ -40,8 +40,8 @@ export default function Footer() {
                   About
                 </Link>
                 <a
-                  href="/Floor_Plan_Santa_Maria.pdf"
-                  download="Santa-Maria-Residences-Brochure.pdf"
+                  href="/assets/Pullman-Technical-Layouts-Brochure.pdf"
+                  download="Pullman-Technical-Layouts-Brochure.pdf"
                   className="flex items-center gap-1.5 text-white/70 hover:text-white text-sm transition-colors focus:outline-none focus:text-white"
                 >
                   <Download className="w-4 h-4" aria-hidden="true" />
