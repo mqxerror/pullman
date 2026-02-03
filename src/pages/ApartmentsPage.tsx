@@ -25,13 +25,6 @@ const statusConfig = {
   sold: { icon: Lock, label: 'Sold', color: 'text-slate-400', bg: 'bg-slate-400', bgLight: 'bg-slate-50', border: 'border-slate-200' },
 }
 
-const getDirectionLabel = (unitNumber: number): string => {
-  // Map unit numbers to compass directions based on building orientation
-  if (unitNumber <= 4) return 'N'
-  if (unitNumber <= 7) return 'E'
-  if (unitNumber <= 10) return 'S'
-  return 'W'
-}
 
 export default function ApartmentsPage() {
   const navigate = useNavigate()
@@ -584,7 +577,6 @@ export default function ApartmentsPage() {
                         </div>
                         <div className="flex items-center gap-1.5">
                           <div className={cn('w-3 h-3 rounded-full', config.bg)} />
-                          <span className="text-xs font-medium text-slate-500">{getDirectionLabel(apt.unit_number)}</span>
                         </div>
                       </div>
 
@@ -662,7 +654,6 @@ export default function ApartmentsPage() {
                           {apt.size_sqm} m²
                         </span>
                         <span>Floor {apt.floor}</span>
-                        <span>{getDirectionLabel(apt.unit_number)}</span>
                       </div>
                     </div>
 

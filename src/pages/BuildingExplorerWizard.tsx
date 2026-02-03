@@ -230,21 +230,32 @@ export default function BuildingExplorerWizard() {
                           height: `${f.height}%`,
                         }}
                       >
+                        {/* Selected floor - Premium gold glow */}
                         {isSelected && (
-                          <div className="absolute inset-0 bg-amber-400/40 border-y-2 border-amber-400 flex items-center justify-center">
-                            <div className="bg-amber-400 text-amber-900 text-xs font-bold px-3 py-0.5 rounded-md shadow-lg">
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            {/* Outer glow layer */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-amber-400/50 via-yellow-300/60 to-amber-400/50 border-y-2 border-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.6),inset_0_0_15px_rgba(253,224,71,0.3)]" />
+                            {/* Inner highlight */}
+                            <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-200 to-transparent" />
+                            {/* Floor badge */}
+                            <div className="relative bg-gradient-to-b from-yellow-400 to-amber-500 text-amber-950 text-xs font-bold px-4 py-1 rounded-md shadow-lg shadow-amber-500/50 border border-yellow-300/50">
                               {f.floor}
                             </div>
                           </div>
                         )}
+                        {/* Hovered floor - Subtle gold hint */}
                         {isHovered && !isSelected && (
                           <div className={cn(
                             "absolute inset-0 backdrop-blur-[1px] transition-all duration-150 border-y flex items-center justify-center",
-                            isAmenity ? "bg-blue-400/30 border-blue-400/50" : "bg-white/30 border-white/50"
+                            isAmenity
+                              ? "bg-blue-400/30 border-blue-400/50"
+                              : "bg-gradient-to-r from-amber-300/20 via-yellow-200/30 to-amber-300/20 border-yellow-400/40"
                           )}>
                             <div className={cn(
-                              "text-xs font-bold px-2 py-0.5 rounded shadow",
-                              isAmenity ? "bg-blue-500 text-white" : "bg-white text-slate-800"
+                              "text-xs font-bold px-3 py-0.5 rounded shadow-md",
+                              isAmenity
+                                ? "bg-blue-500 text-white"
+                                : "bg-gradient-to-b from-amber-50 to-white text-amber-800 border border-amber-200"
                             )}>
                               {isAmenity ? AMENITY_FLOOR_LABELS[f.floor]?.split(' ')[0] : f.floor}
                             </div>

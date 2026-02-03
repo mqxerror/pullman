@@ -21,27 +21,6 @@ const getSuitePrice = (suite: ExecutiveSuite): string => {
   return price ? formatPriceShort(price) : 'Contact'
 }
 
-// Get view direction based on unit number with compass position
-const getViewDirection = (unitNumber: number): { full: string; short: string; position: { x: number; y: number } } => {
-  // Compass positions: center is (50, 50), edges at 15% from center
-  const directions: Record<number, { full: string; short: string; position: { x: number; y: number } }> = {
-    1: { full: 'North', short: 'N', position: { x: 50, y: 15 } },
-    2: { full: 'North', short: 'N', position: { x: 50, y: 15 } },
-    3: { full: 'North', short: 'N', position: { x: 50, y: 15 } },
-    4: { full: 'Northeast', short: 'NE', position: { x: 80, y: 20 } },
-    5: { full: 'East', short: 'E', position: { x: 85, y: 50 } },
-    6: { full: 'Southeast', short: 'SE', position: { x: 80, y: 80 } },
-    7: { full: 'South', short: 'S', position: { x: 50, y: 85 } },
-    8: { full: 'South', short: 'S', position: { x: 50, y: 85 } },
-    9: { full: 'South', short: 'S', position: { x: 50, y: 85 } },
-    10: { full: 'South', short: 'S', position: { x: 50, y: 85 } },
-    11: { full: 'Southwest', short: 'SW', position: { x: 20, y: 80 } },
-    12: { full: 'West', short: 'W', position: { x: 15, y: 50 } },
-    13: { full: 'Northwest', short: 'NW', position: { x: 20, y: 20 } },
-    14: { full: 'North', short: 'N', position: { x: 50, y: 15 } },
-  }
-  return directions[unitNumber] || { full: 'City', short: 'C', position: { x: 50, y: 50 } }
-}
 
 // Status configuration
 const statusConfig = {
@@ -75,7 +54,6 @@ export default function SuiteCard({ suite, onClick }: SuiteCardProps) {
   const config = statusConfig[suite.status]
   const suiteType = getSuiteType(suite.size_sqm)
   const price = suite.price_display || getSuitePrice(suite)
-  const viewDirection = getViewDirection(suite.unit_number)
   const StatusIcon = config.icon
   const isSold = suite.status === 'sold'
 
@@ -125,25 +103,6 @@ export default function SuiteCard({ suite, onClick }: SuiteCardProps) {
           <div className="flex items-center gap-1.5">
             <Maximize2 className="w-4 h-4 text-slate-400" />
             <span>{suite.size_sqm} m²</span>
-          </div>
-
-          {/* View Direction with Compass */}
-          <div className="flex items-center gap-1.5">
-            <div
-              className="w-5 h-5 rounded-full border-2 border-slate-300 relative bg-slate-50"
-              title={viewDirection.full}
-            >
-              {/* Compass dot positioned based on direction */}
-              <div
-                className="absolute w-1.5 h-1.5 rounded-full bg-amber-500"
-                style={{
-                  left: `${viewDirection.position.x}%`,
-                  top: `${viewDirection.position.y}%`,
-                  transform: 'translate(-50%, -50%)'
-                }}
-              />
-            </div>
-            <span>{viewDirection.short}</span>
           </div>
         </div>
       </div>

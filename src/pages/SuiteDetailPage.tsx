@@ -1,7 +1,7 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { ArrowLeft, Maximize2, Building2, Compass, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Maximize2, Building2, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { getSuiteInfo, getSuiteType, getSuiteImage, SUITE_SIZES, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM } from '@/config/suiteData'
@@ -251,7 +251,7 @@ export default function SuiteDetailPage() {
             </div>
 
             {/* Key Stats */}
-            <div className="grid grid-cols-3 gap-2 md:gap-4">
+            <div className="grid grid-cols-2 gap-2 md:gap-4">
               <div className="bg-white rounded-xl p-3 md:p-4 border border-slate-200 text-center">
                 <Maximize2 className="w-5 h-5 md:w-6 md:h-6 text-gold-600 mx-auto mb-1.5 md:mb-2" />
                 <div className="text-lg md:text-2xl font-bold text-slate-900">{suiteInfo?.size || '--'}</div>
@@ -261,11 +261,6 @@ export default function SuiteDetailPage() {
                 <Building2 className="w-5 h-5 md:w-6 md:h-6 text-gold-600 mx-auto mb-1.5 md:mb-2" />
                 <div className="text-lg md:text-2xl font-bold text-slate-900">{floor}</div>
                 <div className="text-xs md:text-sm text-slate-500">Floor Level</div>
-              </div>
-              <div className="bg-white rounded-xl p-3 md:p-4 border border-slate-200 text-center">
-                <Compass className="w-5 h-5 md:w-6 md:h-6 text-gold-600 mx-auto mb-1.5 md:mb-2" />
-                <div className="text-lg md:text-2xl font-bold text-slate-900">Ocean</div>
-                <div className="text-xs md:text-sm text-slate-500">View</div>
               </div>
             </div>
 

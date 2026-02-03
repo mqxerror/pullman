@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowLeft, Check, Clock, Lock, Maximize2, Compass, Share2, Download, X, Building2, Sun, Wind, Wifi, Shield, Waves, ChevronRight, Expand, Image, ChevronDown, Utensils, Dumbbell, Car, Sparkles } from 'lucide-react'
+import { ArrowLeft, Check, Clock, Lock, Maximize2, Share2, Download, X, Building2, Sun, Wind, Wifi, Shield, Waves, ChevronRight, Expand, Image, ChevronDown, Utensils, Dumbbell, Car, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { ExecutiveSuite } from '@/types/database'
 import { cn } from '@/lib/utils'
@@ -34,26 +34,6 @@ const formatPrice = (price: number): string => {
   return `$${Math.round(price / 1000)}K`
 }
 
-// Get view direction based on unit number
-const getViewDirection = (unitNumber: number): { full: string; short: string; degrees: number } => {
-  const directions: Record<number, { full: string; short: string; degrees: number }> = {
-    1: { full: 'North', short: 'N', degrees: 0 },
-    2: { full: 'North', short: 'N', degrees: 0 },
-    3: { full: 'North', short: 'N', degrees: 0 },
-    4: { full: 'Northeast', short: 'NE', degrees: 45 },
-    5: { full: 'East', short: 'E', degrees: 90 },
-    6: { full: 'Southeast', short: 'SE', degrees: 135 },
-    7: { full: 'South', short: 'S', degrees: 180 },
-    8: { full: 'South', short: 'S', degrees: 180 },
-    9: { full: 'South', short: 'S', degrees: 180 },
-    10: { full: 'South', short: 'S', degrees: 180 },
-    11: { full: 'Southwest', short: 'SW', degrees: 225 },
-    12: { full: 'West', short: 'W', degrees: 270 },
-    13: { full: 'Northwest', short: 'NW', degrees: 315 },
-    14: { full: 'North', short: 'N', degrees: 0 },
-  }
-  return directions[unitNumber] || { full: 'City', short: 'C', degrees: 0 }
-}
 
 // Get suite image based on unit number
 const getSuiteImage = (unitNumber: number): string => {
@@ -113,7 +93,6 @@ export default function SuiteDetail({ suite, onBack }: SuiteDetailProps) {
   const config = statusConfig[suite.status]
   const suiteType = getSuiteType(suite.size_sqm)
   const price = suite.price_usd || getEstimatedPrice(suite.floor, suite.size_sqm)
-  const viewDirection = getViewDirection(suite.unit_number)
   const suiteImage = getSuiteImage(suite.unit_number)
   const StatusIcon = config.icon
 
@@ -173,11 +152,6 @@ export default function SuiteDetail({ suite, onBack }: SuiteDetailProps) {
                   icon={<Building2 className="w-4 h-4" />}
                   label="Floor"
                   value={String(suite.floor)}
-                />
-                <StatChip
-                  icon={<Compass className="w-4 h-4" />}
-                  label="View"
-                  value={viewDirection.full}
                 />
               </div>
             </div>

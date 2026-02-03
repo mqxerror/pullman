@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
-import { Menu, X, ChevronLeft, ChevronRight, Maximize2, Building2, Compass, Check, Clock, Lock, ArrowRight, Sparkles } from 'lucide-react'
+import { Menu, X, ChevronLeft, ChevronRight, Maximize2, Building2, Check, Clock, Lock, ArrowRight, Sparkles } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR } from '@/config/building'
 import { cn } from '@/lib/utils'
 import { getSuiteType, getSuiteImage, SUITE_PRICES, formatPriceShort } from '@/config/suiteData'
@@ -246,10 +246,6 @@ export default function BuildingExplorerV2() {
                         <span className="flex items-center gap-1">
                           <Maximize2 className="w-4 h-4" />
                           {suite.size_sqm} m²
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Compass className="w-4 h-4" />
-                          North
                         </span>
                       </div>
 

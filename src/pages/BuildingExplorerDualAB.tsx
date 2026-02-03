@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import {
   X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
-  X as CloseIcon, ArrowRight, Bed, Mountain, Download, Share2,
+  X as CloseIcon, ArrowRight, Bed, Download, Share2,
   ChevronLeft, ChevronRight, Sparkles, Star, Wifi, Car, Dumbbell, Coffee, Shield, Waves,
   PanelLeftClose, PanelLeftOpen, Home, Scale, Plus, Sun, Users
 } from 'lucide-react'
@@ -838,7 +838,7 @@ export default function BuildingExplorerDualAB() {
                 {/* Panel Content */}
                 <div className="p-5">
                   {/* Quick Stats - Consistent typography */}
-                  <div className="grid grid-cols-3 gap-3 mb-5">
+                  <div className="grid grid-cols-2 gap-3 mb-5">
                     <div className="bg-slate-50 rounded-xl p-3.5 text-center border border-slate-100">
                       <Maximize2 className="w-5 h-5 text-amber-600 mx-auto mb-1.5" />
                       <div className="text-xl font-bold text-slate-900">{selectedSuite.size_sqm}</div>
@@ -848,11 +848,6 @@ export default function BuildingExplorerDualAB() {
                       <Building2 className="w-5 h-5 text-amber-600 mx-auto mb-1.5" />
                       <div className="text-xl font-bold text-slate-900">{selectedSuite.floor}</div>
                       <div className="text-xs text-slate-500 font-medium mt-0.5">Floor</div>
-                    </div>
-                    <div className="bg-slate-50 rounded-xl p-3.5 text-center border border-slate-100">
-                      <Mountain className="w-5 h-5 text-amber-600 mx-auto mb-1.5" />
-                      <div className="text-xl font-bold text-slate-900">Ocean</div>
-                      <div className="text-xs text-slate-500 font-medium mt-0.5">View</div>
                     </div>
                   </div>
 
@@ -1219,7 +1214,7 @@ export default function BuildingExplorerDualAB() {
 
                   <div className="p-3 lg:p-4 flex-1">
                     {/* Quick Stats - Horizontal scroll on mobile, grid on desktop */}
-                    <div className="flex lg:grid lg:grid-cols-3 gap-2 mb-4 overflow-x-auto pb-2 lg:pb-0 -mx-3 px-3 lg:mx-0 lg:px-0">
+                    <div className="flex lg:grid lg:grid-cols-2 gap-2 mb-4 overflow-x-auto pb-2 lg:pb-0 -mx-3 px-3 lg:mx-0 lg:px-0">
                       <div className="bg-slate-50 rounded-lg p-2.5 text-center border border-slate-200/50 min-w-[100px] lg:min-w-0 flex-shrink-0">
                         <Maximize2 className="w-5 h-5 text-amber-500 mx-auto mb-1" />
                         <div className="text-xl font-bold text-slate-900">{selectedSuite.size_sqm}</div>
@@ -1229,11 +1224,6 @@ export default function BuildingExplorerDualAB() {
                         <Building2 className="w-5 h-5 text-amber-500 mx-auto mb-1" />
                         <div className="text-xl font-bold text-slate-900">{selectedSuite.floor}</div>
                         <div className="text-xs text-slate-500 font-medium">Floor</div>
-                      </div>
-                      <div className="bg-slate-50 rounded-lg p-2.5 text-center border border-slate-200/50 min-w-[100px] lg:min-w-0 flex-shrink-0">
-                        <Mountain className="w-5 h-5 text-amber-500 mx-auto mb-1" />
-                        <div className="text-xl font-bold text-slate-900">Ocean</div>
-                        <div className="text-xs text-slate-500 font-medium">View</div>
                       </div>
                     </div>
 
@@ -1503,10 +1493,6 @@ export default function BuildingExplorerDualAB() {
                           <div className="flex justify-between">
                             <span className="text-slate-500">Floor</span>
                             <span className="font-semibold text-slate-900">{suite.floor}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-500">View</span>
-                            <span className="font-semibold text-slate-900">Ocean</span>
                           </div>
                         </div>
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
-import { Menu, X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown, X as CloseIcon, ArrowRight, Bed, Bath, Mountain } from 'lucide-react'
+import { Menu, X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown, X as CloseIcon, ArrowRight, Bed, Bath } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG } from '@/config/building'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
@@ -342,7 +342,7 @@ export default function BuildingExplorerDual() {
                   <h3 className="text-lg font-semibold text-slate-900 mb-4 heading-display">Suite Details</h3>
 
                   {/* Key Features */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
+                  <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="bg-slate-50 rounded-xl p-4 text-center">
                       <Maximize2 className="w-6 h-6 text-gold-500 mx-auto mb-2" />
                       <div className="text-xl font-bold text-slate-900">{selectedSuite.size_sqm}</div>
@@ -352,11 +352,6 @@ export default function BuildingExplorerDual() {
                       <Building2 className="w-6 h-6 text-gold-500 mx-auto mb-2" />
                       <div className="text-xl font-bold text-slate-900">{selectedSuite.floor}</div>
                       <div className="text-xs text-slate-500">Floor Level</div>
-                    </div>
-                    <div className="bg-slate-50 rounded-xl p-4 text-center">
-                      <Mountain className="w-6 h-6 text-gold-500 mx-auto mb-2" />
-                      <div className="text-xl font-bold text-slate-900">Ocean</div>
-                      <div className="text-xs text-slate-500">View</div>
                     </div>
                   </div>
 
