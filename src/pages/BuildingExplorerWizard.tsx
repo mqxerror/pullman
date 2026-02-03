@@ -19,10 +19,11 @@ import {
   ArrowRight, Bed, ArrowLeft, Home, ChevronRight,
   Sparkles, Wifi, Coffee, Shield, Dumbbell, Car, Star, Waves
 } from 'lucide-react'
-import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG, isAmenityFloor, AMENITY_FLOOR_LABELS } from '@/config/building'
+import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, isAmenityFloor, AMENITY_FLOOR_LABELS } from '@/config/building'
 import { getSuiteInfo, getSuiteImage, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM } from '@/config/suiteData'
 import { cn } from '@/lib/utils'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
+import BuildingFacadeSVG from '@/components/BuildingFacadeSVG'
 
 type WizardStep = 'building' | 'floorplan'
 
@@ -86,18 +87,6 @@ export default function BuildingExplorerWizard() {
       sold: floorApts.filter((a) => a.status === 'sold').length,
     }
   }
-
-  // Build floor data for building visualization
-  const floors = Array.from({ length: TOTAL_FLOORS }, (_, i) => {
-    const floor = MAX_FLOOR - i
-    const floorHeight = (BUILDING_CONFIG.bottom - BUILDING_CONFIG.top) / TOTAL_FLOORS
-    return {
-      floor,
-      top: BUILDING_CONFIG.top + i * floorHeight,
-      height: floorHeight,
-      stats: getFloorStats(floor),
-    }
-  })
 
   const activeFloor = hoveredFloor || selectedFloor
 
@@ -202,73 +191,17 @@ export default function BuildingExplorerWizard() {
           <div className="h-full flex flex-col lg:flex-row">
             {/* Building Visualization - Takes most space */}
             <div className="flex-1 flex items-center justify-center p-2 lg:p-6 bg-gradient-to-br from-slate-100 to-stone-100 overflow-hidden">
-              <div className="relative h-full max-h-[90vh] w-auto" style={{ aspectRatio: '3/5' }}>
-                <img
-                  src="/assets/pullman-facade-v2.png"
-                  alt="Pullman Hotel Panama"
-                  className="h-full w-full object-cover object-bottom rounded-2xl shadow-2xl"
-                  style={{ objectPosition: 'center 85%' }}
+              <div className="relative h-full max-h-[90vh] w-auto flex flex-col items-center">
+                <BuildingFacadeSVG
+                  selectedFloor={selectedFloor}
+                  hoveredFloor={hoveredFloor}
+                  onFloorSelect={handleFloorSelect}
+                  onFloorHover={setHoveredFloor}
+                  className="h-full w-auto"
                 />
 
-                {/* Floor Overlays */}
-                <div className="absolute inset-0 rounded-2xl overflow-hidden">
-                  {floors.map((f) => {
-                    const isHovered = hoveredFloor === f.floor
-                    const isSelected = selectedFloor === f.floor
-                    const isAmenity = isAmenityFloor(f.floor)
-
-                    return (
-                      <button
-                        key={f.floor}
-                        onClick={() => handleFloorSelect(f.floor)}
-                        onMouseEnter={() => setHoveredFloor(f.floor)}
-                        onMouseLeave={() => setHoveredFloor(null)}
-                        className="absolute transition-all duration-200"
-                        style={{
-                          top: `${f.top}%`,
-                          left: `${BUILDING_CONFIG.left}%`,
-                          width: `${BUILDING_CONFIG.right - BUILDING_CONFIG.left}%`,
-                          height: `${f.height}%`,
-                        }}
-                      >
-                        {/* Selected floor - Premium gold glow */}
-                        {isSelected && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            {/* Outer glow layer */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-amber-400/50 via-yellow-300/60 to-amber-400/50 border-y-2 border-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.6),inset_0_0_15px_rgba(253,224,71,0.3)]" />
-                            {/* Inner highlight */}
-                            <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-yellow-200 to-transparent" />
-                            {/* Floor badge */}
-                            <div className="relative bg-gradient-to-b from-yellow-400 to-amber-500 text-amber-950 text-xs font-bold px-4 py-1 rounded-md shadow-lg shadow-amber-500/50 border border-yellow-300/50">
-                              {f.floor}
-                            </div>
-                          </div>
-                        )}
-                        {/* Hovered floor - Subtle gold hint */}
-                        {isHovered && !isSelected && (
-                          <div className={cn(
-                            "absolute inset-0 backdrop-blur-[1px] transition-all duration-150 border-y flex items-center justify-center",
-                            isAmenity
-                              ? "bg-blue-400/30 border-blue-400/50"
-                              : "bg-gradient-to-r from-amber-300/20 via-yellow-200/30 to-amber-300/20 border-yellow-400/40"
-                          )}>
-                            <div className={cn(
-                              "text-xs font-bold px-3 py-0.5 rounded shadow-md",
-                              isAmenity
-                                ? "bg-blue-500 text-white"
-                                : "bg-gradient-to-b from-amber-50 to-white text-amber-800 border border-amber-200"
-                            )}>
-                              {isAmenity ? AMENITY_FLOOR_LABELS[f.floor]?.split(' ')[0] : f.floor}
-                            </div>
-                          </div>
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
-
                 {/* Floor indicator pill - bottom */}
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white rounded-full shadow-lg px-4 py-2 border border-slate-200">
+                <div className="mt-3 bg-white rounded-full shadow-lg px-4 py-2 border border-slate-200">
                   <span className="text-sm font-bold text-slate-900">Floor {activeFloor}</span>
                 </div>
               </div>

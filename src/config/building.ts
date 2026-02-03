@@ -26,10 +26,10 @@ export const UNITS_PER_FLOOR = 14
  * - left/right: Horizontal bounds of the building facade
  */
 export const BUILDING_CONFIG = {
-  top: 26.5,    // Start of floor 27 (top of windowed facade)
-  bottom: 47,   // End of executive floors (floor 17)
-  left: 30,     // Left edge of building
-  right: 70,    // Right edge of building
+  top: 12.2,    // Start of floor 27 (Y=135px on 1104px image)
+  bottom: 71.6, // End of floor 17 (Y=790px on 1104px image)
+  left: 26,     // Left edge of building windows
+  right: 74,    // Right edge of building windows
 }
 
 // Residential vs Amenity floor classification
@@ -46,31 +46,32 @@ export const isAmenityFloor = (floor: number): boolean =>
   AMENITY_FLOORS.includes(floor as typeof AMENITY_FLOORS[number])
 
 /**
- * Floor position mapping on facade image (pullman-facade-v2.png)
- * All values are percentages of image dimensions
+ * Floor position mapping on facade image (pullman-building-v4.png)
+ * All values are percentages of image dimensions (1104px height)
  *
- * These are auto-calculated from BUILDING_CONFIG for consistency.
- * span = bottom - top = 42%
- * height per floor = 42 / 9 = 4.67%
+ * PRECISE per-floor positions calibrated to match actual window rows:
+ * - Pixel coordinates converted to percentages
+ * - Progressive heights: 50-60px top → 60-75px bottom (perspective)
+ * - Floors 27-26 have taller penthouse windows
  */
-const FLOOR_HEIGHT = (BUILDING_CONFIG.bottom - BUILDING_CONFIG.top) / TOTAL_FLOORS
-
 export const FLOOR_POSITIONS: Record<number, {
   top: number
   height: number
   left: number
   right: number
-}> = Object.fromEntries(
-  Array.from({ length: TOTAL_FLOORS }, (_, i) => {
-    const floor = MAX_FLOOR - i
-    return [floor, {
-      top: BUILDING_CONFIG.top + (i * FLOOR_HEIGHT),
-      height: FLOOR_HEIGHT,
-      left: BUILDING_CONFIG.left,
-      right: BUILDING_CONFIG.right,
-    }]
-  })
-)
+}> = {
+  27: { top: 12.2, height: 5.4, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // Sky Bar - tall penthouse (60px)
+  26: { top: 17.7, height: 5.0, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // Rooftop Pool (55px)
+  25: { top: 22.6, height: 4.5, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // (50px)
+  24: { top: 27.2, height: 4.7, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // (52px)
+  23: { top: 31.9, height: 4.9, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // (54px)
+  22: { top: 36.8, height: 5.1, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // (56px)
+  21: { top: 41.8, height: 5.3, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // (58px)
+  20: { top: 47.1, height: 5.4, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // (60px)
+  19: { top: 52.5, height: 5.9, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // (65px)
+  18: { top: 58.4, height: 6.3, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // (70px)
+  17: { top: 64.8, height: 6.8, left: BUILDING_CONFIG.left, right: BUILDING_CONFIG.right },  // Bottom floor (75px)
+}
 
 /**
  * Building boundary on the facade image

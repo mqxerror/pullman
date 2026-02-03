@@ -11,6 +11,7 @@ interface MainNavProps {
 const navItems = [
   { label: 'Interactive Map', href: '/building' },
   { label: 'Apartments', href: '/apartments' },
+  { label: '360° Tour', href: '/virtual-tour' },
   { label: 'Location', href: '/location' },
 ]
 
