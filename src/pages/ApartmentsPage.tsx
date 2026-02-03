@@ -199,7 +199,7 @@ export default function ApartmentsPage() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              <Link to="/building-wizard" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Interactive Map
               </Link>
               <Link to="/apartments" className="text-sm text-primary font-medium">
@@ -227,7 +227,7 @@ export default function ApartmentsPage() {
           {mobileMenuOpen && (
             <nav className="md:hidden mt-4 p-4 bg-white rounded-xl border border-slate-200 shadow-lg">
               <div className="flex flex-col gap-1">
-                <Link to="/building-wizard" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Interactive Map</Link>
+                <Link to="/building" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Interactive Map</Link>
                 <Link to="/apartments" className="px-4 py-3 bg-primary/10 text-primary rounded-lg font-medium">Apartments</Link>
                 <Link to="/virtual-tour" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">360° Tour</Link>
                 <Link to="/location" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Location</Link>
@@ -802,7 +802,7 @@ export default function ApartmentsPage() {
             Discover the perfect suite that matches your lifestyle with our interactive building explorer.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/building-wizard">
+            <Link to="/building">
               <HoverBorderGradient
                 containerClassName="rounded-xl"
                 className="flex items-center gap-2 px-8 py-4 bg-slate-950 text-white font-medium"
