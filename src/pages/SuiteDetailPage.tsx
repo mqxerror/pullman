@@ -1,7 +1,7 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { ArrowLeft, Maximize2, Building2, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Maximize2, Building2, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { getSuiteInfo, getSuiteType, getSuiteImage, SUITE_SIZES, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM } from '@/config/suiteData'
@@ -53,6 +53,7 @@ export default function SuiteDetailPage() {
   const navigate = useNavigate()
   const [activeImageTab, setActiveImageTab] = useState<'interior' | 'floorplan'>('interior')
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [showFloorPlanFullscreen, setShowFloorPlanFullscreen] = useState(false)
 
   const floorNum = parseInt(floor || '17')
   const unitNum = parseInt(unit || '1')
@@ -183,8 +184,24 @@ export default function SuiteDetailPage() {
               <img
                 src={currentImages[currentImageIndex]}
                 alt={`Suite ${floor}-${unit} ${activeImageTab}`}
-                className="w-full h-full object-cover"
+                className={cn(
+                  "w-full h-full object-cover",
+                  activeImageTab === 'floorplan' && "cursor-pointer hover:opacity-90 transition-opacity"
+                )}
+                onClick={() => {
+                  if (activeImageTab === 'floorplan') {
+                    setShowFloorPlanFullscreen(true)
+                  }
+                }}
               />
+
+              {/* Click to enlarge hint for floor plan */}
+              {activeImageTab === 'floorplan' && (
+                <div className="absolute top-4 right-4 px-3 py-2 bg-black/60 backdrop-blur text-white text-sm font-medium rounded-lg flex items-center gap-2 pointer-events-none">
+                  <Maximize2 className="w-4 h-4" />
+                  Click to enlarge
+                </div>
+              )}
 
               {/* Navigation Arrows */}
               {currentImages.length > 1 && (
@@ -347,6 +364,29 @@ export default function SuiteDetailPage() {
           </div>
         )}
       </main>
+
+      {/* Fullscreen Floor Plan Modal */}
+      {showFloorPlanFullscreen && (
+        <div
+          className="fixed inset-0 bg-white z-[60] flex items-center justify-center"
+          onClick={() => setShowFloorPlanFullscreen(false)}
+        >
+          <button
+            onClick={() => setShowFloorPlanFullscreen(false)}
+            className="absolute top-4 right-4 p-3 bg-slate-900 text-white rounded-full shadow-lg z-10 hover:bg-slate-800 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <div className="w-full h-full overflow-auto p-4 flex items-center justify-center">
+            <img
+              src={floorPlanImage}
+              alt="Floor plan fullscreen"
+              className="max-w-none w-[150vw] sm:w-[120vw] lg:w-auto lg:max-h-[90vh]"
+              style={{ touchAction: 'pan-x pan-y pinch-zoom' }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

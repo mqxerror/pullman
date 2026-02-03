@@ -15,9 +15,9 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import {
-  X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
+  X, Maximize2, Check, Clock, Lock, ChevronUp, ChevronDown,
   ArrowRight, Bed, ArrowLeft, Home, ChevronRight,
-  Sparkles, Wifi, Coffee, Shield, Dumbbell, Car, Star, Waves, Sun, Users
+  Sparkles, Wifi, Coffee, Shield, Dumbbell, Car, Star, Waves
 } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, BUILDING_CONFIG, isAmenityFloor, AMENITY_FLOOR_LABELS } from '@/config/building'
 import { getSuiteInfo, getSuiteImage, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM } from '@/config/suiteData'
@@ -554,7 +554,7 @@ export default function BuildingExplorerWizard() {
                   <div className="text-center p-3 bg-slate-50 rounded-xl">
                     <div className="flex items-center justify-center gap-1">
                       <Bed className="w-5 h-5 text-slate-600" />
-                      <span className="text-xl font-bold text-slate-900">{selectedSuite.bedrooms || 1}</span>
+                      <span className="text-xl font-bold text-slate-900">1</span>
                     </div>
                     <div className="text-xs text-slate-500">Bedroom</div>
                   </div>
