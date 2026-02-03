@@ -204,6 +204,9 @@ export default function ApartmentsPage() {
               <Link to="/apartments" className="text-sm text-primary font-medium">
                 Apartments
               </Link>
+              <Link to="/virtual-tour" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
+                360° Tour
+              </Link>
               <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Location
               </Link>
@@ -225,6 +228,7 @@ export default function ApartmentsPage() {
               <div className="flex flex-col gap-1">
                 <Link to="/building" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Interactive Map</Link>
                 <Link to="/apartments" className="px-4 py-3 bg-primary/10 text-primary rounded-lg font-medium">Apartments</Link>
+                <Link to="/virtual-tour" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">360° Tour</Link>
                 <Link to="/location" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Location</Link>
                 <Link to="/about" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">About</Link>
               </div>

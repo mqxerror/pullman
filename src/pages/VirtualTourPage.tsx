@@ -77,6 +77,9 @@ export default function VirtualTourPage() {
               <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Apartments
               </Link>
+              <Link to="/virtual-tour" className="text-sm text-primary font-medium">
+                360° Tour
+              </Link>
               <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
                 Location
               </Link>
