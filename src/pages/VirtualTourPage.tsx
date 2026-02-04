@@ -28,7 +28,7 @@ const SUITE_TYPES = [
     features: ['King Size Bed', 'West Facing', 'Living/Dining Area', 'Kitchenette', 'Laundry', 'City Views'],
     specs: { bedrooms: 1, bathrooms: 1, balcony: 'No' },
     image: '/assets/suites/executive-suite-type-a-suite-3.jpg',
-    tourUrl: 'https://kuula.co/share/collection/7HS3N?logo=-1&info=0&fs=1&vr=1&sd=1&initload=0&thumbs=1',
+    tourUrl: 'https://kuula.co/share/collection/7HS3N?logo=-1&info=0&fs=0&vr=1&sd=1&initload=0&thumbs=1&autopilot=0&iosfs=0',
   },
   {
     id: 'suite-7',
@@ -40,7 +40,7 @@ const SUITE_TYPES = [
     features: ['King Size Bed', 'Lockoff Option', 'Corner Unit', 'North Facing', 'Bay Views', 'Largest Layout'],
     specs: { bedrooms: 1, bathrooms: 1, balcony: 'Yes' },
     image: '/assets/suites/executive-suite-type-e-suite-7.jpg',
-    tourUrl: 'https://kuula.co/share/collection/7HS28?logo=-1&info=0&fs=1&vr=1&sd=1&initload=0&thumbs=1',
+    tourUrl: 'https://kuula.co/share/collection/7HS28?logo=-1&info=0&fs=0&vr=1&sd=1&initload=0&thumbs=1&autopilot=0&iosfs=0',
   },
   {
     id: 'suite-8',
@@ -52,7 +52,7 @@ const SUITE_TYPES = [
     features: ['King Size Bed', 'Lockoff Option', 'North-East Facing', 'Front Views', 'Living/Dining', 'Laundry'],
     specs: { bedrooms: 1, bathrooms: 1, balcony: 'Yes' },
     image: '/assets/suites/executive-suite-type-e-suite-8.jpg',
-    tourUrl: 'https://kuula.co/share/collection/7HS2n?logo=-1&info=0&fs=1&vr=1&sd=1&initload=0&thumbs=1',
+    tourUrl: 'https://kuula.co/share/collection/7HS2n?logo=-1&info=0&fs=0&vr=1&sd=1&initload=0&thumbs=1&autopilot=0&iosfs=0',
   },
 ]
 
@@ -262,10 +262,10 @@ export default function VirtualTourPage() {
                       height="100%"
                       frameBorder="0"
                       allowFullScreen
-                      allow="xr-spatial-tracking; gyroscope; accelerometer"
-                      scrolling="no"
+                      allow="xr-spatial-tracking; gyroscope; accelerometer; fullscreen; autoplay"
                       title={`${suite.name} - 360° Virtual Tour`}
                       className="w-full h-full"
+                      style={{ touchAction: 'none' }}
                     />
                   </div>
                 </div>
