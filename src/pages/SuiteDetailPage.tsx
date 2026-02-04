@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { ArrowLeft, Maximize2, Building2, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import { getSuiteInfo, getSuiteType, getSuiteImage, SUITE_SIZES, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM } from '@/config/suiteData'
+import { getSuiteInfo, getSuiteType, SUITE_SIZES, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM, EXECUTIVE_SUITES } from '@/config/suiteData'
 
 // Suite metadata helper (uses accurate data from suiteData.ts)
 const getSuiteMetadata = (unitNumber: number): { size: number; type: string } => {
@@ -37,15 +37,27 @@ const statusConfig = {
   },
 }
 
-// Get suite-specific images or fallback to gallery
+// Get suite-specific images based on suite type
 const getSuiteImages = (unitNumber: number): string[] => {
-  const specificImage = getSuiteImage(unitNumber)
-  // Return the specific image plus gallery images as fallback
-  return [
-    specificImage,
-    '/assets/gallery/suite-type-07.jpg',
-    '/assets/gallery/suite-type-08.jpg',
-  ]
+  const suiteInfo = EXECUTIVE_SUITES.find(s => s.unitNumber === unitNumber)
+  const suiteType = suiteInfo?.type || 'A'
+
+  // Define images for each suite type
+  const typeImages: Record<string, string[]> = {
+    'A': ['/assets/suites/executive-suite-type-a-suite-3.jpg'],
+    'B': ['/assets/suites/standard-hotel-room.jpg'],
+    'C': ['/assets/suites/executive-suite-type-c-suite-5.jpg'],
+    'D': ['/assets/suites/executive-suite-type-c-suite-5.jpg'], // Use type C image as fallback
+    'E': ['/assets/suites/executive-suite-type-e-suite-7.jpg', '/assets/suites/executive-suite-type-e-suite-8.jpg'],
+    'Hotel': ['/assets/suites/standard-hotel-room.jpg'],
+  }
+
+  // Use specific rendering if available, otherwise use type-based images
+  if (suiteInfo?.renderingFile) {
+    return [suiteInfo.renderingFile]
+  }
+
+  return typeImages[suiteType] || ['/assets/suites/standard-hotel-room.jpg']
 }
 
 export default function SuiteDetailPage() {
