@@ -10,7 +10,7 @@
  */
 
 import { Link } from 'react-router-dom'
-import { Check, Maximize2, Bed, Bath, Maximize, ChevronRight, Play, Move, ZoomIn, ArrowRight } from 'lucide-react'
+import { Check, Maximize2, Bed, Bath, Maximize, ChevronRight, Move, ArrowRight } from 'lucide-react'
 import Footer from '@/components/Footer'
 import { cn } from '@/lib/utils'
 import { BackgroundBeams } from '@/components/ui'
@@ -117,10 +117,6 @@ export default function VirtualTourPage() {
               <div className="flex items-center gap-2">
                 <Move className="w-4 h-4 text-amber-400" />
                 <span>Drag to look around</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <ZoomIn className="w-4 h-4 text-amber-400" />
-                <span>Scroll to zoom</span>
               </div>
             </div>
           </div>
@@ -275,14 +271,6 @@ export default function VirtualTourPage() {
                   <div className="flex items-center gap-2">
                     <Move className="w-4 h-4 text-amber-500" />
                     <span>Drag to rotate</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <ZoomIn className="w-4 h-4 text-amber-500" />
-                    <span>Scroll to zoom</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Play className="w-4 h-4 text-amber-500" />
-                    <span>Click hotspots</span>
                   </div>
                 </div>
               </div>
