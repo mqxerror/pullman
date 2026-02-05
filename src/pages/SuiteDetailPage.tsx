@@ -154,8 +154,8 @@ export default function SuiteDetailPage() {
               Share
             </button>
             <a
-              href="/assets/Pullman-Technical-Layouts-Brochure.pdf"
-              download="Pullman-Technical-Layouts-Brochure.pdf"
+              href="/assets/Mercan-Group-Panama-Presentation.pdf"
+              download="Mercan-Group-Panama-Presentation.pdf"
               className="flex items-center gap-2 px-4 py-2 bg-gold-600 text-white rounded-lg hover:bg-gold-700 transition-all"
             >
               <Download className="w-4 h-4" />
