@@ -21,6 +21,7 @@ import ApartmentsPage from './pages/ApartmentsPage'
 // Admin Pages
 import LoginPage from './pages/LoginPage'
 import AdminDashboard from './pages/AdminDashboard'
+import ProfilePage from './pages/ProfilePage'
 
 function AppRoutes() {
   const location = useLocation()
@@ -50,6 +51,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
