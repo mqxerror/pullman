@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import { projectConfig } from '@/config/project'
-import { getSuiteType, getSuiteImage, SUITE_PRICES, formatPriceUSD } from '@/config/suiteData'
+import { getSuiteType, getSuiteImage, getSuiteInfo, SUITE_PRICES, formatPriceUSD } from '@/config/suiteData'
 import {
   Menu, X, Check, Clock, Lock, Maximize2, ArrowRight, ArrowUpDown,
   SlidersHorizontal, Building2, Filter, Grid3X3, LayoutList,
@@ -569,7 +569,7 @@ export default function ApartmentsPage() {
 
                       {/* Suite Type */}
                       <div className="absolute bottom-4 left-4">
-                        <span className="text-white/70 text-xs font-medium">{getSuiteType(apt.size_sqm)}</span>
+                        <span className="text-white/70 text-xs font-medium">Type {getSuiteInfo(apt.unit_number)?.type || getSuiteType(apt.size_sqm)}</span>
                       </div>
                     </div>
 
@@ -655,7 +655,7 @@ export default function ApartmentsPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-lg font-bold text-slate-900">{apt.floor}-{apt.unit_number}</h3>
-                        <span className="text-sm text-slate-500">{getSuiteType(apt.size_sqm)}</span>
+                        <span className="text-sm text-slate-500">Type {getSuiteInfo(apt.unit_number)?.type || getSuiteType(apt.size_sqm)}</span>
                       </div>
                       <div className="flex items-center gap-4 text-sm text-slate-500">
                         <span className="flex items-center gap-1">

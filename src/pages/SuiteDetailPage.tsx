@@ -2,9 +2,10 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { ArrowLeft, Maximize2, Building2, Check, Clock, Lock, Download, Share2, ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
-import { getSuiteInfo, getSuiteType, SUITE_SIZES, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM, EXECUTIVE_SUITES } from '@/config/suiteData'
+import { getSuiteInfo, getSuiteType, SUITE_SIZES, SUITE_PRICES, formatPriceUSD, PRICE_PER_SQM, EXECUTIVE_SUITES, COMPASS_LABELS } from '@/config/suiteData'
+import { projectConfig } from '@/config/project'
 
 // Suite metadata helper (uses accurate data from suiteData.ts)
 const getSuiteMetadata = (unitNumber: number): { size: number; type: string } => {
@@ -40,15 +41,17 @@ const statusConfig = {
 // Get suite-specific images based on suite type
 const getSuiteImages = (unitNumber: number): string[] => {
   const suiteInfo = EXECUTIVE_SUITES.find(s => s.unitNumber === unitNumber)
-  const suiteType = suiteInfo?.type || 'A'
+  const suiteType = suiteInfo?.type || 'A1'
 
   // Define images for each suite type
   const typeImages: Record<string, string[]> = {
-    'A': ['/assets/suites/executive-suite-type-a-suite-3.jpg'],
+    'A1': ['/assets/suites/executive-suite-type-a-suite-3.jpg'],
+    'A2': ['/assets/suites/executive-suite-type-a-suite-3.jpg'],
     'B': ['/assets/suites/standard-hotel-room.jpg'],
     'C': ['/assets/suites/executive-suite-type-c-suite-5.jpg'],
     'D': ['/assets/suites/executive-suite-type-c-suite-5.jpg'], // Use type C image as fallback
-    'E': ['/assets/suites/executive-suite-type-e-suite-7.jpg', '/assets/suites/executive-suite-type-e-suite-8.jpg'],
+    'E1': ['/assets/suites/executive-suite-type-e-suite-7.jpg', '/assets/suites/executive-suite-type-e-suite-8.jpg'],
+    'E2': ['/assets/suites/executive-suite-type-e-suite-7.jpg', '/assets/suites/executive-suite-type-e-suite-8.jpg'],
     'Hotel': ['/assets/suites/standard-hotel-room.jpg'],
   }
 
@@ -66,6 +69,17 @@ export default function SuiteDetailPage() {
   const [activeImageTab, setActiveImageTab] = useState<'interior' | 'floorplan'>('interior')
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [showFloorPlanFullscreen, setShowFloorPlanFullscreen] = useState(false)
+
+  // Close fullscreen on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showFloorPlanFullscreen) {
+        setShowFloorPlanFullscreen(false)
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [showFloorPlanFullscreen])
 
   const floorNum = parseInt(floor || '17')
   const unitNum = parseInt(unit || '1')
@@ -114,8 +128,7 @@ export default function SuiteDetailPage() {
   const suiteDetails = getSuiteInfo(unitNum)
   const floorPlanImage = suiteDetails?.floorPlanFile || '/assets/floorplans/pullman-plan.png'
 
-  const currentImages = activeImageTab === 'interior' ? suiteImages :
-                        [floorPlanImage]
+  const currentImages = activeImageTab === 'interior' ? suiteImages : [floorPlanImage]
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % currentImages.length)
@@ -196,24 +209,15 @@ export default function SuiteDetailPage() {
               <img
                 src={currentImages[currentImageIndex]}
                 alt={`Suite ${floor}-${unit} ${activeImageTab}`}
-                className={cn(
-                  "w-full h-full object-cover",
-                  activeImageTab === 'floorplan' && "cursor-pointer hover:opacity-90 transition-opacity"
-                )}
-                onClick={() => {
-                  if (activeImageTab === 'floorplan') {
-                    setShowFloorPlanFullscreen(true)
-                  }
-                }}
+                className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => setShowFloorPlanFullscreen(true)}
               />
 
-              {/* Click to enlarge hint for floor plan */}
-              {activeImageTab === 'floorplan' && (
-                <div className="absolute top-4 right-4 px-3 py-2 bg-black/60 backdrop-blur text-white text-sm font-medium rounded-lg flex items-center gap-2 pointer-events-none">
-                  <Maximize2 className="w-4 h-4" />
-                  Click to enlarge
-                </div>
-              )}
+              {/* Click to enlarge hint */}
+              <div className="absolute top-4 right-4 px-3 py-2 bg-black/60 backdrop-blur text-white text-sm font-medium rounded-lg flex items-center gap-2 pointer-events-none">
+                <Maximize2 className="w-4 h-4" />
+                Click to enlarge
+              </div>
 
               {/* Navigation Arrows */}
               {currentImages.length > 1 && (
@@ -276,7 +280,7 @@ export default function SuiteDetailPage() {
               <h1 className="text-4xl font-bold text-slate-900 heading-display">
                 Suite {floor}-{unit}
               </h1>
-              <p className="text-xl text-slate-500 mt-1">{suiteInfo?.type || 'Executive Suite'}</p>
+              <p className="text-xl text-slate-500 mt-1">{getSuiteInfo(unitNum)?.typeName || suiteInfo?.type || 'Executive Suite'}</p>
             </div>
 
             {/* Key Stats */}
@@ -293,6 +297,19 @@ export default function SuiteDetailPage() {
               </div>
             </div>
 
+            {/* Orientation */}
+            {(() => {
+              const details = getSuiteInfo(unitNum)
+              if (!details) return null
+              return (
+                <div className="rounded-xl p-4 md:p-5 bg-white border border-slate-200">
+                  <span className="text-base font-semibold text-slate-900">
+                    {COMPASS_LABELS[details.orientation]} Facing
+                  </span>
+                </div>
+              )
+            })()}
+
             {/* Pricing */}
             <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-6 text-white">
               <div className="text-sm text-slate-300 mb-1">Investment Price</div>
@@ -304,14 +321,7 @@ export default function SuiteDetailPage() {
             <div className="bg-white rounded-xl p-6 border border-slate-200">
               <h3 className="text-lg font-semibold text-slate-900 mb-4">Suite Features</h3>
               <div className="grid grid-cols-2 gap-3">
-                {[
-                  'Floor-to-Ceiling Windows',
-                  'Central Air Conditioning',
-                  'Smart Home Ready',
-                  'Premium Finishes',
-                  'Gourmet Kitchen',
-                  'Marble Bathrooms',
-                ].map((feature) => (
+                {projectConfig.amenities.suiteFeatures.map((feature) => (
                   <div key={feature} className="flex items-center gap-2 text-slate-600">
                     <Check className="w-4 h-4 text-emerald-500" />
                     <span className="text-sm">{feature}</span>
@@ -324,16 +334,7 @@ export default function SuiteDetailPage() {
             <div className="bg-white rounded-xl p-6 border border-slate-200">
               <h3 className="text-lg font-semibold text-slate-900 mb-4">Hotel Amenities</h3>
               <div className="grid grid-cols-2 gap-3">
-                {[
-                  '24/7 Room Service',
-                  'Rooftop Pool Access',
-                  'Casino Access',
-                  '24/7 Security',
-                  'Fitness Center',
-                  'Valet Parking',
-                  'Concierge Service',
-                  'Spa & Wellness',
-                ].map((amenity) => (
+                {projectConfig.amenities.hotelAmenities.map((amenity) => (
                   <div key={amenity} className="flex items-center gap-2 text-slate-600">
                     <Check className="w-4 h-4 text-gold-500" />
                     <span className="text-sm">{amenity}</span>
@@ -377,7 +378,7 @@ export default function SuiteDetailPage() {
         )}
       </main>
 
-      {/* Fullscreen Floor Plan Modal */}
+      {/* Fullscreen Image Modal */}
       {showFloorPlanFullscreen && (
         <div
           className="fixed inset-0 bg-white z-[60] flex items-center justify-center"
@@ -391,8 +392,8 @@ export default function SuiteDetailPage() {
           </button>
           <div className="w-full h-full overflow-auto p-4 flex items-center justify-center">
             <img
-              src={floorPlanImage}
-              alt="Floor plan fullscreen"
+              src={currentImages[currentImageIndex]}
+              alt={`${activeImageTab === 'floorplan' ? 'Floor plan' : 'Interior'} fullscreen`}
               className="max-w-none w-[150vw] sm:w-[120vw] lg:w-auto lg:max-h-[90vh]"
               style={{ touchAction: 'pan-x pan-y pinch-zoom' }}
             />

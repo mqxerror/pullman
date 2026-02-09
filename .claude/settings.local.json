@@ -117,7 +117,22 @@
       "Bash(wc:*)",
       "Bash(python -m json.tool:*)",
       "Skill(agent-browser)",
-      "Bash(agent-browser close:*)"
+      "Bash(agent-browser close:*)",
+      "Bash(git archive:*)",
+      "Bash(npx netlify deploy:*)",
+      "Bash(npx playwright:*)",
+      "Bash(npx --yes playwright install chromium)",
+      "Bash(npx vite build)",
+      "Bash(npx vite:*)",
+      "Bash(du:*)",
+      "Bash(sort:*)",
+      "Bash(cmd /c copy:*)",
+      "Bash(git reset:*)",
+      "Bash(bash:*)",
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\usr\\\\bin\\\\bash.exe\" \"C:/Users/Wassim/.claude/statusline.sh\")",
+      "Bash(\"C:/Program Files/Git/usr/bin/bash.exe\" \"C:/Users/Wassim/.claude/statusline.sh\")",
+      "Bash(timeout:*)",
+      "Bash(git status:*)"
     ]
   }
 }

@@ -11,7 +11,7 @@ import {
 import type { ExecutiveSuite } from '@/types/database'
 import { projectConfig } from '@/config/project'
 import { cn } from '@/lib/utils'
-import { SUITE_PRICES, formatPriceUSD } from '@/config/suiteData'
+import { SUITE_PRICES, formatPriceUSD, getSuiteInfo, COMPASS_LABELS } from '@/config/suiteData'
 
 interface SuiteDetailModalProps {
   suite: ExecutiveSuite
@@ -104,7 +104,7 @@ export default function SuiteDetailModal({
             {/* Header */}
             <div className="p-4 md:p-6 border-b border-slate-700">
               <p className="text-amber-400 text-sm font-medium mb-1">
-                {getSizeCategory(suite.size_sqm)}
+                {getSuiteInfo(suite.unit_number)?.typeName || getSizeCategory(suite.size_sqm)}
               </p>
               <h2 className="text-xl md:text-2xl font-bold text-white">
                 Suite {suite.floor}-{suite.unit_number}
@@ -134,6 +134,17 @@ export default function SuiteDetailModal({
                   <p className="text-lg md:text-xl font-bold text-white">{suite.floor}</p>
                 </div>
               </div>
+
+              {/* Orientation */}
+              {(() => {
+                const info = getSuiteInfo(suite.unit_number)
+                if (!info) return null
+                return (
+                  <div className="mt-3 md:mt-4 rounded-xl p-3 md:p-4 bg-slate-800">
+                    <p className="text-base font-semibold text-white">{COMPASS_LABELS[info.orientation]} Facing</p>
+                  </div>
+                )
+              })()}
 
               {/* Price */}
               <div className="mt-3 md:mt-4 bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 md:p-4">

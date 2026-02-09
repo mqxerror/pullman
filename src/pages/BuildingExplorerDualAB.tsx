@@ -5,12 +5,13 @@ import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import {
   X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
-  ArrowLeft, Bed, ChevronRight, Sparkles, Star, Wifi, Car, Dumbbell, Coffee, Shield, Waves,
-  Home, Scale, Plus, Sun, Users
+  ArrowLeft, Bed, ChevronRight, Sparkles, Star, Dumbbell, Coffee, Waves,
+  Home, Scale, Plus, Sun, Users, Download, ZoomIn, ZoomOut
 } from 'lucide-react'
 import { MIN_FLOOR, MAX_FLOOR, TOTAL_FLOORS, isAmenityFloor, AMENITY_FLOOR_LABELS } from '@/config/building'
-import { getSuiteType, getSuiteImage, getSuiteInfo, SUITE_PRICES, formatPriceUSD, formatPriceShort, PRICE_PER_SQM } from '@/config/suiteData'
+import { getSuiteType, getSuiteImage, getSuiteInfo, SUITE_PRICES, formatPriceUSD, formatPriceShort, PRICE_PER_SQM, COMPASS_LABELS } from '@/config/suiteData'
 import { cn } from '@/lib/utils'
+import { projectConfig } from '@/config/project'
 import FloorPlanSVG from '@/components/FloorPlanSVG'
 import BuildingFacadeSVG from '@/components/BuildingFacadeSVG'
 import TourGuide from '@/components/TourGuide'
@@ -28,20 +29,7 @@ const statusConfig = {
   sold: { icon: Lock, label: 'Sold', color: 'text-red-500', bg: 'bg-red-500', bgLight: 'bg-red-50' },
 }
 
-const SUITE_FEATURES = [
-  { icon: Maximize2, label: 'Floor-to-Ceiling Windows' },
-  { icon: Sparkles, label: 'Central Air Conditioning' },
-  { icon: Wifi, label: 'Smart Home Ready' },
-]
-
-const HOTEL_AMENITIES = [
-  { icon: Coffee, label: '24/7 Room Service' },
-  { icon: Waves, label: 'Rooftop Pool Access' },
-  { icon: Star, label: 'Casino Access' },
-  { icon: Shield, label: '24/7 Security' },
-  { icon: Dumbbell, label: 'Fitness Center' },
-  { icon: Car, label: 'Valet Parking' },
-]
+// No more hardcoded features - use projectConfig as single source of truth
 
 export default function BuildingExplorerDualAB() {
   const [selectedFloor, setSelectedFloor] = useState<number>(23)
@@ -49,6 +37,7 @@ export default function BuildingExplorerDualAB() {
   const [hoveredFloor, setHoveredFloor] = useState<number | null>(null)
   const [activeImageTab, setActiveImageTab] = useState<'interior' | 'floorplan'>('floorplan')
   const [showFloorPlanFullscreen, setShowFloorPlanFullscreen] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState(1.5)
 
   // Compare mode state (max 3 suites)
   const [compareSuites, setCompareSuites] = useState<ExecutiveSuite[]>([])
@@ -131,7 +120,8 @@ export default function BuildingExplorerDualAB() {
 
   const handleSuiteClick = (suite: ExecutiveSuite) => {
     setSelectedSuite(suite)
-    setActiveImageTab('floorplan') // Show floor plan first
+    setActiveImageTab('floorplan')
+    setZoomLevel(1.5) // Reset zoom when selecting new suite
   }
 
   useEffect(() => {
@@ -448,6 +438,36 @@ export default function BuildingExplorerDualAB() {
                   selectedSuiteId={selectedSuite?.id}
                   compareSuiteIds={compareSuites.map(s => s.id)}
                 />
+
+                {/* Compass Rose Overlay - North points to bottom-right (135°) */}
+                <div className="absolute top-3 right-3 z-10 pointer-events-none" role="img" aria-label="Compass rose, North points to bottom-right">
+                  <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-white/90 backdrop-blur-sm shadow-lg border border-slate-200 flex items-center justify-center">
+                    <svg viewBox="0 0 80 80" className="w-12 h-12 lg:w-16 lg:h-16" aria-hidden="true">
+                      {/* Diagonal cross-hair lines */}
+                      <line x1="16" y1="16" x2="64" y2="64" stroke="#e2e8f0" strokeWidth="1" />
+                      <line x1="64" y1="16" x2="16" y2="64" stroke="#e2e8f0" strokeWidth="1" />
+                      {/* Arrows rotated 135° — drawn in local "up" coords then rotated */}
+                      <g transform="rotate(135, 40, 40)">
+                        {/* North arrow (local UP → rotated to bottom-right) */}
+                        <polygon points="40,12 30,42 40,36 50,42" fill="#ef4444" stroke="#dc2626" strokeWidth="0.8" />
+                        {/* South arrow (local DOWN → rotated to top-left) */}
+                        <polygon points="40,68 34,42 40,44 46,42" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="0.5" />
+                      </g>
+                      {/* Center dot */}
+                      <circle cx="40" cy="40" r="3" fill="#ef4444" />
+                      <circle cx="40" cy="40" r="1.5" fill="white" />
+                      {/* N label - bottom-right */}
+                      <text x="68" y="72" textAnchor="middle" fill="#ef4444" fontWeight="bold" fontSize="11" fontFamily="system-ui">N</text>
+                      {/* S label - top-left */}
+                      <text x="13" y="15" textAnchor="middle" fill="#94a3b8" fontWeight="600" fontSize="9" fontFamily="system-ui">S</text>
+                      {/* E label - bottom-left */}
+                      <text x="9" y="68" textAnchor="middle" fill="#94a3b8" fontWeight="600" fontSize="9" fontFamily="system-ui">E</text>
+                      {/* W label - top-right */}
+                      <text x="71" y="15" textAnchor="middle" fill="#94a3b8" fontWeight="600" fontSize="9" fontFamily="system-ui">W</text>
+                    </svg>
+                  </div>
+                </div>
+
                 {/* Compare feature onboarding - prominent tooltip */}
                 {showCompareHint && compareSuites.length === 0 && (
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 animate-bounce">
@@ -534,24 +554,35 @@ export default function BuildingExplorerDualAB() {
                       ? getFloorPlanImage(selectedSuite.unit_number)
                       : getSuiteImage(selectedSuite.unit_number)}
                     alt={`Suite ${selectedSuite.floor}-${selectedSuite.unit_number}`}
-                    className={cn(
-                      "w-full h-full object-cover",
-                      activeImageTab === 'floorplan' && "cursor-pointer"
-                    )}
-                    onClick={() => activeImageTab === 'floorplan' && setShowFloorPlanFullscreen(true)}
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => setShowFloorPlanFullscreen(true)}
                   />
 
-                  {activeImageTab === 'floorplan' && (
-                    <div className="absolute top-3 right-3 px-3 py-2 bg-black/60 text-white text-sm rounded-lg flex items-center gap-2">
+                  <div className="absolute top-3 right-3 flex items-center gap-2">
+                    {activeImageTab === 'floorplan' && (
+                      <a
+                        href={getFloorPlanImage(selectedSuite.unit_number)}
+                        download={`Suite-${selectedSuite.floor}-${selectedSuite.unit_number}-FloorPlan.png`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="px-3 py-2 bg-black/60 hover:bg-black/80 text-white text-sm rounded-lg flex items-center gap-2 transition-colors"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download
+                      </a>
+                    )}
+                    <button
+                      onClick={() => setShowFloorPlanFullscreen(true)}
+                      className="px-3 py-2 bg-black/60 hover:bg-black/80 text-white text-sm rounded-lg flex items-center gap-2 transition-colors"
+                    >
                       <Maximize2 className="w-4 h-4" />
-                      Tap to zoom
-                    </div>
-                  )}
+                      Zoom
+                    </button>
+                  </div>
 
                   {/* Image Tabs */}
                   <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 bg-black/50 backdrop-blur-sm rounded-full p-1">
                     <button
-                      onClick={() => setActiveImageTab('floorplan')}
+                      onClick={() => { setActiveImageTab('floorplan'); setZoomLevel(1.5) }}
                       className={cn(
                         'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                         activeImageTab === 'floorplan' ? 'bg-white text-slate-900' : 'text-white hover:bg-white/20'
@@ -560,7 +591,7 @@ export default function BuildingExplorerDualAB() {
                       Floor Plan
                     </button>
                     <button
-                      onClick={() => setActiveImageTab('interior')}
+                      onClick={() => { setActiveImageTab('interior'); setZoomLevel(1.5) }}
                       className={cn(
                         'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
                         activeImageTab === 'interior' ? 'bg-white text-slate-900' : 'text-white hover:bg-white/20'
@@ -579,9 +610,22 @@ export default function BuildingExplorerDualAB() {
                       Suite {selectedSuite.floor}-{selectedSuite.unit_number}
                     </h3>
                     <p className="text-slate-500">
-                      {getSuiteInfo(selectedSuite.unit_number)?.type || getSuiteType(selectedSuite.size_sqm)}
+                      {getSuiteInfo(selectedSuite.unit_number)?.typeName || getSuiteType(selectedSuite.size_sqm)}
                     </p>
                   </div>
+
+                  {/* Orientation Badge */}
+                  {(() => {
+                    const info = getSuiteInfo(selectedSuite.unit_number)
+                    if (!info) return null
+                    return (
+                      <div className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl mb-5">
+                        <span className="text-sm font-semibold text-slate-900">
+                          {COMPASS_LABELS[info.orientation]} Facing
+                        </span>
+                      </div>
+                    )
+                  })()}
 
                   {/* Key Stats */}
                   <div className="grid grid-cols-3 gap-3 mb-6">
@@ -617,10 +661,10 @@ export default function BuildingExplorerDualAB() {
                   <div className="mb-6">
                     <h4 className="text-sm font-semibold text-slate-900 mb-3">Suite Features</h4>
                     <div className="grid grid-cols-1 gap-2">
-                      {SUITE_FEATURES.map((feature, i) => (
+                      {projectConfig.amenities.suiteFeatures.map((feature, i) => (
                         <div key={i} className="flex items-center gap-3 p-2 bg-slate-50 rounded-lg">
-                          <feature.icon className="w-4 h-4 text-amber-600" />
-                          <span className="text-sm text-slate-700">{feature.label}</span>
+                          <Check className="w-4 h-4 text-amber-600" />
+                          <span className="text-sm text-slate-700">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -630,10 +674,10 @@ export default function BuildingExplorerDualAB() {
                   <div className="mb-6">
                     <h4 className="text-sm font-semibold text-slate-900 mb-3">Hotel Amenities Included</h4>
                     <div className="grid grid-cols-2 gap-2">
-                      {HOTEL_AMENITIES.map((amenity, i) => (
+                      {projectConfig.amenities.hotelAmenities.map((amenity, i) => (
                         <div key={i} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
-                          <amenity.icon className="w-4 h-4 text-slate-500" />
-                          <span className="text-xs text-slate-600">{amenity.label}</span>
+                          <Check className="w-4 h-4 text-slate-500" />
+                          <span className="text-xs text-slate-600">{amenity}</span>
                         </div>
                       ))}
                     </div>
@@ -669,30 +713,71 @@ export default function BuildingExplorerDualAB() {
                   Suite {selectedSuite.floor}-{selectedSuite.unit_number}
                 </div>
                 <div className="text-sm text-slate-500">
-                  {getSuiteType(selectedSuite.size_sqm)} &bull; {selectedSuite.size_sqm} m² &bull; Pinch or scroll to zoom
+                  {activeImageTab === 'floorplan' ? 'Floor Plan' : 'Interior'} &bull; {selectedSuite.size_sqm} m²
                 </div>
               </div>
-              <button
-                onClick={() => setShowFloorPlanFullscreen(false)}
-                className="p-2.5 min-w-[44px] min-h-[44px] bg-slate-100 hover:bg-slate-200 rounded-full transition-colors flex items-center justify-center"
-                aria-label="Close fullscreen"
-              >
-                <X className="w-5 h-5 text-slate-600" />
-              </button>
+              <div className="flex items-center gap-2">
+                {activeImageTab === 'floorplan' && (
+                <a
+                  href={getFloorPlanImage(selectedSuite.unit_number)}
+                  download={`Suite-${selectedSuite.floor}-${selectedSuite.unit_number}-FloorPlan.png`}
+                  className="p-2.5 min-w-[44px] min-h-[44px] bg-slate-100 hover:bg-slate-200 rounded-full transition-colors flex items-center justify-center"
+                  aria-label="Download floor plan"
+                >
+                  <Download className="w-5 h-5 text-slate-600" />
+                </a>
+                )}
+                <button
+                  onClick={() => setShowFloorPlanFullscreen(false)}
+                  className="p-2.5 min-w-[44px] min-h-[44px] bg-slate-100 hover:bg-slate-200 rounded-full transition-colors flex items-center justify-center"
+                  aria-label="Close fullscreen"
+                >
+                  <X className="w-5 h-5 text-slate-600" />
+                </button>
+              </div>
             </div>
 
-            {/* Scrollable + zoomable floor plan */}
+            {/* Scrollable + zoomable image */}
             <div
-              className="flex-1 overflow-auto overscroll-contain"
+              className="flex-1 overflow-auto overscroll-contain relative"
               onClick={(e) => e.stopPropagation()}
               style={{ touchAction: 'pan-x pan-y pinch-zoom' }}
             >
               <img
-                src={getFloorPlanImage(selectedSuite.unit_number)}
-                alt={`Suite ${selectedSuite.floor}-${selectedSuite.unit_number} Floor Plan`}
-                className="w-[200vw] md:w-[150vw] max-w-none h-auto mx-auto"
+                src={activeImageTab === 'floorplan'
+                  ? getFloorPlanImage(selectedSuite.unit_number)
+                  : getSuiteImage(selectedSuite.unit_number)}
+                alt={`Suite ${selectedSuite.floor}-${selectedSuite.unit_number} ${activeImageTab === 'floorplan' ? 'Floor Plan' : 'Interior'}`}
+                className="max-w-none h-auto mx-auto transition-all duration-200"
+                style={{ width: `${zoomLevel * 100}vw` }}
                 draggable={false}
               />
+            </div>
+
+            {/* Zoom Controls - floating bottom-right */}
+            <div
+              className="absolute bottom-6 right-6 flex flex-col gap-2 z-10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setZoomLevel(z => Math.min(z + 0.5, 4))}
+                disabled={zoomLevel >= 4}
+                className="w-12 h-12 bg-white shadow-lg border border-slate-200 rounded-xl flex items-center justify-center hover:bg-slate-50 disabled:opacity-40 transition-all"
+                aria-label="Zoom in"
+              >
+                <ZoomIn className="w-5 h-5 text-slate-700" />
+              </button>
+              <div className="text-center text-xs font-medium text-slate-500 bg-white shadow-sm border border-slate-200 rounded-lg py-1">
+                {Math.round(zoomLevel * 100)}%
+              </div>
+              <button
+                onClick={() => setZoomLevel(z => Math.max(z - 0.5, 0.5))}
+                disabled={zoomLevel <= 0.5}
+                className="w-12 h-12 bg-white shadow-lg border border-slate-200 rounded-xl flex items-center justify-center hover:bg-slate-50 disabled:opacity-40 transition-all"
+                aria-label="Zoom out"
+              >
+                <ZoomOut className="w-5 h-5 text-slate-700" />
+              </button>
             </div>
           </div>
         )}
@@ -838,7 +923,7 @@ export default function BuildingExplorerDualAB() {
                       {/* Suite Details */}
                       <div className="p-3">
                         <h3 className="font-bold text-slate-900">Suite {suite.floor}-{suite.unit_number}</h3>
-                        <p className="text-xs text-amber-600 font-medium mb-3">{suiteInfo?.type || 'Executive Suite'}</p>
+                        <p className="text-xs text-amber-600 font-medium mb-3">Type {suiteInfo?.type || 'N/A'}</p>
 
                         {/* Stats */}
                         <div className="space-y-2 text-sm">
@@ -853,6 +938,12 @@ export default function BuildingExplorerDualAB() {
                           <div className="flex justify-between">
                             <span className="text-slate-500">Floor</span>
                             <span className="font-semibold text-slate-900">{suite.floor}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-slate-500">Facing</span>
+                            <span className="font-semibold text-slate-900">
+                              {suiteInfo ? COMPASS_LABELS[suiteInfo.orientation] : '--'}
+                            </span>
                           </div>
                         </div>
 
