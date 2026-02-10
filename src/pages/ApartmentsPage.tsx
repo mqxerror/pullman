@@ -43,9 +43,9 @@ export default function ApartmentsPage() {
     const s = searchParams.get('size')
     return s === 'small' || s === 'medium' || s === 'large' ? s : 'all'
   })
-  const [budgetFilter, setBudgetFilter] = useState<'all' | '300' | '500' | '750' | '1000'>(() => {
+  const [budgetFilter, setBudgetFilter] = useState<'all' | '400' | '500' | '750' | '1000'>(() => {
     const b = searchParams.get('budget')
-    return b === '300' || b === '500' || b === '750' || b === '1000' ? b : 'all'
+    return b === '400' || b === '500' || b === '750' || b === '1000' ? b : 'all'
   })
   const [showFilters, setShowFilters] = useState(() => {
     // Auto-show filters panel if any filter came from URL
@@ -390,11 +390,11 @@ export default function ApartmentsPage() {
                 <label className="text-sm text-slate-500">Budget:</label>
                 <select
                   value={budgetFilter}
-                  onChange={(e) => setBudgetFilter(e.target.value as 'all' | '300' | '500' | '750' | '1000')}
+                  onChange={(e) => setBudgetFilter(e.target.value as 'all' | '400' | '500' | '750' | '1000')}
                   className="bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
                   <option value="all">Any Budget</option>
-                  <option value="300">Under $300K</option>
+                  <option value="400">Under $400K</option>
                   <option value="500">Under $500K</option>
                   <option value="750">Under $750K</option>
                   <option value="1000">$1M+</option>

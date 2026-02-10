@@ -231,7 +231,7 @@ export default function LandingPage() {
                   className="px-3 py-2.5 sm:py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent col-span-2 sm:col-span-1"
                 >
                   <option value="any">Any Budget</option>
-                  <option value="300">Under $300K</option>
+                  <option value="400">Under $400K</option>
                   <option value="500">Under $500K</option>
                   <option value="750">Under $750K</option>
                   <option value="1000">$1M+</option>
@@ -287,7 +287,7 @@ export default function LandingPage() {
                 className="hidden sm:block px-3 py-1.5 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 <option value="any">Budget</option>
-                <option value="300">Under $300K</option>
+                <option value="400">Under $400K</option>
                 <option value="500">Under $500K</option>
                 <option value="750">Under $750K</option>
               </select>
