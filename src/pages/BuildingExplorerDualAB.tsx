@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { ExecutiveSuite } from '@/types/database'
 import {
-  X, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
+  X, Menu, Maximize2, Building2, Check, Clock, Lock, ChevronUp, ChevronDown,
   ArrowLeft, Bed, ChevronRight, Sparkles, Star, Dumbbell, Coffee, Waves,
   Home, Scale, Plus, Sun, Users, Download, ZoomIn, ZoomOut
 } from 'lucide-react'
@@ -38,6 +38,7 @@ export default function BuildingExplorerDualAB() {
   const [activeImageTab, setActiveImageTab] = useState<'interior' | 'floorplan'>('floorplan')
   const [showFloorPlanFullscreen, setShowFloorPlanFullscreen] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(1.5)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Compare mode state (max 3 suites)
   const [compareSuites, setCompareSuites] = useState<ExecutiveSuite[]>([])
@@ -177,7 +178,7 @@ export default function BuildingExplorerDualAB() {
               </nav>
             </div>
 
-            {/* Navigation Links + Tour */}
+            {/* Navigation Links + Tour - Desktop */}
             <div className="hidden lg:flex items-center gap-4">
               <nav className="flex items-center gap-6">
                 <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors">Apartments</Link>
@@ -187,7 +188,29 @@ export default function BuildingExplorerDualAB() {
               </nav>
               <TourGuide tourId="buildingWizard" variant="icon" />
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-lg transition-colors"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
+
+          {/* Mobile Navigation Dropdown */}
+          {mobileMenuOpen && (
+            <nav className="lg:hidden p-3 border-t border-slate-200" aria-label="Mobile navigation">
+              <div className="flex flex-col gap-1">
+                <Link to="/apartments" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors font-medium">Apartments</Link>
+                <Link to="/virtual-tour" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors font-medium">360° Tour</Link>
+                <Link to="/location" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors font-medium">Location</Link>
+                <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors font-medium">About</Link>
+              </div>
+            </nav>
+          )}
         </div>
       </header>
 
