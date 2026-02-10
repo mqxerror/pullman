@@ -13,6 +13,7 @@ const navItems = [
   { label: 'Apartments', href: '/apartments' },
   { label: '360° Tour', href: '/virtual-tour' },
   { label: 'Location', href: '/location' },
+  { label: 'About', href: '/about' },
 ]
 
 export default function MainNav({ variant = 'solid', className }: MainNavProps) {

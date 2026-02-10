@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { projectConfig } from '@/config/project'
 import LocationMap from '@/components/LocationMap'
+import MainNav from '@/components/MainNav'
 import {
   MapPin,
   Navigation,
@@ -14,14 +15,11 @@ import {
   Utensils,
   TreePine,
   ArrowRight,
-  Menu,
-  X,
   ExternalLink,
   Train,
   Coffee,
   Waves
 } from 'lucide-react'
-import { useState } from 'react'
 import Footer from '@/components/Footer'
 // Aceternity UI Components - These will be used in future updates
 // import { TextGenerateEffect, BackgroundBeams } from '@/components/ui'
@@ -124,110 +122,70 @@ const lifestyleFeatures = [
 ]
 
 export default function LocationPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { location } = projectConfig
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
-        <div className="page-container py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3">
-              <img
-                src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
-                alt="Mercan Group"
-                className="h-12 lg:h-14 w-auto"
-              />
-            </Link>
+      <MainNav />
 
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Interactive Map
-              </Link>
-              <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Apartments
-              </Link>
-              <Link to="/virtual-tour" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                360° Tour
-              </Link>
-              <Link to="/location" className="text-sm text-primary font-medium">
-                Location
-              </Link>
-              <Link to="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                About
-              </Link>
-            </nav>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 hover:bg-slate-100 rounded-lg transition-colors"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-
-          {mobileMenuOpen && (
-            <nav className="md:hidden mt-4 p-4 bg-white rounded-xl border border-slate-200 shadow-lg">
-              <div className="flex flex-col gap-1">
-                <Link to="/building" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Interactive Map</Link>
-                <Link to="/apartments" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Apartments</Link>
-                <Link to="/virtual-tour" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">360° Tour</Link>
-                <Link to="/location" className="px-4 py-3 bg-primary/10 text-primary rounded-lg font-medium">Location</Link>
-                <Link to="/about" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">About</Link>
-              </div>
-            </nav>
-          )}
-        </div>
-      </header>
-
-      {/* Hero Section with Map */}
-      <section id="main-content" className="relative h-[60vh] min-h-[400px] md:min-h-[500px]">
-        <div className="absolute inset-0">
-          <LocationMap />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
-        </div>
-
-        {/* Floating Location Card */}
-        <div className="absolute bottom-8 left-4 right-4 md:left-8 md:right-auto md:max-w-md">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-white/20">
-            <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary/30">
-                <MapPin className="w-7 h-7 text-white" />
-              </div>
-              <div className="flex-1">
-                <h1 className="text-2xl font-bold text-text-primary mb-1">
-                  {location.neighborhood}
-                </h1>
-                <p className="text-sm text-text-secondary mb-1">
-                  {location.address}
-                </p>
-                <p className="text-xs text-text-muted">
-                  {location.city}, {location.country}
-                </p>
-              </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="flex items-center gap-4 mt-5 pt-5 border-t border-stone-100">
-              {lifestyleFeatures.slice(0, 3).map((feature, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <feature.icon className="w-4 h-4 text-accent" />
-                  <span className="text-xs text-text-secondary">{feature.count}</span>
+      {/* Hero + Map Section — side by side on desktop */}
+      <section id="main-content" className="py-10 md:py-14 bg-gradient-to-b from-stone-50 to-white">
+        <div className="page-container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            {/* Left: Location Info */}
+            <div>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-lg shadow-primary/30">
+                  <MapPin className="w-5 h-5 text-white" />
                 </div>
-              ))}
+                <p className="text-accent text-xs font-semibold tracking-widest uppercase">
+                  Prime Location
+                </p>
+              </div>
+
+              <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-3 leading-tight">
+                {location.neighborhood}, {location.city}
+              </h1>
+              <p className="text-text-secondary mb-1">
+                {location.address}
+              </p>
+              <p className="text-text-muted text-sm mb-6">
+                {location.city}, {location.country}
+              </p>
+
+              {/* Quick Stats */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {lifestyleFeatures.map((feature, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 px-3.5 py-2 bg-white rounded-xl border border-stone-200 shadow-sm"
+                  >
+                    <feature.icon className="w-4 h-4 text-accent" />
+                    <span className="text-text-primary font-semibold text-sm">{feature.count}</span>
+                    <span className="text-text-muted text-sm">{feature.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates.lat},${location.coordinates.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primary-light text-white font-medium rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all duration-300"
+              >
+                <Navigation className="w-4 h-4" />
+                Get Directions
+                <ExternalLink className="w-3.5 h-3.5 ml-1 opacity-70" />
+              </a>
             </div>
 
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates.lat},${location.coordinates.lng}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-5 w-full flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-primary to-primary-light text-white font-medium rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all duration-300"
-            >
-              <Navigation className="w-4 h-4" />
-              Get Directions
-              <ExternalLink className="w-3.5 h-3.5 ml-1 opacity-70" />
-            </a>
+            {/* Right: Interactive Map Preview */}
+            <div>
+              <LocationMap className="aspect-[4/3]" />
+              <p className="text-center text-xs text-text-muted mt-2">
+                Tap the map to open a zoomable full-screen view
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -390,7 +348,7 @@ export default function LocationPage() {
                 </div>
                 <div className="rounded-2xl overflow-hidden shadow-lg">
                   <img
-                    src="https://images.unsplash.com/photo-1567449303078-57ad995bd329?w=600&q=80"
+                    src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80"
                     alt="Shopping"
                     className="w-full h-32 object-cover hover:scale-105 transition-transform duration-500"
                   />
@@ -423,7 +381,7 @@ export default function LocationPage() {
                 The Perfect Address for Modern Living
               </h2>
               <p className="text-text-secondary mb-6 leading-relaxed">
-                San Francisco offers the ideal balance of urban sophistication and residential tranquility.
+                {location.neighborhood} offers the ideal balance of urban sophistication and residential tranquility.
                 With tree-lined streets, premium dining options, and easy access to business districts,
                 it's where Panama's most discerning residents choose to call home.
               </p>

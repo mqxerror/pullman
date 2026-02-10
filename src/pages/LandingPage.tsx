@@ -4,9 +4,10 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import type { Apartment } from '@/types/database'
 import { projectConfig } from '@/config/project'
-import { MapPin, Building2, TrendingUp, ChevronRight, Download, ArrowRight, Users, Calendar, Globe, ExternalLink, Menu, X } from 'lucide-react'
+import { MapPin, Building2, TrendingUp, ChevronRight, Download, ArrowRight, Users, Calendar, Globe, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Footer from '@/components/Footer'
+import MainNav from '@/components/MainNav'
 import LocationMap from '@/components/LocationMap'
 // Aceternity UI Components
 import { BackgroundBeams, TextGenerateEffect, FlipWords, Spotlight, HoverBorderGradient, FocusCards } from '@/components/ui'
@@ -24,8 +25,6 @@ export default function LandingPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>('available')
   const [selectedBudget, setSelectedBudget] = useState<string>('any')
   const [isScrolled, setIsScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   // Track scroll for sticky search bar - throttled with RAF
   useEffect(() => {
     let ticking = false
@@ -86,102 +85,7 @@ export default function LandingPage() {
         Skip to main content
       </a>
 
-      {/* Navigation */}
-      <header className="absolute top-0 left-0 right-0 z-50">
-        <div className="page-container py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg">
-              <img
-                src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
-                alt="Mercan Group"
-                className="h-14 w-auto"
-              />
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
-              <Link to="/building" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                Interactive Map
-              </Link>
-              <Link to="/apartments" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                Apartments
-              </Link>
-              <Link to="/virtual-tour" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                360° Tour
-              </Link>
-              <Link to="/location" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                Location
-              </Link>
-              <Link to="/about" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                About
-              </Link>
-              <a href="#investor" className="text-sm text-white/80 hover:text-white transition-colors font-medium py-2 focus:outline-none focus:text-white focus:underline underline-offset-4">
-                Investor
-              </a>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
-              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-
-          {/* Mobile Navigation Dropdown */}
-          {mobileMenuOpen && (
-            <nav className="md:hidden mt-4 p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20" aria-label="Mobile navigation">
-              <div className="flex flex-col gap-1">
-                <Link
-                  to="/building"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
-                >
-                  Interactive Map
-                </Link>
-                <Link
-                  to="/apartments"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
-                >
-                  Apartments
-                </Link>
-                <Link
-                  to="/virtual-tour"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
-                >
-                  360° Tour
-                </Link>
-                <Link
-                  to="/location"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
-                >
-                  Location
-                </Link>
-                <Link
-                  to="/about"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
-                >
-                  About
-                </Link>
-                <a
-                  href="#investor"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors font-medium focus:outline-none focus:bg-white/10"
-                >
-                  Investor Program
-                </a>
-              </div>
-            </nav>
-          )}
-        </div>
-      </header>
+      <MainNav variant="transparent" />
 
       {/* Hero Section - Enhanced with Aceternity UI */}
       <section id="main-content" className="relative h-[85vh] min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden">

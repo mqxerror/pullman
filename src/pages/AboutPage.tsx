@@ -3,6 +3,7 @@ import { projectConfig } from '@/config/project'
 import { Check, Building2, Sun, MapPin, ChevronRight } from 'lucide-react'
 import { GalleryImage } from '@/components/LazyImage'
 import Footer from '@/components/Footer'
+import MainNav from '@/components/MainNav'
 import LocationMap from '@/components/LocationMap'
 // Aceternity UI Components
 import { TextGenerateEffect, BentoGrid, BentoGridItem, HoverBorderGradient, BackgroundBeams } from '@/components/ui'
@@ -10,37 +11,7 @@ import { TextGenerateEffect, BentoGrid, BentoGridItem, HoverBorderGradient, Back
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
-        <div className="page-container py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3">
-              <img
-                src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
-                alt="Mercan Group"
-                className="h-12 lg:h-14 w-auto"
-              />
-            </Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Interactive Map
-              </Link>
-              <Link to="/apartments" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Apartments
-              </Link>
-              <Link to="/virtual-tour" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                360° Tour
-              </Link>
-              <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Location
-              </Link>
-              <Link to="/about" className="text-sm text-primary font-medium">
-                About
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <MainNav />
 
       {/* Hero - Enhanced with Aceternity */}
       <section id="main-content" className="relative h-[50vh] min-h-[400px] overflow-hidden">

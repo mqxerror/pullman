@@ -6,12 +6,13 @@ import type { ExecutiveSuite } from '@/types/database'
 import { projectConfig } from '@/config/project'
 import { getSuiteType, getSuiteImage, getSuiteInfo, SUITE_PRICES, formatPriceUSD } from '@/config/suiteData'
 import {
-  Menu, X, Check, Clock, Lock, Maximize2, ArrowRight, ArrowUpDown,
+  Check, Clock, Lock, Maximize2, ArrowRight, ArrowUpDown,
   SlidersHorizontal, Building2, Filter, Grid3X3, LayoutList,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Footer from '@/components/Footer'
+import MainNav from '@/components/MainNav'
 import TourGuide from '@/components/TourGuide'
 // Aceternity UI Components
 import { BackgroundBeams, TextGenerateEffect, HoverBorderGradient, Spotlight } from '@/components/ui'
@@ -30,7 +31,6 @@ const statusConfig = {
 export default function ApartmentsPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [statusFilter, setStatusFilter] = useState<StatusFilter>(() => {
     const s = searchParams.get('status')
     return s === 'all' || s === 'available' || s === 'reserved' || s === 'sold' ? s : 'all'
@@ -186,57 +186,7 @@ export default function ApartmentsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-stone-50 to-slate-100">
-      {/* Navigation */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
-        <div className="page-container py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3">
-              <img
-                src="https://www.mercan.com/wp-content/uploads/2024/06/logo.png"
-                alt="Mercan Group"
-                className="h-12 lg:h-14 w-auto"
-              />
-            </Link>
-
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/building" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Interactive Map
-              </Link>
-              <Link to="/apartments" className="text-sm text-primary font-medium">
-                Apartments
-              </Link>
-              <Link to="/virtual-tour" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                360° Tour
-              </Link>
-              <Link to="/location" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                Location
-              </Link>
-              <Link to="/about" className="text-sm text-slate-600 hover:text-slate-900 transition-colors font-medium">
-                About
-              </Link>
-            </nav>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 hover:bg-slate-100 rounded-lg"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-
-          {mobileMenuOpen && (
-            <nav className="md:hidden mt-4 p-4 bg-white rounded-xl border border-slate-200 shadow-lg">
-              <div className="flex flex-col gap-1">
-                <Link to="/building" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Interactive Map</Link>
-                <Link to="/apartments" className="px-4 py-3 bg-primary/10 text-primary rounded-lg font-medium">Apartments</Link>
-                <Link to="/virtual-tour" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">360° Tour</Link>
-                <Link to="/location" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">Location</Link>
-                <Link to="/about" className="px-4 py-3 hover:bg-slate-100 rounded-lg transition-colors">About</Link>
-              </div>
-            </nav>
-          )}
-        </div>
-      </header>
+      <MainNav />
 
       {/* Hero Section with Spotlight */}
       <section className="relative py-16 overflow-hidden bg-gradient-to-br from-primary via-primary-dark to-slate-900">
