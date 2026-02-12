@@ -20,6 +20,30 @@ import { BackgroundBeams } from '@/components/ui'
 // Prices and sizes from suiteData.ts (Official Excel spreadsheet Jan 21, 2026)
 const SUITE_TYPES = [
   {
+    id: 'suite-1',
+    name: 'Executive Suite Type A1',
+    suiteNumber: 1,
+    size: '53.35 m²',
+    price: '$308,096',
+    description: 'Compact executive suite with lockoff capability, facing south-west. Features a well-appointed kitchen, bedroom, and bathroom. Ideal entry point for investors seeking hotel-managed rental income.',
+    features: ['King Size Bed', 'Lockoff Option', 'South-West Facing', 'Kitchenette', 'City Views', 'Compact Layout'],
+    specs: { bedrooms: 1, bathrooms: 1, balcony: 'No' },
+    image: '/assets/suites/executive-suite-type-a-suite-3.jpg',
+    tourUrl: 'https://kuula.co/share/collection/7Htk7?logo=0&info=0&fs=1&vr=1&sd=1&initload=0&thumbs=1',
+  },
+  {
+    id: 'suite-5',
+    name: 'Executive Suite Type C',
+    suiteNumber: 5,
+    size: '56.88 m²',
+    price: '$328,482',
+    description: 'West-facing executive suite with generous living space and modern finishes. Features a full kitchen, comfortable bedroom, and luxurious bathroom. Excellent value with premium city views.',
+    features: ['King Size Bed', 'West Facing', 'Living/Dining Area', 'Full Kitchen', 'City Views', 'Laundry'],
+    specs: { bedrooms: 1, bathrooms: 1, balcony: 'No' },
+    image: '/assets/suites/executive-suite-type-c-suite-5.jpg',
+    tourUrl: 'https://kuula.co/share/collection/7Htkf?logo=0&info=0&fs=1&vr=1&sd=1&initload=0&thumbs=1',
+  },
+  {
     id: 'suite-6',
     name: 'Deluxe Suite Type D',
     suiteNumber: 6,
@@ -54,6 +78,18 @@ const SUITE_TYPES = [
     specs: { bedrooms: 1, bathrooms: 1, balcony: 'Yes' },
     image: '/assets/suites/executive-suite-type-e-suite-8.jpg',
     tourUrl: 'https://kuula.co/share/collection/7HS2n?logo=-1&info=0&fs=0&vr=1&sd=1&initload=0&thumbs=1&autopilot=0&iosfs=0',
+  },
+  {
+    id: 'suite-9',
+    name: 'Premium Suite Type B',
+    suiteNumber: 9,
+    size: '85.25 m²',
+    price: '$492,319',
+    description: 'Spacious premium suite facing north-east with expansive living area, hallway, bedroom, and full bathroom. One of the largest layouts in the building, perfect for those seeking generous space and comfort.',
+    features: ['King Size Bed', 'North-East Facing', 'Spacious Living', 'Hallway', 'Premium Finishes', 'Largest Units'],
+    specs: { bedrooms: 1, bathrooms: 1, balcony: 'No' },
+    image: '/assets/suites/standard-hotel-room.jpg',
+    tourUrl: 'https://kuula.co/share/collection/7HtkR?logo=0&info=0&fs=1&vr=1&sd=1&initload=0&thumbs=1',
   },
 ]
 
