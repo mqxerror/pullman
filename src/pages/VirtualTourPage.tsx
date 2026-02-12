@@ -57,7 +57,7 @@ const SUITE_TYPES = [
   },
   {
     id: 'suite-7',
-    name: 'Deluxe Suite Type E',
+    name: 'Deluxe Suite Type E1',
     suiteNumber: 7,
     size: '74.46 m²',
     price: '$430,007',
@@ -69,7 +69,7 @@ const SUITE_TYPES = [
   },
   {
     id: 'suite-8',
-    name: 'Deluxe Suite Type E',
+    name: 'Deluxe Suite Type E1',
     suiteNumber: 8,
     size: '65.55 m²',
     price: '$378,551',
@@ -141,7 +141,7 @@ export default function VirtualTourPage() {
                 href={`#${suite.id}`}
                 className="flex-shrink-0 px-4 py-2 bg-slate-100 hover:bg-amber-100 hover:text-amber-800 rounded-full text-sm font-medium text-slate-700 transition-colors"
               >
-                {suite.name}
+                Suite {suite.suiteNumber}
               </a>
             ))}
           </div>
